@@ -2,279 +2,200 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob: gap:; style-src * 'self' 'unsafe-inline'; script-src * 'self' 'unsafe-inline' 'unsafe-eval';" />
-  <title>LuxTime Pro v3.0</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>LuxTime Pro v4.0</title>
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #090d16;
+      --card: #131c2e;
+      --card-alt: #1a263d;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #f43f5e;
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #0f172a;
-      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+      overflow-x: hidden;
+      user-select: none;
     }
-    .glass {
-      background: rgba(30, 41, 59, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
+    .container { max-width: 680px; margin: 0 auto; padding: 12px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28);
     }
-    input, select {
-      background-color: #1e293b;
-      color: #f8fafc;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 8px 10px;
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700;
     }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #38bdf8;
+    .bg-sky { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; }
+    .bg-emerald { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+    .bg-amber { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+    .bg-purple { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; }
+    .bg-rose { background: rgba(244, 63, 94, 0.15); color: #fda4af; }
+
+    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    input, select, textarea {
+      width: 100%; background: var(--card-alt); color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;
+      padding: 10px 12px; font-size: 13px; font-weight: 600; outline: none;
     }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+    button {
+      border: none; border-radius: 12px; padding: 11px 14px;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+    button:active { transform: scale(0.97); }
+    .btn-primary { background: linear-gradient(135deg, #38bdf8, #0284c7); color: #082f49; width: 100%; font-weight: 800; }
+    .btn-success { background: linear-gradient(135deg, #34d399, #059669); color: #022c22; font-weight: 800; }
+    .btn-danger { background: rgba(244, 63, 94, 0.2); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .btn-ghost { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
+
+    /* Barra de Navegação Inferior estilo One UI Samsung */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      padding: 6px 6px calc(8px + env(safe-area-inset-bottom));
+      z-index: 999;
+    }
+    .nav-item {
+      background: transparent; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; padding: 6px 2px; border-radius: 12px; font-size: 10px; font-weight: 700;
+    }
+    .nav-item.active { color: var(--primary); background: rgba(56, 189, 248, 0.12); }
+    .nav-icon { font-size: 18px; line-height: 1; }
+
+    /* Grelha do Calendário */
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 8px; }
+    .cal-head { text-align: center; font-size: 10px; font-weight: 700; color: var(--muted); padding: 4px 0; }
+    .cal-day {
+      background: var(--card-alt); border: 1px solid var(--border);
+      border-radius: 10px; min-height: 54px; padding: 4px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      cursor: pointer; position: relative;
+    }
+    .cal-day.selected { border: 2px solid var(--primary); }
+    .cal-day.empty { background: transparent; border: none; cursor: default; }
+    .cal-num { font-size: 11px; font-weight: 800; }
+    .cal-tag { font-size: 9px; font-weight: 700; padding: 1px 3px; border-radius: 4px; text-align: center; white-space: nowrap; overflow: hidden; }
+
+    /* Barra de Progresso */
+    .progress-bar { width: 100%; height: 8px; background: #0f172a; border-radius: 99px; overflow: hidden; margin-top: 6px; }
+    .progress-fill { height: 100%; border-radius: 99px; transition: width 0.3s; }
+
+    /* Linha divisória */
+    .divider { height: 1px; background: var(--border); margin: 10px 0; }
+    .kpi-val { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; margin-top: 2px; }
+    .subtext { font-size: 11px; color: var(--muted); }
   </style>
 </head>
-<body class="min-h-screen pb-24">
-  <div id="app" class="max-w-5xl mx-auto p-3 sm:p-6"></div>
+<body>
+  <div id="app" class="container"></div>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+  <nav id="bottomNav" class="bottom-nav"></nav>
 
   <script>
-    // ==================== DICIONÁRIO MULTI-IDIOMA (6 LÍNGUAS) ====================
+    // ==================== DICIONÁRIO 6 IDIOMAS ====================
     const I18N = {
       pt: {
-        appTitle: "LuxTime Pro v3.0",
-        subtitle: "Gestão Profissional de Horários, Feriados & Salário",
-        tabs: { registo: "Registo & Turnos", calendario: "Calendário & Feriados", folha: "Fiche de Salaire", auditoria: "Auditoria", config: "Configurações" },
-        country: "País de Trabalho",
-        taxClass: "Classe de Imposto",
-        netEstimated: "Salário Líquido Estimado",
-        grossTotal: "Total Bruto",
-        congeRate3m: "Média Congé (3 Meses)",
-        unworkedHolidayAuto: "Pagar Feriados Úteis Não Trabalhados Automaticamente",
-        quickTemplates: "Turnos Rápidos (1 Toque)",
-        autoFillWeek: "Preencher Semana Útil (Seg-Sex)",
-        addShift: "Guardar Registo do Dia",
-        date: "Data",
-        dayType: "Tipo de Dia",
-        types: { work: "Trabalho Normal", conge: "Férias (Congé)", feriado_chome: "Feriado Não Trabalhado", feriado_trab: "Feriado Trabalhado (+100%)", recupera: "Uso de Recuperação (Repos)", baixa: "Baixa Médica (CNS)" },
-        start: "Entrada",
-        end: "Saída",
-        breakMin: "Pausa (min)",
-        normalH: "Horas Normais",
-        extraH: "Horas Extras",
-        nightH: "Horas Noturnas (22h-06h)",
-        expenseReimb: "Reembolso Km / Despesas (€)",
-        note: "Nota / Rota / Viatura",
-        otMode: "Destino Horas Extras",
-        otPay: "Pagar na Folha",
-        otBank: "Banco de Horas (Repos)",
-        baseRate: "Valor Hora Base (€)",
-        hourlyBonus: "Prémio Horário Fixo (€/h)",
-        bonusInOt: "Incluir Prémio nas Horas Extras e Feriados",
-        bonusInUnworkedHol: "Incluir Prémio no Feriado Não Trabalhado",
-        deductionsTitle: "Descontos Individuais do País Selecionado",
-        goalLabel: "Meta Líquida Mensal (€)",
-        applyIndex: "Aplicar Index (+2,5%)",
-        exportBackup: "Exportar Backup (.JSON)",
-        importBackup: "Importar Backup",
-        holidayLegend: "Feriados Oficiais & Compensações do Ano"
+        tabs: { registo: "Ponto", calendario: "Calendário", folha: "Salário", financas: "Dinheiros", config: "Ajustes" },
+        netEst: "Líquido Estimado", grossTot: "Total Bruto", conge3m: "Média Congé 3M", freeCash: "Saldo Livre Mês",
+        liveClock: "Relógio de Ponto em Tempo Real", startShift: "▶ Iniciar Turno", stopShift: "⏹ Finalizar e Guardar",
+        quickTpl: "Registo Rápido (1 Toque)", fillWeek: "⚡ Preencher Seg-Sex",
+        saveDay: "Guardar Dia", updateDay: "Atualizar Dia", cancelEdit: "Cancelar Edição",
+        types: {
+          work: "Trabalho Normal", conge: "Férias (Congé)", feriado_chome: "Feriado Não Trab.",
+          feriado_trab: "Feriado Trab. (+100%)", recupera: "Uso Banco Horas", baixa: "Baixa Médica (CNS)"
+        }
       },
       lb: {
-        appTitle: "LuxTime Pro v3.0",
-        subtitle: "Aarbechtszäit, Feierdeeg & Pai Rechner",
-        tabs: { registo: "Schichten & Stonnen", calendario: "Kalender & Feierdeeg", folha: "Fiche de Salaire", auditoria: "Kontroll", config: "Astellungen" },
-        country: "Aarbechtsland",
-        taxClass: "Steierklass",
-        netEstimated: "Geschätzte Netto Pai",
-        grossTotal: "Total Brutto",
-        congeRate3m: "Congé Moyenne (3 Méint)",
-        unworkedHolidayAuto: "Feierdeeg an der Woch automatesch bezuelen",
-        quickTemplates: "Schnell Schichten (1 Klick)",
-        autoFillWeek: "Woch automatesch fëllen (Mo-Fr)",
-        addShift: "Dag späicheren",
-        date: "Datum",
-        dayType: "Typ vum Dag",
-        types: { work: "Normal Aarbecht", conge: "Congé (Vakanz)", feriado_chome: "Feierdag (net geschafft)", feriado_trab: "Feierdag geschafft (+100%)", recupera: "Recuperatioun (Repos)", baixa: "Krankenschein (CNS)" },
-        start: "Ufank",
-        end: "Enn",
-        breakMin: "Paus (Min)",
-        normalH: "Normal Stonnen",
-        extraH: "Iwwerstonnen",
-        nightH: "Nuetsstonnen (22h-06h)",
-        expenseReimb: "Spesen / Km (€)",
-        note: "Notiz / Tour / Camion",
-        otMode: "Iwwerstonnen Modus",
-        otPay: "Op der Fiche bezuelen",
-        otBank: "Zäitkonto (Repos)",
-        baseRate: "Basis Stonneloun (€)",
-        hourlyBonus: "Fix Primm pro Stonn (€/h)",
-        bonusInOt: "Primm an den Iwwerstonnen rechnen",
-        bonusInUnworkedHol: "Primm am Feierdag rechnen",
-        deductionsTitle: "Sozialabgaben & Steieren (Land)",
-        goalLabel: "Netto Zil pro Mount (€)",
-        applyIndex: "Index applizéieren (+2,5%)",
-        exportBackup: "Backup späicheren (.JSON)",
-        importBackup: "Backup lueden",
-        holidayLegend: "Offiziell Feierdeeg & Kompensatioun"
+        tabs: { registo: "Stonnen", calendario: "Kalender", folha: "Fiche", financas: "Budget", config: "Optiounen" },
+        netEst: "Netto Pai", grossTot: "Total Brutto", conge3m: "Congé Moyenne", freeCash: "Fräie Saldo",
+        liveClock: "Echtzäit Stempelauer", startShift: "▶ Schicht starten", stopShift: "⏹ Stoppen & Späicheren",
+        quickTpl: "Schnell Schichten", fillWeek: "⚡ Woch fëllen (Mo-Fr)",
+        saveDay: "Dag späicheren", updateDay: "Dag aktualiséieren", cancelEdit: "Ofbriechen",
+        types: {
+          work: "Normal Aarbecht", conge: "Congé (Vakanz)", feriado_chome: "Feierdag (Fräi)",
+          feriado_trab: "Feierdag geschafft", recupera: "Repos benotzt", baixa: "Krankenschein (CNS)"
+        }
       },
       fr: {
-        appTitle: "LuxTime Pro v3.0",
-        subtitle: "Gestion des Heures, Jours Fériés & Fiche de Salaire",
-        tabs: { registo: "Pointage & Heures", calendario: "Calendrier & Fériés", folha: "Fiche de Salaire", auditoria: "Audit Paie", config: "Paramètres" },
-        country: "Pays de Travail",
-        taxClass: "Classe d'Impôt",
-        netEstimated: "Salaire Net Estimé",
-        grossTotal: "Total Brut",
-        congeRate3m: "Moyenne Congé (3 Mois)",
-        unworkedHolidayAuto: "Payer automatiquement les jours fériés chômés",
-        quickTemplates: "Modèles Rapides (1 Clic)",
-        autoFillWeek: "Remplir la semaine (Lun-Ven)",
-        addShift: "Enregistrer la journée",
-        date: "Date",
-        dayType: "Type de Jour",
-        types: { work: "Travail Normal", conge: "Congé Payé", feriado_chome: "Jour Férié Chômé", feriado_trab: "Jour Férié Travaillé (+100%)", recupera: "Repos Compensatoire", baixa: "Maladie (CNS)" },
-        start: "Début",
-        end: "Fin",
-        breakMin: "Pause (min)",
-        normalH: "Heures Normales",
-        extraH: "Heures Supplémentaires",
-        nightH: "Heures de Nuit (22h-06h)",
-        expenseReimb: "Frais / Km Remboursés (€)",
-        note: "Note / Tournée / Véhicule",
-        otMode: "Mode Heures Sup.",
-        otPay: "Payer sur la fiche",
-        otBank: "Compte Épargne-Temps (Repos)",
-        baseRate: "Taux Horaire de Base (€)",
-        hourlyBonus: "Prime Horaire Fixe (€/h)",
-        bonusInOt: "Inclure la prime dans les heures sup.",
-        bonusInUnworkedHol: "Inclure la prime dans les fériés chômés",
-        deductionsTitle: "Cotisations Sociales & Impôts par Pays",
-        goalLabel: "Objectif Net Mensuel (€)",
-        applyIndex: "Appliquer l'Index (+2,5%)",
-        exportBackup: "Exporter Sauvegarde (.JSON)",
-        importBackup: "Importer Sauvegarde",
-        holidayLegend: "Jours Fériés Légaux & Compensations"
+        tabs: { registo: "Pointage", calendario: "Calendrier", folha: "Salaire", financas: "Finances", config: "Réglages" },
+        netEst: "Salaire Net", grossTot: "Total Brut", conge3m: "Moyenne Congé 3M", freeCash: "Reste à Vivre",
+        liveClock: "Pointeuse en Temps Réel", startShift: "▶ Démarrer Poste", stopShift: "⏹ Terminer & Sauver",
+        quickTpl: "Modèles 1-Clic", fillWeek: "⚡ Remplir Lun-Ven",
+        saveDay: "Enregistrer", updateDay: "Mettre à jour", cancelEdit: "Annuler",
+        types: {
+          work: "Travail Normal", conge: "Congé Payé", feriado_chome: "Férié Chômé",
+          feriado_trab: "Férié Travaillé (+100%)", recupera: "Repos Pris", baixa: "Maladie (CNS)"
+        }
       },
       de: {
-        appTitle: "LuxTime Pro v3.0",
-        subtitle: "Arbeitszeiterfassung, Feiertage & Lohnabrechnung",
-        tabs: { registo: "Schichten & Stunden", calendario: "Kalender & Feiertage", folha: "Lohnabrechnung", auditoria: "Lohn-Prüfung", config: "Einstellungen" },
-        country: "Arbeitsland",
-        taxClass: "Steuerklasse",
-        netEstimated: "Geschätztes Nettogehalt",
-        grossTotal: "Gesamtbrutto",
-        congeRate3m: "Urlaubsschnitt (3 Monate)",
-        unworkedHolidayAuto: "Freie gesetzliche Feiertage automatisch vergüten",
-        quickTemplates: "Schnellvorlagen (1 Klick)",
-        autoFillWeek: "Woche füllen (Mo-Fr)",
-        addShift: "Tag speichern",
-        date: "Datum",
-        dayType: "Tagestyp",
-        types: { work: "Arbeitstag", conge: "Urlaub (Congé)", feriado_chome: "Feiertag (frei)", feriado_trab: "Feiertag gearbeitet (+100%)", recupera: "Freizeitausgleich (Repos)", baixa: "Krankheit (CNS)" },
-        start: "Beginn",
-        end: "Ende",
-        breakMin: "Pause (Min)",
-        normalH: "Normalstunden",
-        extraH: "Überstunden",
-        nightH: "Nachtstunden (22h-06h)",
-        expenseReimb: "Spesen / Km (€)",
-        note: "Notiz / Tour / Fahrzeug",
-        otMode: "Überstunden-Modus",
-        otPay: "Auszahlen",
-        otBank: "Arbeitszeitkonto (Repos)",
-        baseRate: "Basis-Stundenlohn (€)",
-        hourlyBonus: "Stundenprämie (€/Std.)",
-        bonusInOt: "Prämie bei Überstunden einbeziehen",
-        bonusInUnworkedHol: "Prämie an freien Feiertagen einbeziehen",
-        deductionsTitle: "Sozialabgaben & Steuern nach Land",
-        goalLabel: "Monatliches Netto-Ziel (€)",
-        applyIndex: "Index anwenden (+2,5%)",
-        exportBackup: "Backup exportieren (.JSON)",
-        importBackup: "Backup importieren",
-        holidayLegend: "Gesetzliche Feiertage & Ausgleichstage"
+        tabs: { registo: "Stempeln", calendario: "Kalender", folha: "Lohn", financas: "Finanzen", config: "Setup" },
+        netEst: "Nettogehalt", grossTot: "Gesamtbrutto", conge3m: "Urlaubsschnitt 3M", freeCash: "Freies Budget",
+        liveClock: "Live-Stechuhr", startShift: "▶ Schicht starten", stopShift: "⏹ Stoppen & Speichern",
+        quickTpl: "Schnellvorlagen", fillWeek: "⚡ Mo-Fr füllen",
+        saveDay: "Tag speichern", updateDay: "Aktualisieren", cancelEdit: "Abbrechen",
+        types: {
+          work: "Arbeitstag", conge: "Urlaub (Congé)", feriado_chome: "Feiertag (Frei)",
+          feriado_trab: "Feiertag gearbeitet", recupera: "Freizeitausgleich", baixa: "Krankheit (CNS)"
+        }
       },
       en: {
-        appTitle: "LuxTime Pro v3.0",
-        subtitle: "Professional Timesheet, Holidays & Payslip Simulator",
-        tabs: { registo: "Timesheet & Shifts", calendario: "Calendar & Holidays", folha: "Payslip", auditoria: "Payslip Audit", config: "Settings" },
-        country: "Working Country",
-        taxClass: "Tax Class",
-        netEstimated: "Estimated Net Pay",
-        grossTotal: "Total Gross",
-        congeRate3m: "Holiday Pay Avg (3 Months)",
-        unworkedHolidayAuto: "Auto-Pay Unworked Weekday Public Holidays",
-        quickTemplates: "1-Tap Shift Templates",
-        autoFillWeek: "Auto-Fill Workweek (Mon-Fri)",
-        addShift: "Save Daily Entry",
-        date: "Date",
-        dayType: "Day Type",
-        types: { work: "Regular Work", conge: "Paid Leave (Congé)", feriado_chome: "Public Holiday (Unworked)", feriado_trab: "Public Holiday Worked (+100%)", recupera: "Compensatory Rest (Repos)", baixa: "Sick Leave (CNS)" },
-        start: "Start",
-        end: "End",
-        breakMin: "Break (min)",
-        normalH: "Regular Hours",
-        extraH: "Overtime Hours",
-        nightH: "Night Hours (22h-06h)",
-        expenseReimb: "Expenses / Mileage (€)",
-        note: "Note / Route / Truck",
-        otMode: "Overtime Mode",
-        otPay: "Pay on Payslip",
-        otBank: "Time Bank (Repos)",
-        baseRate: "Base Hourly Rate (€)",
-        hourlyBonus: "Fixed Hourly Bonus (€/h)",
-        bonusInOt: "Include Bonus in Overtime",
-        bonusInUnworkedHol: "Include Bonus in Unworked Holidays",
-        deductionsTitle: "Country Social Security & Tax Deductions",
-        goalLabel: "Monthly Net Goal (€)",
-        applyIndex: "Apply +2.5% Index",
-        exportBackup: "Export Backup (.JSON)",
-        importBackup: "Import Backup",
-        holidayLegend: "Official Public Holidays & Compensation"
+        tabs: { registo: "Punch", calendario: "Calendar", folha: "Payslip", financas: "Money", config: "Settings" },
+        netEst: "Estimated Net", grossTot: "Total Gross", conge3m: "3M Holiday Avg", freeCash: "Free Cashflow",
+        liveClock: "Live Shift Timer", startShift: "▶ Clock In", stopShift: "⏹ Clock Out & Save",
+        quickTpl: "1-Tap Shifts", fillWeek: "⚡ Auto-Fill Mon-Fri",
+        saveDay: "Save Day", updateDay: "Update Day", cancelEdit: "Cancel",
+        types: {
+          work: "Regular Work", conge: "Paid Leave (Congé)", feriado_chome: "Public Holiday",
+          feriado_trab: "Holiday Worked (+100%)", recupera: "Time Bank Used", baixa: "Sick Leave (CNS)"
+        }
       },
       es: {
-        appTitle: "LuxTime Pro v3.0",
-        subtitle: "Control de Horas, Festivos y Simulador de Nómina",
-        tabs: { registo: "Turnos y Horas", calendario: "Calendario y Festivos", folha: "Nómina", auditoria: "Auditoría", config: "Ajustes" },
-        country: "País de Trabajo",
-        taxClass: "Clase Fiscal",
-        netEstimated: "Salario Neto Estimado",
-        grossTotal: "Total Bruto",
-        congeRate3m: "Media Vacaciones (3 Meses)",
-        unworkedHolidayAuto: "Pagar Festivos No Trabajados Automáticamente",
-        quickTemplates: "Turnos Rápidos (1 Toque)",
-        autoFillWeek: "Rellenar Semana (Lun-Vie)",
-        addShift: "Guardar Día",
-        date: "Fecha",
-        dayType: "Tipo de Día",
-        types: { work: "Trabajo Normal", conge: "Vacaciones (Congé)", feriado_chome: "Festivo No Trabajado", feriado_trab: "Festivo Trabajado (+100%)", recupera: "Descanso Compensatorio", baixa: "Baja Médica" },
-        start: "Entrada",
-        end: "Salida",
-        breakMin: "Pausa (min)",
-        normalH: "Horas Normales",
-        extraH: "Horas Extra",
-        nightH: "Horas Nocturnas (22h-06h)",
-        expenseReimb: "Dietas / Km (€)",
-        note: "Nota / Ruta / Vehículo",
-        otMode: "Destino Horas Extra",
-        otPay: "Pagar en Nómina",
-        otBank: "Banco de Horas (Repos)",
-        baseRate: "Precio Hora Base (€)",
-        hourlyBonus: "Prima por Hora Fija (€/h)",
-        bonusInOt: "Incluir Prima en Horas Extra",
-        bonusInUnworkedHol: "Incluir Prima en Festivo No Trabajado",
-        deductionsTitle: "Descuentos y Cotizaciones por País",
-        goalLabel: "Meta Neta Mensual (€)",
-        applyIndex: "Aplicar Index (+2,5%)",
-        exportBackup: "Exportar Copia (.JSON)",
-        importBackup: "Importar Copia",
-        holidayLegend: "Festivos Oficiales y Compensaciones"
+        tabs: { registo: "Fichaje", calendario: "Calendario", folha: "Nómina", financas: "Finanzas", config: "Ajustes" },
+        netEst: "Salario Neto", grossTot: "Total Bruto", conge3m: "Media Vacaciones", freeCash: "Saldo Libre",
+        liveClock: "Reloj en Tiempo Real", startShift: "▶ Iniciar Turno", stopShift: "⏹ Terminar y Guardar",
+        quickTpl: "Turnos Rápidos", fillWeek: "⚡ Rellenar Lun-Vie",
+        saveDay: "Guardar Día", updateDay: "Actualizar Día", cancelEdit: "Cancelar",
+        types: {
+          work: "Trabajo Normal", conge: "Vacaciones (Congé)", feriado_chome: "Festivo Libre",
+          feriado_trab: "Festivo Trabajado", recupera: "Uso Banco Horas", baixa: "Baja Médica"
+        }
       }
     };
 
-    // ==================== PERFIS DE DESCONTOS POR PAÍS ====================
+    // ==================== PERFIS FISCAIS POR PAÍS ====================
     const DEFAULT_COUNTRY_PROFILES = {
       LU: {
         name: "Luxemburgo 🇱🇺",
         classes: [
           { id: "1", label: "Classe 1 (Solteiro / Geral)", defaultTax: 14.5 },
-          { id: "1a", label: "Classe 1a (Monoparental / +64)", defaultTax: 9.0 },
+          { id: "1a", label: "Classe 1a (Monoparental)", defaultTax: 9.0 },
           { id: "2", label: "Classe 2 (Casado / Conjunto)", defaultTax: 7.5 }
         ],
         selectedClass: "2",
@@ -284,7 +205,7 @@
         deductions: [
           { key: "pension", label: "Caixa de Pensões (CNAP)", rate: 8.0, onOt: false },
           { key: "health", label: "Caixa de Doença (CNS Espécie)", rate: 2.8, onOt: true },
-          { key: "healthCash", label: "Caixa de Doença (CNS Monetária)", rate: 0.25, onOt: true },
+          { key: "healthCash", label: "Caixa de Doença (CNS Monetária)", rate: 0.25, onOt: false },
           { key: "depend", label: "Seguro Dependência (Abat. 642,73€)", rate: 1.4, onOt: true, allowance: 642.73 }
         ],
         mealVoucherCost: 2.80,
@@ -293,17 +214,17 @@
       DE: {
         name: "Alemanha 🇩🇪",
         classes: [
-          { id: "I", label: "Steuerklasse I (Solteiro)", defaultTax: 16.0 },
-          { id: "III", label: "Steuerklasse III (Casado Principal)", defaultTax: 8.5 },
-          { id: "IV", label: "Steuerklasse IV (Casado Igual)", defaultTax: 14.0 },
-          { id: "V", label: "Steuerklasse V (Casado Secundário)", defaultTax: 24.0 }
+          { id: "I", label: "Steuerklasse I", defaultTax: 16.0 },
+          { id: "III", label: "Steuerklasse III", defaultTax: 8.5 },
+          { id: "IV", label: "Steuerklasse IV", defaultTax: 14.0 },
+          { id: "V", label: "Steuerklasse V", defaultTax: 24.0 }
         ],
         selectedClass: "III",
         taxRate: 8.5,
         cisCredit: 0,
         otTaxExempt: false,
         deductions: [
-          { key: "rv", label: "Rentenversicherung (Pensão)", rate: 9.3, onOt: true },
+          { key: "rv", label: "Rentenversicherung", rate: 9.3, onOt: true },
           { key: "kv", label: "Krankenversicherung", rate: 8.86, onOt: true },
           { key: "pv", label: "Pflegeversicherung", rate: 1.8, onOt: true },
           { key: "av", label: "Arbeitslosenversicherung", rate: 1.3, onOt: true }
@@ -314,11 +235,11 @@
       FR: {
         name: "França 🇫🇷",
         classes: [
-          { id: "neutre", label: "Célibataire (1 Part)", defaultTax: 7.5 },
-          { id: "couple", label: "Couple Marié (2 Parts)", defaultTax: 4.5 },
-          { id: "famille", label: "Couple + Enfants (2.5+ Parts)", defaultTax: 2.5 }
+          { id: "1p", label: "Célibataire (1 Part)", defaultTax: 7.5 },
+          { id: "2p", label: "Marié / Pacsé (2 Parts)", defaultTax: 4.5 },
+          { id: "3p", label: "Famille (2.5+ Parts)", defaultTax: 2.5 }
         ],
-        selectedClass: "couple",
+        selectedClass: "2p",
         taxRate: 4.5,
         cisCredit: 0,
         otTaxExempt: true,
@@ -333,11 +254,11 @@
       PT: {
         name: "Portugal 🇵🇹",
         classes: [
-          { id: "nao_casado", label: "Não Casado", defaultTax: 13.5 },
-          { id: "casado_2", label: "Casado - 2 Titulares", defaultTax: 12.0 },
-          { id: "casado_1", label: "Casado - Único Titular", defaultTax: 8.5 }
+          { id: "nc", label: "Não Casado", defaultTax: 13.5 },
+          { id: "c2", label: "Casado 2 Titulares", defaultTax: 12.0 },
+          { id: "c1", label: "Casado 1 Titular", defaultTax: 8.5 }
         ],
-        selectedClass: "casado_2",
+        selectedClass: "c2",
         taxRate: 12.0,
         cisCredit: 0,
         otTaxExempt: false,
@@ -352,7 +273,7 @@
         classes: [
           { id: "s1", label: "Situación 1 (Soltero)", defaultTax: 14.0 },
           { id: "s2", label: "Situación 2 (Casado)", defaultTax: 10.5 },
-          { id: "s3", label: "Situación 3 (Con hijos)", defaultTax: 11.5 }
+          { id: "s3", label: "Situación 3 (General)", defaultTax: 11.5 }
         ],
         selectedClass: "s3",
         taxRate: 11.5,
@@ -360,100 +281,65 @@
         otTaxExempt: false,
         deductions: [
           { key: "cc", label: "Contingencias Comunes", rate: 4.7, onOt: true },
-          { key: "desempleo", label: "Desempleo + FP + MEI", rate: 1.8, onOt: true }
+          { key: "des", label: "Desempleo + FP + MEI", rate: 1.8, onOt: true }
         ],
         mealVoucherCost: 0,
         mealVoucherMax: 0
       }
     };
 
-    // ==================== CÁLCULO DE FERIADOS POR ANO ====================
+    // ==================== FERIADOS AUTOMÁTICOS POR ANO ====================
     function getEasterDate(year) {
-      const a = year % 19;
-      const b = Math.floor(year / 100);
-      const c = year % 100;
-      const d = Math.floor(b / 4);
-      const e = b % 4;
-      const f = Math.floor((b + 8) / 25);
-      const g = Math.floor((b - f + 1) / 3);
-      const h = (19 * a + b - d - g + 15) % 30;
-      const i = Math.floor(c / 4);
-      const k = c % 4;
-      const l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+      const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
       const m = Math.floor((a + 11 * h + 22 * l) / 451);
       const month = Math.floor((h + l - 7 * m + 114) / 31);
       const day = ((h + l - 7 * m + 114) % 31) + 1;
       return new Date(year, month - 1, day);
     }
-
-    function addDays(date, days) {
-      const d = new Date(date);
-      d.setDate(d.getDate() + days);
-      return d;
-    }
-
+    function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return d; }
     function fmtISO(d) {
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
     function getPublicHolidays(year, country) {
       const easter = getEasterDate(year);
-      const easterMonday = fmtISO(addDays(easter, 1));
+      const easterMon = fmtISO(addDays(easter, 1));
       const ascension = fmtISO(addDays(easter, 39));
-      const whitMonday = fmtISO(addDays(easter, 50));
-      const goodFriday = fmtISO(addDays(easter, -2));
-      const corpusChristi = fmtISO(addDays(easter, 60));
+      const whitMon = fmtISO(addDays(easter, 50));
+      const goodFri = fmtISO(addDays(easter, -2));
+      const corpus = fmtISO(addDays(easter, 60));
 
       if (country === 'LU') {
         return [
-          { date: `${year}-01-01`, name: "Nouvel An / Ano Novo" },
-          { date: easterMonday, name: "Lundi de Pâques / Segunda de Páscoa" },
-          { date: `${year}-05-01`, name: "Premier Mai / Dia do Trabalhador" },
-          { date: `${year}-05-09`, name: "Journée de l'Europe / Dia da Europa" },
-          { date: ascension, name: "Ascension / Ascensão" },
-          { date: whitMonday, name: "Lundi de Pentecôte / Segunda de Pentecostes" },
-          { date: `${year}-06-23`, name: "Fête Nationale (23 Juin)" },
-          { date: `${year}-08-15`, name: "Assomption / Assunção" },
-          { date: `${year}-11-01`, name: "Toussaint / Todos os Santos" },
-          { date: `${year}-12-25`, name: "Noël / Natal" },
-          { date: `${year}-12-26`, name: "Saint-Étienne / 2.º Dia de Natal" }
+          { date: `${year}-01-01`, name: "Ano Novo (Nouvel An)" }, { date: easterMon, name: "Segunda de Páscoa" }, { date: `${year}-05-01`, name: "1.º de Maio (Dia do Trabalhador)" },
+          { date: `${year}-05-09`, name: "Dia da Europa (Journée de l'Europe)" }, { date: ascension, name: "Quinta da Ascensão" }, { date: whitMon, name: "Segunda de Pentecostes" }, { date: `${year}-06-23`, name: "Festa Nacional Luxemburgo (23 Juin)" },
+          { date: `${year}-08-15`, name: "Assunção (15 de Agosto)" }, { date: `${year}-11-01`, name: "Todos os Santos (Toussaint)" },
+          { date: `${year}-12-25`, name: "Dia de Natal (Noël)" }, { date: `${year}-12-26`, name: "2.º Dia de Natal (Saint-Étienne)" }
         ];
       }
       if (country === 'PT') {
         return [
-          { date: `${year}-01-01`, name: "Ano Novo" },
-          { date: goodFriday, name: "Sexta-Feira Santa" },
-          { date: `${year}-04-25`, name: "Dia da Liberdade" },
-          { date: `${year}-05-01`, name: "Dia do Trabalhador" },
-          { date: corpusChristi, name: "Corpo de Deus" },
-          { date: `${year}-06-10`, name: "Dia de Portugal" },
-          { date: `${year}-08-15`, name: "Assunção de Nossa Senhora" },
-          { date: `${year}-10-05`, name: "Implantação da República" },
-          { date: `${year}-11-01`, name: "Todos os Santos" },
-          { date: `${year}-12-01`, name: "Restauração da Independência" },
-          { date: `${year}-12-08`, name: "Imaculada Conceição" },
-          { date: `${year}-12-25`, name: "Natal" }
+          { date: `${year}-01-01`, name: "Ano Novo" }, { date: goodFri, name: "Sexta-Feira Santa" }, { date: `${year}-04-25`, name: "25 de Abril" },
+          { date: `${year}-05-01`, name: "Dia do Trabalhador" }, { date: corpus, name: "Corpo de Deus" }, { date: `${year}-06-10`, name: "Dia de Portugal" },
+          { date: `${year}-08-15`, name: "Assunção" }, { date: `${year}-10-05`, name: "Implantação da República" },
+          { date: `${year}-11-01`, name: "Todos os Santos" }, { date: `${year}-12-01`, name: "Restauração da Independência" },
+          { date: `${year}-12-08`, name: "Imaculada Conceição" }, { date: `${year}-12-25`, name: "Natal" }
         ];
       }
       return [
-        { date: `${year}-01-01`, name: "Ano Novo / Nouvel An" },
-        { date: easterMonday, name: "Segunda de Páscoa" },
-        { date: `${year}-05-01`, name: "1.º de Maio" },
+        { date: `${year}-01-01`, name: "Ano Novo" }, { date: easterMon, name: "Segunda de Páscoa" }, { date: `${year}-05-01`, name: "1.º de Maio" },
         { date: ascension, name: "Ascensão" },
-        { date: whitMonday, name: "Segunda de Pentecostes" },
-        { date: `${year}-08-15`, name: "15 de Agosto" },
-        { date: `${year}-11-01`, name: "1 de Novembro" },
-        { date: `${year}-12-25`, name: "Natal" },
-        { date: `${year}-12-26`, name: "26 de Dezembro" }
+        { date: whitMon, name: "Pentecostes" },
+        { date: `${year}-08-15`, name: "15 de Agosto" }, { date: `${year}-11-01`, name: "1 de Novembro" },
+        { date: `${year}-12-25`, name: "Natal" }, { date: `${year}-12-26`, name: "26 de Dezembro" }
       ];
     }
 
-    // ==================== ESTADO DA APLICAÇÃO ====================
-    const savedState = JSON.parse(localStorage.getItem('luxtime_v3_state') || 'null');
-    const state = savedState || {
+    // ==================== ESTADO GLOBAL E PERSISTÊNCIA ====================
+    const defaultState = {
       lang: 'pt',
       activeTab: 'registo',
       selectedMonth: '2026-11',
@@ -470,9 +356,22 @@
       sundaySupplementPct: 70,
       holidaySupplementPct: 100,
       manualCongeRate: 21.80,
+      annualCongeQuota: 26,
       monthlyNetGoal: 3400,
+      extraMonthlyBonusGross: 0,
       countryProfiles: DEFAULT_COUNTRY_PROFILES,
+      liveClock: { running: false, startTimeMs: null },
+      editingDate: null,
       entries: {
+        "2026-08": [
+          { date: "2026-08-03", type: "work", start: "06:30", end: "16:00", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "Rota Bebidas" }
+        ],
+        "2026-09": [
+          { date: "2026-09-02", type: "work", start: "07:00", end: "16:30", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "Rota Norte" }
+        ],
+        "2026-10": [
+          { date: "2026-10-05", type: "work", start: "06:30", end: "16:30", breakMin: 30, normalH: 8, extraH: 1.5, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "Logística" }
+        ],
         "2026-11": [
           { date: "2026-11-02", type: "work", start: "06:30", end: "16:00", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "Distribuição" },
           { date: "2026-11-03", type: "work", start: "07:00", end: "15:30", breakMin: 30, normalH: 8, extraH: 0, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "Armazém" }
@@ -492,20 +391,31 @@
         expense: 0,
         note: ""
       },
-      audit: {
-        companyHours: 168,
-        companyCongeRate: 21.80,
-        companyNet: 3250
-      }
+      expensesList: [
+        { id: 1, name: "Habitação / Casa", category: "fixa", amount: 1150 },
+        { id: 2, name: "Supermercado & Alimentação", category: "variavel", amount: 520 },
+        { id: 3, name: "Combustível & Manutenção Auto", category: "variavel", amount: 210 },
+        { id: 4, name: "Telemóvel, Internet & Luz", category: "fixa", amount: 145 },
+        { id: 5, name: "Poupança / Investimento ETF", category: "poupanca", amount: 400 }
+      ],
+      newExpense: { name: "", category: "fixa", amount: "" },
+      audit: { companyHours: 168, companyCongeRate: 21.80, companyNet: 3250 },
+      backupText: ""
     };
 
+    const loaded = JSON.parse(localStorage.getItem('luxtime_v4_pro') || 'null');
+    const state = Object.assign({}, defaultState, loaded || {});
+    if (!state.expensesList) state.expensesList = defaultState.expensesList;
+    if (!state.liveClock) state.liveClock = { running: false, startTimeMs: null };
+
     function saveState() {
-      localStorage.setItem('luxtime_v3_state', JSON.stringify(state));
+      localStorage.setItem('luxtime_v4_pro', JSON.stringify(state));
       render();
     }
 
-    function calcShiftFromTimes(startStr, endStr, breakMin, stdHours) {
-      if (!startStr || !endStr) return { normalH: stdHours, extraH: 0, nightH: 0 };
+    // ==================== CÁLCULO DE HORAS & NOTURNAS (22h-06h) ====================
+    function calcShiftFromTimes(startStr, endStr, breakMin, stdHours, dateStr) {
+      if (!startStr || !endStr) return { normalH: stdHours, extraH: 0, nightH: 0, sundayH: 0 };
       const [sh, sm] = startStr.split(':').map(Number);
       const [eh, em] = endStr.split(':').map(Number);
       let startMin = sh * 60 + sm;
@@ -523,9 +433,13 @@
         if (clockMin >= 22 * 60 || clockMin < 6 * 60) nightMin++;
       }
       const nightH = +(nightMin / 60).toFixed(2);
-      return { normalH, extraH, nightH };
+      const isSun = dateStr ? (new Date(dateStr + 'T12:00:00').getDay() === 0) : false;
+      const sundayH = isSun ? totalH : 0;
+
+      return { normalH, extraH, nightH, sundayH };
     }
 
+    // ==================== MOTOR SALARIAL E MÉDIA DOS 3 MESES ====================
     function getPrevious3Months(ym) {
       const [y, m] = ym.split('-').map(Number);
       const res = [];
@@ -570,24 +484,25 @@
       const nh = Number(entry.normalH || 0);
       const eh = entry.otMode === 'pay' ? Number(entry.extraH || 0) : 0;
       const nightH = Number(entry.nightH || 0);
+      const sunH = Number(entry.sundayH || 0);
 
       const normalPay = nh * rateWithBonus;
       const otPay = eh * otBaseRate;
       const nightPay = nightH * base * (Number(state.nightSupplementPct) / 100);
+      const sunPay = sunH * base * (Number(state.sundaySupplementPct) / 100);
       const bonusTotal = (nh * bonus) + (state.includeBonusInOt ? eh * bonus : 0);
 
       return {
-        gross: normalPay + otPay + nightPay,
-        otGross: otPay + nightPay,
+        gross: normalPay + otPay + nightPay + sunPay,
+        otGross: otPay + nightPay + sunPay,
         bonusTotal,
         hoursCounted: nh + eh
       };
     }
 
-    function getCongeRate(ym) {
+    function getCongeRateDetails(ym) {
       const prev3 = getPrevious3Months(ym);
-      let totalGross = 0;
-      let totalHours = 0;
+      let totalGross = 0, totalHours = 0;
       prev3.forEach(m => {
         const list = state.entries[m] || [];
         list.forEach(e => {
@@ -596,8 +511,9 @@
           totalHours += r.hoursCounted;
         });
       });
-      if (totalHours >= 40) return +(totalGross / totalHours).toFixed(2);
-      return Number(state.manualCongeRate);
+      const isAuto = totalHours >= 24;
+      const rate = isAuto ? +(totalGross / totalHours).toFixed(2) : Number(state.manualCongeRate);
+      return { rate, isAuto, totalGross: +totalGross.toFixed(2), totalHours: +totalHours.toFixed(2), prev3 };
     }
 
     function getEffectiveMonthEntries(ym) {
@@ -612,18 +528,9 @@
           const alreadyLogged = manual.some(e => e.date === h.date);
           if (!alreadyLogged && dow >= 1 && dow <= 5) {
             manual.push({
-              date: h.date,
-              type: 'feriado_chome',
-              start: '-',
-              end: '-',
-              breakMin: 0,
-              normalH: state.standardDailyHours,
-              extraH: 0,
-              nightH: 0,
-              otMode: 'pay',
-              expense: 0,
-              note: `Feriado Oficial: ${h.name}`,
-              isAutoHoliday: true
+              date: h.date, type: 'feriado_chome', start: '-', end: '-',
+              breakMin: 0, normalH: state.standardDailyHours, extraH: 0, nightH: 0, sundayH: 0,
+              otMode: 'pay', expense: 0, note: h.name, isAutoHoliday: true
             });
           }
         });
@@ -633,31 +540,46 @@
 
     function calculateMonthSummary(ym) {
       const profile = state.countryProfiles[state.country];
-      const congeRate = getCongeRate(ym);
+      const congeInfo = getCongeRateDetails(ym);
+      const congeRate = congeInfo.rate;
       const list = getEffectiveMonthEntries(ym);
 
-      let totalGross = 0, totalOtAndSupplements = 0, totalBonusEarned = 0;
-      let totalNormalHours = 0, totalPaidExtraHours = 0, totalBankHours = 0;
-      let workedDaysForVouchers = 0, congeDaysCount = 0, unworkedHolidayHours = 0, unworkedHolidayPay = 0, totalExpenses = 0;
+      let totalGross = Number(state.extraMonthlyBonusGross || 0);
+      let totalOtAndSupplements = 0, totalBonusEarned = 0;
+      let totalNormalHours = 0, totalPaidExtraHours = 0;
+      let workedDaysForVouchers = 0, congeDaysCount = 0;
+      let unworkedHolidayHours = 0, unworkedHolidayPay = 0, totalExpensesReimb = 0;
 
       list.forEach(e => {
         const r = computeRowGross(e, congeRate);
         totalGross += r.gross;
         totalOtAndSupplements += r.otGross;
         totalBonusEarned += r.bonusTotal;
-        totalExpenses += Number(e.expense || 0);
+        totalExpensesReimb += Number(e.expense || 0);
 
         if (e.type === 'work' || e.type === 'feriado_trab') {
           totalNormalHours += Number(e.normalH || 0);
           workedDaysForVouchers++;
           if (e.otMode === 'pay') totalPaidExtraHours += Number(e.extraH || 0);
-          else totalBankHours += Number(e.extraH || 0);
         } else if (e.type === 'conge') {
           congeDaysCount++;
         } else if (e.type === 'feriado_chome') {
           unworkedHolidayHours += Number(e.normalH || state.standardDailyHours);
           unworkedHolidayPay += r.gross;
         }
+      });
+
+      // Contadores Anuais (Férias usadas no ano & Banco de Horas acumulado)
+      const [year] = ym.split('-').map(Number);
+      let annualCongeUsed = 0;
+      let totalReposBankHours = 0;
+      Object.keys(state.entries).forEach(monthKey => {
+        const mList = state.entries[monthKey] || [];
+        mList.forEach(item => {
+          if (monthKey.startsWith(String(year)) && item.type === 'conge') annualCongeUsed++;
+          if (item.otMode === 'bank') totalReposBankHours += Number(item.extraH || 0);
+          if (item.type === 'recupera') totalReposBankHours -= Number(item.normalH || state.standardDailyHours);
+        });
       });
 
       const regularGross = Math.max(0, totalGross - totalOtAndSupplements);
@@ -681,35 +603,120 @@
       const voucherDeduction = +(vouchersCount * Number(profile.mealVoucherCost || 0)).toFixed(2);
       const cis = Number(profile.cisCredit || 0);
 
-      const netSalary = +(totalGross - totalSocialDeductions - estimatedTax - voucherDeduction + cis + totalExpenses).toFixed(2);
+      const netSalary = +(totalGross - totalSocialDeductions - estimatedTax - voucherDeduction + cis + totalExpensesReimb).toFixed(2);
 
-      const [year] = ym.split('-').map(Number);
       const yearHolidays = getPublicHolidays(year, state.country);
       const weekendHolidays = yearHolidays.filter(h => {
         const dow = new Date(h.date + 'T12:00:00').getDay();
         return dow === 0 || dow === 6;
       });
 
+      // Finanças & Dinheiros
+      let fixedExp = 0, varExp = 0, savExp = 0;
+      (state.expensesList || []).forEach(x => {
+        const v = Number(x.amount || 0);
+        if (x.category === 'fixa') fixedExp += v;
+        else if (x.category === 'poupanca') savExp += v;
+        else varExp += v;
+      });
+      const totalOutflows = +(fixedExp + varExp + savExp).toFixed(2);
+      const freeCash = +(netSalary - totalOutflows).toFixed(2);
+      const totalWorkedH = Math.max(1, totalNormalHours + totalPaidExtraHours);
+      const netPerWorkedHour = +(netSalary / totalWorkedH).toFixed(2);
+
       return {
-        list, congeRate,
+        list, congeRate, congeInfo,
         totalGross: +totalGross.toFixed(2),
         totalOtAndSupplements: +totalOtAndSupplements.toFixed(2),
         totalBonusEarned: +totalBonusEarned.toFixed(2),
         totalNormalHours: +totalNormalHours.toFixed(2),
         totalPaidExtraHours: +totalPaidExtraHours.toFixed(2),
-        totalBankHours: +totalBankHours.toFixed(2),
+        annualCongeUsed,
+        annualCongeRemaining: Math.max(0, Number(state.annualCongeQuota) - annualCongeUsed),
+        totalReposBankHours: +totalReposBankHours.toFixed(2),
         congeDaysCount, unworkedHolidayHours,
         unworkedHolidayPay: +unworkedHolidayPay.toFixed(2),
         deductionBreakdown,
         totalSocialDeductions: +totalSocialDeductions.toFixed(2),
         estimatedTax, vouchersCount, voucherDeduction, cis,
-        totalExpenses: +totalExpenses.toFixed(2),
-        netSalary, weekendHolidays, yearHolidays
+        totalExpensesReimb: +totalExpensesReimb.toFixed(2),
+        netSalary, weekendHolidays, yearHolidays,
+        fixedExp, varExp, savExp, totalOutflows, freeCash, netPerWorkedHour
       };
     }
 
+    // ==================== RELÓGIO DE PONTO EM TEMPO REAL ====================
+    let liveInterval = null;
+    function updateLiveClockDisplay() {
+      const el = document.getElementById('liveClockBox');
+      if (!el || !state.liveClock.running) return;
+      const elapsedSec = Math.max(0, Math.floor((Date.now() - state.liveClock.startTimeMs) / 1000));
+      const hrs = Math.floor(elapsedSec / 3600);
+      const mins = Math.floor((elapsedSec % 3600) / 60);
+      const secs = elapsedSec % 60;
+      const elapsedHoursDec = elapsedSec / 3600;
+
+      const normalRate = Number(state.baseRate) + Number(state.hourlyBonus);
+      const otRate = Number(state.baseRate) * (1 + Number(state.otSupplementPct) / 100) + (state.includeBonusInOt ? Number(state.hourlyBonus) : 0);
+
+      let earned = 0;
+      if (elapsedHoursDec <= state.standardDailyHours) {
+        earned = elapsedHoursDec * normalRate;
+      } else {
+        earned = (state.standardDailyHours * normalRate) + ((elapsedHoursDec - state.standardDailyHours) * otRate);
+      }
+
+      el.innerHTML = `
+        <div class="row">
+          <div>
+            <div style="font-size:22px; font-weight:900; font-family:monospace; color:#38bdf8;">
+              ${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}
+            </div>
+            <div class="subtext">Turno em curso desde ${new Date(state.liveClock.startTimeMs).toTimeString().slice(0,5)}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:22px; font-weight:900; color:#10b981;">+${earned.toFixed(3)} €</div>
+            <div class="subtext">${normalRate.toFixed(2)} €/h acumulados</div>
+          </div>
+        </div>
+      `;
+    }
+
+    window.toggleLiveClock = () => {
+      if (!state.liveClock.running) {
+        state.liveClock.running = true;
+        state.liveClock.startTimeMs = Date.now();
+        saveState();
+      } else {
+        const startDt = new Date(state.liveClock.startTimeMs);
+        const endDt = new Date();
+        const todayISO = fmtISO(startDt);
+        const startStr = startDt.toTimeString().slice(0, 5);
+        const endStr = endDt.toTimeString().slice(0, 5);
+        const calc = calcShiftFromTimes(startStr, endStr, state.defaultBreakMin, state.standardDailyHours, todayISO);
+
+        state.form.date = todayISO;
+        state.form.type = 'work';
+        state.form.start = startStr;
+        state.form.end = endStr;
+        state.form.breakMin = state.defaultBreakMin;
+        state.form.normalH = calc.normalH;
+        state.form.extraH = calc.extraH;
+        state.form.nightH = calc.nightH;
+        state.form.sundayH = calc.sundayH;
+
+        state.liveClock.running = false;
+        state.liveClock.startTimeMs = null;
+        window.saveEntry();
+      }
+    };
+
+    if (liveInterval) clearInterval(liveInterval);
+    liveInterval = setInterval(updateLiveClockDisplay, 1000);
+
+    // ==================== FUNÇÕES DE INTERAÇÃO ====================
+    window.setTab = (tab) => { state.activeTab = tab; saveState(); };
     window.setLang = (l) => { state.lang = l; saveState(); };
-    window.setTab = (t) => { state.activeTab = t; saveState(); };
     window.setMonth = (m) => { state.selectedMonth = m; state.form.date = `${m}-01`; saveState(); };
     window.setCountry = (c) => { state.country = c; saveState(); };
     window.setTaxClass = (clsId) => {
@@ -726,22 +733,22 @@
       } else if (tpl === 'day9h') {
         state.form.type = 'work'; state.form.start = '07:00'; state.form.end = '16:30'; state.form.breakMin = 30;
       } else if (tpl === 'conge') {
-        state.form.type = 'conge'; state.form.normalH = state.standardDailyHours; state.form.extraH = 0; state.form.nightH = 0;
+        state.form.type = 'conge'; state.form.normalH = state.standardDailyHours; state.form.extraH = 0; state.form.nightH = 0; state.form.sundayH = 0;
       } else if (tpl === 'feriado_trab') {
         state.form.type = 'feriado_trab'; state.form.normalH = state.standardDailyHours; state.form.extraH = 0;
       }
       if (state.form.type === 'work') {
-        const calc = calcShiftFromTimes(state.form.start, state.form.end, state.form.breakMin, state.standardDailyHours);
-        state.form.normalH = calc.normalH; state.form.extraH = calc.extraH; state.form.nightH = calc.nightH;
+        const calc = calcShiftFromTimes(state.form.start, state.form.end, state.form.breakMin, state.standardDailyHours, state.form.date);
+        state.form.normalH = calc.normalH; state.form.extraH = calc.extraH; state.form.nightH = calc.nightH; state.form.sundayH = calc.sundayH;
       }
       saveState();
     };
 
-    window.updateFormTime = (field, val) => {
+    window.updateFormField = (field, val) => {
       state.form[field] = val;
-      if (['start', 'end', 'breakMin'].includes(field) && state.form.type === 'work') {
-        const calc = calcShiftFromTimes(state.form.start, state.form.end, state.form.breakMin, state.standardDailyHours);
-        state.form.normalH = calc.normalH; state.form.extraH = calc.extraH; state.form.nightH = calc.nightH;
+      if (['start', 'end', 'breakMin', 'date'].includes(field) && state.form.type === 'work') {
+        const calc = calcShiftFromTimes(state.form.start, state.form.end, state.form.breakMin, state.standardDailyHours, state.form.date);
+        state.form.normalH = calc.normalH; state.form.extraH = calc.extraH; state.form.nightH = calc.nightH; state.form.sundayH = calc.sundayH;
       }
       saveState();
     };
@@ -752,13 +759,31 @@
       if (!state.entries[ym]) state.entries[ym] = [];
       state.entries[ym] = state.entries[ym].filter(e => e.date !== state.form.date);
       state.entries[ym].push({ ...state.form });
+      state.editingDate = null;
       saveState();
+    };
+
+    window.editEntryFromList = (dateStr) => {
+      const ym = dateStr.slice(0, 7);
+      const list = getEffectiveMonthEntries(ym);
+      const found = list.find(e => e.date === dateStr);
+      if (found) {
+        state.form = { ...found };
+        delete state.form.isAutoHoliday;
+      } else {
+        state.form.date = dateStr;
+      }
+      state.editingDate = dateStr;
+      state.activeTab = 'registo';
+      saveState();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.deleteEntry = (date) => {
       const ym = state.selectedMonth;
       if (!state.entries[ym]) return;
       state.entries[ym] = state.entries[ym].filter(e => e.date !== date);
+      if (state.editingDate === date) state.editingDate = null;
       saveState();
     };
 
@@ -776,10 +801,28 @@
           state.entries[ym].push({
             date: dateStr, type: 'work', start: '07:00', end: '15:30',
             breakMin: state.defaultBreakMin, normalH: state.standardDailyHours,
-            extraH: 0, nightH: 0, otMode: 'pay', expense: 0, note: 'Turno Padrão'
+            extraH: 0, nightH: 0, sundayH: 0, otMode: 'pay', expense: 0, note: 'Turno Normal'
           });
         }
       }
+      saveState();
+    };
+
+    // ==================== FUNÇÕES DO GESTOR DE DINHEIROS ====================
+    window.addExpenseItem = () => {
+      if (!state.newExpense.name || !state.newExpense.amount) return;
+      state.expensesList.push({
+        id: Date.now(),
+        name: state.newExpense.name,
+        category: state.newExpense.category || 'fixa',
+        amount: Number(state.newExpense.amount)
+      });
+      state.newExpense = { name: "", category: "fixa", amount: "" };
+      saveState();
+    };
+
+    window.deleteExpenseItem = (id) => {
+      state.expensesList = state.expensesList.filter(x => x.id !== id);
       saveState();
     };
 
@@ -788,6 +831,24 @@
       saveState();
     };
 
+    window.generateBackupCode = () => {
+      state.backupText = JSON.stringify(state);
+      saveState();
+    };
+
+    window.restoreFromBackupCode = () => {
+      try {
+        const parsed = JSON.parse(state.backupText);
+        Object.assign(state, parsed);
+        state.backupText = "";
+        saveState();
+        alert("Dados restaurados com sucesso!");
+      } catch (e) {
+        alert("Código de backup inválido.");
+      }
+    };
+
+    // ==================== RENDERIZAÇÃO PRINCIPAL ====================
     function render() {
       const t = I18N[state.lang] || I18N.pt;
       const profile = state.countryProfiles[state.country];
@@ -795,370 +856,38 @@
       const goalPct = Math.min(100, Math.round((summary.netSalary / Math.max(1, state.monthlyNetGoal)) * 100));
 
       document.getElementById('app').innerHTML = `
-        <div class="glass p-4 mb-4 flex flex-col gap-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-xs font-bold">${profile.name}</span>
-              <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs font-bold">${t.taxClass}: ${profile.selectedClass}</span>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold">+${Number(state.hourlyBonus).toFixed(2)} €/h</span>
+        <!-- CABEÇALHO COMPACTO -->
+        <div class="card" style="padding: 12px 14px;">
+          <div class="row" style="margin-bottom: 8px; flex-wrap: wrap;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <span class="badge bg-sky">${profile.name}</span>
+              <span class="badge bg-amber">Classe ${profile.selectedClass}</span>
+              <span class="badge bg-emerald">+${Number(state.hourlyBonus).toFixed(2)} €/h</span>
             </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              <select onchange="setCountry(this.value)" class="text-xs font-semibold">
-                ${Object.keys(state.countryProfiles).map(c => `<option value="${c}" ${state.country === c ? 'selected' : ''}>${state.countryProfiles[c].name}</option>`).join('')}
+            <div style="display:flex; gap:6px;">
+              <select onchange="setLang(this.value)" style="width:auto; padding:5px 8px; font-size:11px;">
+                <option value="pt" ${state.lang==='pt'?'selected':''}>🇵🇹 PT</option>
+                <option value="lb" ${state.lang==='lb'?'selected':''}>🇱🇺 LB</option>
+                <option value="fr" ${state.lang==='fr'?'selected':''}>🇫🇷 FR</option>
+                <option value="de" ${state.lang==='de'?'selected':''}>🇩🇪 DE</option>
+                <option value="en" ${state.lang==='en'?'selected':''}>🇬🇧 EN</option>
+                <option value="es" ${state.lang==='es'?'selected':''}>🇪🇸 ES</option>
               </select>
-              <select onchange="setLang(this.value)" class="text-xs font-semibold">
-                <option value="pt" ${state.lang === 'pt' ? 'selected' : ''}>🇵🇹 PT</option>
-                <option value="lb" ${state.lang === 'lb' ? 'selected' : ''}>🇱🇺 LB</option>
-                <option value="fr" ${state.lang === 'fr' ? 'selected' : ''}>🇫🇷 FR</option>
-                <option value="de" ${state.lang === 'de' ? 'selected' : ''}>🇩🇪 DE</option>
-                <option value="en" ${state.lang === 'en' ? 'selected' : ''}>🇬🇧 EN</option>
-                <option value="es" ${state.lang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
-              </select>
-              <input type="month" value="${state.selectedMonth}" onchange="setMonth(this.value)" class="text-xs font-bold" />
-            </div>
-          </div>
-          <div>
-            <h1 class="text-xl font-extrabold text-white">${t.appTitle}</h1>
-            <p class="text-xs text-slate-400">${t.subtitle}</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 mb-4">
-          <div class="glass p-3.5 border-l-4 border-emerald-400">
-            <p class="text-[11px] text-slate-400">${t.netEstimated}</p>
-            <p class="text-xl font-extrabold text-emerald-400 mt-0.5">${summary.netSalary.toFixed(2)} €</p>
-            <p class="text-[10px] text-slate-400 mt-1">${goalPct}% da meta (${state.monthlyNetGoal} €)</p>
-          </div>
-          <div class="glass p-3.5 border-l-4 border-sky-400">
-            <p class="text-[11px] text-slate-400">${t.grossTotal}</p>
-            <p class="text-xl font-extrabold text-white mt-0.5">${summary.totalGross.toFixed(2)} €</p>
-            <p class="text-[10px] text-sky-300 mt-1">Prémio: +${summary.totalBonusEarned.toFixed(2)} €</p>
-          </div>
-          <div class="glass p-3.5 border-l-4 border-amber-400">
-            <p class="text-[11px] text-slate-400">${t.congeRate3m}</p>
-            <p class="text-xl font-extrabold text-amber-300 mt-0.5">${summary.congeRate.toFixed(2)} €/h</p>
-            <p class="text-[10px] text-slate-400 mt-1">1 dia (8h) = ${(summary.congeRate * 8).toFixed(2)} €</p>
-          </div>
-          <div class="glass p-3.5 border-l-4 border-purple-400">
-            <p class="text-[11px] text-slate-400">Feriados Não Trab.</p>
-            <p class="text-xl font-extrabold text-purple-300 mt-0.5">+${summary.unworkedHolidayPay.toFixed(2)} €</p>
-            <p class="text-[10px] text-slate-400 mt-1">${summary.unworkedHolidayHours}h | +${summary.weekendHolidays.length} Comp./Ano</p>
-          </div>
-        </div>
-
-        <div class="flex overflow-x-auto gap-1.5 mb-4 pb-1">
-          ${Object.entries(t.tabs).map(([key, label]) => `
-            <button onclick="setTab('${key}')" class="px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap ${state.activeTab === key ? 'bg-sky-500 text-slate-950' : 'glass text-slate-300'}">
-              ${label}
-            </button>
-          `).join('')}
-        </div>
-
-        ${state.activeTab === 'registo' ? renderRegistoTab(t, summary) : ''}
-        ${state.activeTab === 'calendario' ? renderCalendarioTab(t, summary) : ''}
-        ${state.activeTab === 'folha' ? renderFolhaTab(t, profile, summary) : ''}
-        ${state.activeTab === 'auditoria' ? renderAuditoriaTab(t, summary) : ''}
-        ${state.activeTab === 'config' ? renderConfigTab(t, profile) : ''}
-      `;
-    }
-
-    function renderRegistoTab(t, summary) {
-      return `
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div class="glass p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold text-sky-300 uppercase">${t.quickTemplates}</span>
-              <button onclick="autoFillWorkweek()" class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded-lg font-bold">
-                ⚡ ${t.autoFillWeek}
-              </button>
-            </div>
-            <div class="grid grid-cols-2 gap-1.5 mb-3">
-              <button onclick="applyQuickTemplate('morning')" class="p-2 rounded-lg bg-slate-800 text-xs font-semibold text-left">🌅 06:00-14:30 (8h)</button>
-              <button onclick="applyQuickTemplate('day9h')" class="p-2 rounded-lg bg-slate-800 text-xs font-semibold text-left">🚛 07:00-16:30 (8h+1h)</button>
-              <button onclick="applyQuickTemplate('conge')" class="p-2 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold text-left">🏖️ Dia de Congé</button>
-              <button onclick="applyQuickTemplate('feriado_trab')" class="p-2 rounded-lg bg-purple-500/20 text-purple-300 text-xs font-semibold text-left">🎉 Feriado Trab.</button>
-            </div>
-            <div class="space-y-2.5 text-xs">
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.date}</label>
-                  <input type="date" value="${state.form.date}" onchange="updateFormTime('date', this.value)" class="w-full" />
-                </div>
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.dayType}</label>
-                  <select onchange="updateFormTime('type', this.value)" class="w-full">
-                    ${Object.entries(t.types).map(([k, v]) => `<option value="${k}" ${state.form.type === k ? 'selected' : ''}>${v}</option>`).join('')}
-                  </select>
-                </div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.start}</label>
-                  <input type="time" value="${state.form.start}" onchange="updateFormTime('start', this.value)" class="w-full" />
-                </div>
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.end}</label>
-                  <input type="time" value="${state.form.end}" onchange="updateFormTime('end', this.value)" class="w-full" />
-                </div>
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.breakMin}</label>
-                  <input type="number" value="${state.form.breakMin}" onchange="updateFormTime('breakMin', this.value)" class="w-full" />
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.normalH}</label>
-                  <input type="number" step="0.25" value="${state.form.normalH}" onchange="updateFormTime('normalH', this.value)" class="w-full" />
-                </div>
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.extraH}</label>
-                  <input type="number" step="0.25" value="${state.form.extraH}" onchange="updateFormTime('extraH', this.value)" class="w-full" />
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.nightH}</label>
-                  <input type="number" step="0.25" value="${state.form.nightH}" onchange="updateFormTime('nightH', this.value)" class="w-full" />
-                </div>
-                <div>
-                  <label class="block text-slate-400 mb-1">${t.otMode}</label>
-                  <select onchange="updateFormTime('otMode', this.value)" class="w-full">
-                    <option value="pay" ${state.form.otMode === 'pay' ? 'selected' : ''}>${t.otPay}</option>
-                    <option value="bank" ${state.form.otMode === 'bank' ? 'selected' : ''}>${t.otBank}</option>
-                  </select>
-                </div>
-              </div>
-              <button onclick="saveEntry()" class="w-full py-2.5 rounded-xl bg-sky-500 text-slate-950 font-extrabold text-sm mt-1">
-                + ${t.addShift}
-              </button>
+              <input type="month" value="${state.selectedMonth}" onchange="setMonth(this.value)" style="width:auto; padding:5px 8px; font-size:11px;" />
             </div>
           </div>
 
-          <div class="glass p-4 lg:col-span-2">
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-xs font-bold text-white uppercase">Registos (${summary.list.length} dias)</h2>
-              <span class="text-xs text-slate-400">Normais: <b>${summary.totalNormalHours}h</b> | Extras: <b>${summary.totalPaidExtraHours}h</b></span>
+          <!-- 4 CARTÕES DE RESUMO FINANCEIRO E HORAS -->
+          <div class="grid-2">
+            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--success);">
+              <div class="subtext">${t.netEst}</div>
+              <div class="kpi-val" style="color:var(--success);">${summary.netSalary.toFixed(2)} €</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${goalPct}%; background:var(--success);"></div></div>
+              <div class="subtext" style="font-size:10px; margin-top:4px;">${goalPct}\% da meta (${state.monthlyNetGoal} €)</div>
             </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
-                <thead>
-                  <tr class="border-b border-slate-700 text-slate-400">
-                    <th class="py-2">Data</th>
-                    <th class="py-2">Tipo</th>
-                    <th class="py-2">Horas</th>
-                    <th class="py-2">Bruto</th>
-                    <th class="py-2 text-right">Ação</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-800">
-                  ${summary.list.map(e => {
-                    const row = computeRowGross(e, summary.congeRate);
-                    return `
-                      <tr>
-                        <td class="py-2 font-bold">${e.date.slice(5)}</td>
-                        <td class="py-2">${t.types[e.type] || e.type}</td>
-                        <td class="py-2">${e.normalH}h ${Number(e.extraH) > 0 ? `+${e.extraH}h` : ''}</td>
-                        <td class="py-2 font-bold text-emerald-400">${row.gross.toFixed(2)} €</td>
-                        <td class="py-2 text-right">
-                          ${e.isAutoHoliday ? '<span class="text-[10px] text-purple-300">Auto</span>' : `<button onclick="deleteEntry('${e.date}')" class="text-rose-400">✕</button>`}
-                        </td>
-                      </tr>
-                    `;
-                  }).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      `;
-    }
 
-    function renderCalendarioTab(t, summary) {
-      const [year] = state.selectedMonth.split('-').map(Number);
-      const rateUnworkedHol = Number(state.baseRate) + (state.includeBonusInUnworkedHoliday ? Number(state.hourlyBonus) : 0);
-      const dayPayUnworked = (state.standardDailyHours * rateUnworkedHol).toFixed(2);
-      const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-
-      return `
-        <div class="glass p-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-            <div>
-              <h2 class="text-base font-extrabold text-white">${t.holidayLegend} (${year})</h2>
-              <p class="text-xs text-slate-400">Valor Feriado Não Trabalhado (8h): <b class="text-emerald-400">${dayPayUnworked} €</b></p>
-            </div>
-            <label class="flex items-center gap-2 text-xs bg-slate-800 px-3 py-2 rounded-xl">
-              <input type="checkbox" ${state.autoPayUnworkedHolidays ? 'checked' : ''} onchange="state.autoPayUnworkedHolidays = this.checked; saveState();" />
-              <span>${t.unworkedHolidayAuto}</span>
-            </label>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            ${summary.yearHolidays.map(h => {
-              const dow = new Date(h.date + 'T12:00:00').getDay();
-              const isWeekend = (dow === 0 || dow === 6);
-              return `
-                <div class="p-3 rounded-xl border ${isWeekend ? 'bg-amber-500/10 border-amber-500/30' : 'bg-purple-500/10 border-purple-500/30'}">
-                  <div class="flex items-center justify-between text-xs font-bold">
-                    <span class="${isWeekend ? 'text-amber-300' : 'text-purple-300'}">${h.date} (${dayNames[dow]})</span>
-                    <span class="${isWeekend ? 'text-amber-200' : 'text-emerald-300'}">${isWeekend ? '+1 Congé Comp.' : `+${dayPayUnworked} €`}</span>
-                  </div>
-                  <p class="text-sm font-bold text-white mt-1">${h.name}</p>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    function renderFolhaTab(t, profile, summary) {
-      return `
-        <div class="glass p-4 max-w-2xl mx-auto space-y-2 text-xs">
-          <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-2">
-            <div>
-              <h2 class="text-base font-extrabold text-white">Fiche de Salaire (${state.selectedMonth})</h2>
-              <p class="text-slate-400">${profile.name} • ${t.taxClass} ${profile.selectedClass}</p>
-            </div>
-            <select onchange="setTaxClass(this.value)" class="text-xs font-bold">
-              ${profile.classes.map(c => `<option value="${c.id}" ${profile.selectedClass === c.id ? 'selected' : ''}>${c.label}</option>`).join('')}
-            </select>
-          </div>
-          <div class="flex justify-between py-1">
-            <span>Horas Normais (${summary.totalNormalHours}h) + Prémio 2,60€/h</span>
-            <span class="font-bold">${(summary.totalNormalHours * (Number(state.baseRate) + Number(state.hourlyBonus))).toFixed(2)} €</span>
-          </div>
-          <div class="flex justify-between py-1 text-purple-300">
-            <span>Feriados Não Trabalhados (${summary.unworkedHolidayHours}h)</span>
-            <span class="font-bold">+${summary.unworkedHolidayPay.toFixed(2)} €</span>
-          </div>
-          <div class="flex justify-between py-1 text-amber-300">
-            <span>Férias / Congé (${summary.congeDaysCount}d @ ${summary.congeRate.toFixed(2)} €/h)</span>
-            <span class="font-bold">+${(summary.congeDaysCount * state.standardDailyHours * summary.congeRate).toFixed(2)} €</span>
-          </div>
-          <div class="flex justify-between py-1 text-emerald-300">
-            <span>Horas Extras (${summary.totalPaidExtraHours}h) & Suplementos</span>
-            <span class="font-bold">+${summary.totalOtAndSupplements.toFixed(2)} €</span>
-          </div>
-          <div class="flex justify-between py-2 bg-slate-800 px-3 rounded-lg font-extrabold text-sm">
-            <span>TOTAL BRUTO</span>
-            <span class="text-sky-300">${summary.totalGross.toFixed(2)} €</span>
-          </div>
-          ${summary.deductionBreakdown.map(d => `
-            <div class="flex justify-between py-1 text-rose-300">
-              <span>- ${d.label} (${d.rate}%)</span>
-              <span>-${d.amount.toFixed(2)} €</span>
-            </div>
-          `).join('')}
-          <div class="flex justify-between py-1 text-rose-300">
-            <span>- Imposto (${t.taxClass} ${profile.selectedClass}: ${profile.taxRate}%)</span>
-            <span>-${summary.estimatedTax.toFixed(2)} €</span>
-          </div>
-          ${summary.voucherDeduction > 0 ? `
-            <div class="flex justify-between py-1 text-amber-300">
-              <span>- Chèques-Repas (${summary.vouchersCount}d × ${profile.mealVoucherCost.toFixed(2)} €)</span>
-              <span>-${summary.voucherDeduction.toFixed(2)} €</span>
-            </div>
-          ` : ''}
-          ${summary.cis > 0 ? `
-            <div class="flex justify-between py-1 text-emerald-300">
-              <span>+ Crédito Fiscal CIS</span>
-              <span>+${summary.cis.toFixed(2)} €</span>
-            </div>
-          ` : ''}
-          <div class="flex justify-between py-3 bg-emerald-500/20 border border-emerald-500/40 px-3 rounded-xl font-extrabold text-base mt-2">
-            <span>SALÁRIO LÍQUIDO</span>
-            <span class="text-emerald-300">${summary.netSalary.toFixed(2)} €</span>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderAuditoriaTab(t, summary) {
-      const diffConge = +(state.audit.companyCongeRate - summary.congeRate).toFixed(2);
-      const diffNet = +(state.audit.companyNet - summary.netSalary).toFixed(2);
-      return `
-        <div class="glass p-4 max-w-xl mx-auto space-y-3 text-xs">
-          <h2 class="text-base font-extrabold text-white">Auditoria da Folha da Empresa</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div>
-              <label class="block text-slate-400 mb-1">Taxa Congé Folha (€/h)</label>
-              <input type="number" step="0.01" value="${state.audit.companyCongeRate}" onchange="state.audit.companyCongeRate = Number(this.value); saveState();" class="w-full" />
-            </div>
-            <div>
-              <label class="block text-slate-400 mb-1">Horas na Folha</label>
-              <input type="number" step="0.5" value="${state.audit.companyHours}" onchange="state.audit.companyHours = Number(this.value); saveState();" class="w-full" />
-            </div>
-            <div>
-              <label class="block text-slate-400 mb-1">Líquido Recebido (€)</label>
-              <input type="number" step="1" value="${state.audit.companyNet}" onchange="state.audit.companyNet = Number(this.value); saveState();" class="w-full" />
-            </div>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-800 space-y-1">
-            <p>• Média Congé 3M: App <b>${summary.congeRate.toFixed(2)} €/h</b> vs Folha <b>${state.audit.companyCongeRate.toFixed(2)} €/h</b> (${diffConge >= 0 ? '+' : ''}${diffConge} €/h)</p>
-            <p>• Salário Líquido: App <b>${summary.netSalary.toFixed(2)} €</b> vs Banco <b>${state.audit.companyNet.toFixed(2)} €</b> (${diffNet >= 0 ? '+' : ''}${diffNet} €)</p>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderConfigTab(t, profile) {
-      return `
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-          <div class="glass p-4 space-y-3">
-            <div class="flex items-center justify-between">
-              <h2 class="font-extrabold text-sky-300 uppercase">Salário, Prémio 2,60€ & Classe</h2>
-              <button onclick="applyIndex25()" class="px-2 py-1 rounded bg-amber-500/20 text-amber-300 font-bold">${t.applyIndex}</button>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-slate-400 mb-1">${t.baseRate}</label>
-                <input type="number" step="0.01" value="${state.baseRate}" onchange="state.baseRate = Number(this.value); saveState();" class="w-full font-bold" />
-              </div>
-              <div>
-                <label class="block text-slate-400 mb-1">${t.hourlyBonus}</label>
-                <input type="number" step="0.01" value="${state.hourlyBonus}" onchange="state.hourlyBonus = Number(this.value); saveState();" class="w-full font-bold text-emerald-400" />
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-amber-300 font-bold mb-1">${t.taxClass}</label>
-                <select onchange="setTaxClass(this.value)" class="w-full font-bold">
-                  ${profile.classes.map(c => `<option value="${c.id}" ${profile.selectedClass === c.id ? 'selected' : ''}>${c.label}</option>`).join('')}
-                </select>
-              </div>
-              <div>
-                <label class="block text-slate-400 mb-1">Imposto (%)</label>
-                <input type="number" step="0.1" value="${profile.taxRate}" onchange="state.countryProfiles[state.country].taxRate = Number(this.value); saveState();" class="w-full font-bold" />
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-slate-400 mb-1">Média Congé Manual (€/h)</label>
-                <input type="number" step="0.01" value="${state.manualCongeRate}" onchange="state.manualCongeRate = Number(this.value); saveState();" class="w-full" />
-              </div>
-              <div>
-                <label class="block text-slate-400 mb-1">${t.goalLabel}</label>
-                <input type="number" step="50" value="${state.monthlyNetGoal}" onchange="state.monthlyNetGoal = Number(this.value); saveState();" class="w-full" />
-              </div>
-            </div>
-          </div>
-
-          <div class="glass p-4 space-y-2.5">
-            <h2 class="font-extrabold text-emerald-300 uppercase">${t.deductionsTitle} (${profile.name})</h2>
-            ${profile.deductions.map((d, idx) => `
-              <div class="flex items-center justify-between bg-slate-800/70 p-2 rounded-lg">
-                <span>${d.label}</span>
-                <div class="flex items-center gap-1">
-                  <input type="number" step="0.05" value="${d.rate}" onchange="state.countryProfiles[state.country].deductions[${idx}].rate = Number(this.value); saveState();" class="w-16 text-right font-bold" />
-                  <span>%</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    render();
-  </script>
-</body>
-</html>
+            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--primary);">
+              <div class="subtext">${t.grossTot}</div>
+              <div class="kpi-val">${summary.totalGross.toFixed(2)} €</div>
+              <div class="subtext" style="font-size:10px; color:#7dd3fc; margin-top:4px;">
+                Prémio 2,60€: +${summary.total
