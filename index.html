@@ -314,27 +314,45 @@
 
       if (country === 'LU') {
         return [
-          { date: `${year}-01-01`, name: "Ano Novo (Nouvel An)" }, { date: easterMon, name: "Segunda de Páscoa" }, { date: `${year}-05-01`, name: "1.º de Maio (Dia do Trabalhador)" },
-          { date: `${year}-05-09`, name: "Dia da Europa (Journée de l'Europe)" }, { date: ascension, name: "Quinta da Ascensão" }, { date: whitMon, name: "Segunda de Pentecostes" }, { date: `${year}-06-23`, name: "Festa Nacional Luxemburgo (23 Juin)" },
-          { date: `${year}-08-15`, name: "Assunção (15 de Agosto)" }, { date: `${year}-11-01`, name: "Todos os Santos (Toussaint)" },
-          { date: `${year}-12-25`, name: "Dia de Natal (Noël)" }, { date: `${year}-12-26`, name: "2.º Dia de Natal (Saint-Étienne)" }
+          { date: `${year}-01-01`, name: "Ano Novo (Nouvel An)" },
+          { date: easterMon, name: "Segunda de Páscoa" },
+          { date: `${year}-05-01`, name: "1.º de Maio (Dia do Trabalhador)" },
+          { date: `${year}-05-09`, name: "Dia da Europa (Journée de l'Europe)" },
+          { date: ascension, name: "Quinta da Ascensão" },
+          { date: whitMon, name: "Segunda de Pentecostes" },
+          { date: `${year}-06-23`, name: "Festa Nacional Luxemburgo (23 Juin)" },
+          { date: `${year}-08-15`, name: "Assunção (15 de Agosto)" },
+          { date: `${year}-11-01`, name: "Todos os Santos (Toussaint)" },
+          { date: `${year}-12-25`, name: "Dia de Natal (Noël)" },
+          { date: `${year}-12-26`, name: "2.º Dia de Natal (Saint-Étienne)" }
         ];
       }
       if (country === 'PT') {
         return [
-          { date: `${year}-01-01`, name: "Ano Novo" }, { date: goodFri, name: "Sexta-Feira Santa" }, { date: `${year}-04-25`, name: "25 de Abril" },
-          { date: `${year}-05-01`, name: "Dia do Trabalhador" }, { date: corpus, name: "Corpo de Deus" }, { date: `${year}-06-10`, name: "Dia de Portugal" },
-          { date: `${year}-08-15`, name: "Assunção" }, { date: `${year}-10-05`, name: "Implantação da República" },
-          { date: `${year}-11-01`, name: "Todos os Santos" }, { date: `${year}-12-01`, name: "Restauração da Independência" },
-          { date: `${year}-12-08`, name: "Imaculada Conceição" }, { date: `${year}-12-25`, name: "Natal" }
+          { date: `${year}-01-01`, name: "Ano Novo" },
+          { date: goodFri, name: "Sexta-Feira Santa" },
+          { date: `${year}-04-25`, name: "25 de Abril" },
+          { date: `${year}-05-01`, name: "Dia do Trabalhador" },
+          { date: corpus, name: "Corpo de Deus" },
+          { date: `${year}-06-10`, name: "Dia de Portugal" },
+          { date: `${year}-08-15`, name: "Assunção" },
+          { date: `${year}-10-05`, name: "Implantação da República" },
+          { date: `${year}-11-01`, name: "Todos os Santos" },
+          { date: `${year}-12-01`, name: "Restauração da Independência" },
+          { date: `${year}-12-08`, name: "Imaculada Conceição" },
+          { date: `${year}-12-25`, name: "Natal" }
         ];
       }
       return [
-        { date: `${year}-01-01`, name: "Ano Novo" }, { date: easterMon, name: "Segunda de Páscoa" }, { date: `${year}-05-01`, name: "1.º de Maio" },
+        { date: `${year}-01-01`, name: "Ano Novo" },
+        { date: easterMon, name: "Segunda de Páscoa" },
+        { date: `${year}-05-01`, name: "1.º de Maio" },
         { date: ascension, name: "Ascensão" },
         { date: whitMon, name: "Pentecostes" },
-        { date: `${year}-08-15`, name: "15 de Agosto" }, { date: `${year}-11-01`, name: "1 de Novembro" },
-        { date: `${year}-12-25`, name: "Natal" }, { date: `${year}-12-26`, name: "26 de Dezembro" }
+        { date: `${year}-08-15`, name: "15 de Agosto" },
+        { date: `${year}-11-01`, name: "1 de Novembro" },
+        { date: `${year}-12-25`, name: "Natal" },
+        { date: `${year}-12-26`, name: "26 de Dezembro" }
       ];
     }
 
@@ -883,11 +901,638 @@
               <div class="subtext">${t.netEst}</div>
               <div class="kpi-val" style="color:var(--success);">${summary.netSalary.toFixed(2)} €</div>
               <div class="progress-bar"><div class="progress-fill" style="width:${goalPct}%; background:var(--success);"></div></div>
-              <div class="subtext" style="font-size:10px; margin-top:4px;">${goalPct}\% da meta (${state.monthlyNetGoal} €)</div>
+              <div class="subtext" style="font-size:10px; margin-top:4px;">${goalPct}% da meta (${state.monthlyNetGoal} €)</div>
             </div>
 
             <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--primary);">
               <div class="subtext">${t.grossTot}</div>
               <div class="kpi-val">${summary.totalGross.toFixed(2)} €</div>
               <div class="subtext" style="font-size:10px; color:#7dd3fc; margin-top:4px;">
-                Prémio 2,60€: +${summary.total
+                Prémio 2,60€: +${summary.totalBonusEarned.toFixed(2)} €
+              </div>
+            </div>
+
+            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--warning);">
+              <div class="subtext">${t.conge3m}</div>
+              <div class="kpi-val" style="color:#fcd34d;">${summary.congeRate.toFixed(2)} €/h</div>
+              <div class="subtext" style="font-size:10px; margin-top:4px;">
+                1 dia (8h) = ${(summary.congeRate * 8).toFixed(2)} €
+              </div>
+            </div>
+
+            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--purple);">
+              <div class="subtext">${t.freeCash}</div>
+              <div class="kpi-val" style="color:${summary.freeCash >= 0 ? '#d8b4fe' : '#fda4af'};">
+                ${summary.freeCash.toFixed(2)} €
+              </div>
+              <div class="subtext" style="font-size:10px; margin-top:4px;">
+                Férias disp.: ${summary.annualCongeRemaining}d | Repos: ${summary.totalReposBankHours}h
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTEÚDO DO SEPARADOR ATIVO -->
+        ${state.activeTab === 'registo' ? renderRegistoTab(t, summary) : ''}
+        ${state.activeTab === 'calendario' ? renderCalendarioTab(t, summary) : ''}
+        ${state.activeTab === 'folha' ? renderFolhaTab(t, profile, summary) : ''}
+        ${state.activeTab === 'financas' ? renderFinancasTab(t, summary) : ''}
+        ${state.activeTab === 'config' ? renderConfigTab(t, profile) : ''}
+      `;
+
+      document.getElementById('bottomNav').innerHTML = `
+        <button onclick="setTab('registo')" class="nav-item ${state.activeTab==='registo'?'active':''}">
+          <span class="nav-icon">⏱️</span><span>${t.tabs.registo}</span>
+        </button>
+        <button onclick="setTab('calendario')" class="nav-item ${state.activeTab==='calendario'?'active':''}">
+          <span class="nav-icon">📅</span><span>${t.tabs.calendario}</span>
+        </button>
+        <button onclick="setTab('folha')" class="nav-item ${state.activeTab==='folha'?'active':''}">
+          <span class="nav-icon">📄</span><span>${t.tabs.folha}</span>
+        </button>
+        <button onclick="setTab('financas')" class="nav-item ${state.activeTab==='financas'?'active':''}">
+          <span class="nav-icon">💰</span><span>${t.tabs.financas}</span>
+        </button>
+        <button onclick="setTab('config')" class="nav-item ${state.activeTab==='config'?'active':''}">
+          <span class="nav-icon">⚙️</span><span>${t.tabs.config}</span>
+        </button>
+      `;
+
+      if (state.liveClock.running) updateLiveClockDisplay();
+    }
+
+    // ==================== ABA 1: PONTO & REGISTO DIÁRIO ====================
+    function renderRegistoTab(t, summary) {
+      return `
+        <!-- RELÓGIO DE PONTO AO VIVO -->
+        <div class="card" style="border: 1px solid rgba(56, 189, 248, 0.25);">
+          <div class="row" style="margin-bottom:8px;">
+            <span style="font-size:12px; font-weight:800; color:#7dd3fc;">⏱️ ${t.liveClock}</span>
+            <span class="badge bg-emerald">${(Number(state.baseRate)+Number(state.hourlyBonus)).toFixed(2)} €/h normal</span>
+          </div>
+          <div id="liveClockBox" style="margin-bottom:10px;">
+            ${!state.liveClock.running ? `<div class="subtext">Toque em Iniciar Turno ao começar o trabalho para contar horas e euros ao segundo.</div>` : ''}
+          </div>
+          <button onclick="toggleLiveClock()" class="${state.liveClock.running ? 'btn-danger' : 'btn-success'}" style="width:100%;">
+            ${state.liveClock.running ? t.stopShift : t.startShift}
+          </button>
+        </div>
+
+        <!-- FORMULÁRIO DE REGISTO / EDIÇÃO -->
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <span style="font-size:12px; font-weight:800; color:#38bdf8;">
+              ${state.editingDate ? `✏️ A Editar Dia: ${state.editingDate}` : `⚡ ${t.quickTpl}`}
+            </span>
+            <button onclick="autoFillWorkweek()" class="badge bg-emerald" style="border:none; cursor:pointer; padding:6px 10px;">
+              ${t.fillWeek}
+            </button>
+          </div>
+
+          <div class="grid-4" style="margin-bottom:12px;">
+            <button onclick="applyQuickTemplate('morning')" class="btn-ghost" style="padding:8px 4px; font-size:11px;">🌅 06-14:30</button>
+            <button onclick="applyQuickTemplate('day9h')" class="btn-ghost" style="padding:8px 4px; font-size:11px;">🚛 07-16:30</button>
+            <button onclick="applyQuickTemplate('conge')" class="btn-ghost" style="padding:8px 4px; font-size:11px; color:#fcd34d;">🏖️ Congé</button>
+            <button onclick="applyQuickTemplate('feriado_trab')" class="btn-ghost" style="padding:8px 4px; font-size:11px; color:#d8b4fe;">🎉 Feriado</button>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div>
+              <label>Data</label>
+              <input type="date" value="${state.form.date}" onchange="updateFormField('date', this.value)" />
+            </div>
+            <div>
+              <label>Tipo de Dia</label>
+              <select onchange="updateFormField('type', this.value)">
+                ${Object.entries(t.types).map(([k,v]) => `<option value="${k}" ${state.form.type===k?'selected':''}>${v}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:8px;">
+            <div>
+              <label>Entrada</label>
+              <input type="time" value="${state.form.start}" onchange="updateFormField('start', this.value)" />
+            </div>
+            <div>
+              <label>Saída</label>
+              <input type="time" value="${state.form.end}" onchange="updateFormField('end', this.value)" />
+            </div>
+            <div>
+              <label>Pausa (min)</label>
+              <input type="number" value="${state.form.breakMin}" onchange="updateFormField('breakMin', this.value)" />
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:8px;">
+            <div>
+              <label>Horas Normais</label>
+              <input type="number" step="0.25" value="${state.form.normalH}" onchange="updateFormField('normalH', this.value)" />
+            </div>
+            <div>
+              <label>Horas Extras</label>
+              <input type="number" step="0.25" value="${state.form.extraH}" onchange="updateFormField('extraH', this.value)" />
+            </div>
+            <div>
+              <label>Noturnas (22-06h)</label>
+              <input type="number" step="0.25" value="${state.form.nightH}" onchange="updateFormField('nightH', this.value)" />
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:12px;">
+            <div>
+              <label>Destino Extras</label>
+              <select onchange="updateFormField('otMode', this.value)">
+                <option value="pay" ${state.form.otMode==='pay'?'selected':''}>Pagar na Folha</option>
+                <option value="bank" ${state.form.otMode==='bank'?'selected':''}>Banco Horas (Repos)</option>
+              </select>
+            </div>
+            <div>
+              <label>Despesas / Km (€)</label>
+              <input type="number" step="0.5" value="${state.form.expense}" onchange="updateFormField('expense', this.value)" />
+            </div>
+            <div>
+              <label>Nota / Rota</label>
+              <input type="text" value="${state.form.note}" placeholder="Ex: Rota" onchange="updateFormField('note', this.value)" />
+            </div>
+          </div>
+
+          <div class="row">
+            <button onclick="saveEntry()" class="btn-primary">
+              ✓ ${state.editingDate ? t.updateDay : t.saveDay}
+            </button>
+            ${state.editingDate ? `<button onclick="state.editingDate=null; saveState();" class="btn-ghost">${t.cancelEdit}</button>` : ''}
+          </div>
+        </div>
+
+        <!-- LISTA DE REGISTOS DO MÊS -->
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <span style="font-size:13px; font-weight:800;">Registos do Mês (${summary.list.length} dias)</span>
+            <span class="subtext">Normais: <b>${summary.totalNormalHours}h</b> | Extras: <b>${summary.totalPaidExtraHours}h</b></span>
+          </div>
+
+          ${summary.list.length === 0 ? `<div class="subtext" style="text-align:center; padding:16px;">Ainda sem registos neste mês. Use o botão Preencher Seg-Sex acima!</div>` : ''}
+
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${summary.list.map(e => {
+              const row = computeRowGross(e, summary.congeRate);
+              const badgeCls = e.type.includes('feriado') ? 'bg-purple' : e.type === 'conge' ? 'bg-amber' : 'bg-sky';
+              return `
+                <div class="row" style="background:var(--card-alt); padding:10px 12px; border-radius:12px;">
+                  <div onclick="editEntryFromList('${e.date}')" style="flex:1; cursor:pointer;">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <span style="font-weight:800; font-size:13px;">${e.date.slice(8,10)}/${e.date.slice(5,7)}</span>
+                      <span class="badge ${badgeCls}">${t.types[e.type] || e.type}</span>
+                      ${Number(e.extraH) > 0 ? `<span class="badge bg-emerald">+${e.extraH}h ext</span>` : ''}
+                    </div>
+                    <div class="subtext" style="margin-top:3px;">
+                      ${e.start} - ${e.end} • ${e.normalH}h normais ${e.note ? `• ${e.note}` : ''}
+                    </div>
+                  </div>
+                  <div style="text-align:right; display:flex; align-items:center; gap:8px;">
+                    <div>
+                      <div style="font-weight:900; color:var(--success); font-size:14px;">+${row.gross.toFixed(2)} €</div>
+                      <div class="subtext" style="font-size:10px;">Toque p/ editar</div>
+                    </div>
+                    ${!e.isAutoHoliday ? `<button onclick="deleteEntry('${e.date}')" class="btn-danger" style="padding:6px 9px; font-size:11px;">✕</button>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== ABA 2: CALENDÁRIO VISUAL & FERIADOS ====================
+    function renderCalendarioTab(t, summary) {
+      const [y, m] = state.selectedMonth.split('-').map(Number);
+      const firstDay = new Date(y, m - 1, 1);
+      let startOffset = firstDay.getDay() - 1; // Segunda = 0
+      if (startOffset < 0) startOffset = 6;
+      const daysInMonth = new Date(y, m, 0).getDate();
+      const mapEntries = {};
+      summary.list.forEach(e => { mapEntries[e.date] = e; });
+
+      const cells = [];
+      for (let i = 0; i < startOffset; i++) cells.push(`<div class="cal-day empty"></div>`);
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${state.selectedMonth}-${String(d).padStart(2, '0')}`;
+        const entry = mapEntries[dateStr];
+        let tagHtml = '';
+        let borderStyle = '';
+        if (entry) {
+          if (entry.type === 'conge') {
+            tagHtml = `<div class="cal-tag bg-amber">Congé</div>`;
+            borderStyle = 'border-color: rgba(245,158,11,0.5);';
+          } else if (entry.type.includes('feriado')) {
+            tagHtml = `<div class="cal-tag bg-purple">Feriado</div>`;
+            borderStyle = 'border-color: rgba(168,85,247,0.5);';
+          } else if (entry.type === 'work') {
+            tagHtml = `<div class="cal-tag bg-emerald">${entry.normalH}h${Number(entry.extraH)>0 ? '+'+entry.extraH : ''}</div>`;
+            borderStyle = 'border-color: rgba(16,185,129,0.4);';
+          } else {
+            tagHtml = `<div class="cal-tag bg-sky">${entry.type}</div>`;
+          }
+        }
+        cells.push(`
+          <div onclick="editEntryFromList('${dateStr}')" class="cal-day" style="${borderStyle}">
+            <div class="cal-num">${d}</div>
+            ${tagHtml}
+          </div>
+        `);
+      }
+
+      const rateUnworkedHol = Number(state.baseRate) + (state.includeBonusInUnworkedHoliday ? Number(state.hourlyBonus) : 0);
+      const dayPayUnworked = (state.standardDailyHours * rateUnworkedHol).toFixed(2);
+
+      return `
+        <!-- CONTADORES DE FÉRIAS E BANCO DE HORAS -->
+        <div class="card">
+          <div class="grid-3" style="text-align:center;">
+            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
+              <div class="subtext">Férias Restantes</div>
+              <div style="font-size:18px; font-weight:900; color:#fcd34d;">${summary.annualCongeRemaining} / ${state.annualCongeQuota}d</div>
+            </div>
+            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
+              <div class="subtext">Banco Horas (Repos)</div>
+              <div style="font-size:18px; font-weight:900; color:#38bdf8;">${summary.totalReposBankHours}h</div>
+            </div>
+            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
+              <div class="subtext">Feriados Fim Semana</div>
+              <div style="font-size:18px; font-weight:900; color:#d8b4fe;">+${summary.weekendHolidays.length} dias</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GRELHA MENSAL INTERATIVA -->
+        <div class="card">
+          <div class="row" style="margin-bottom:6px;">
+            <span style="font-size:14px; font-weight:800;">📅 Calendário de ${state.selectedMonth}</span>
+            <span class="subtext">Toque num dia para editar</span>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-head">Seg</div><div class="cal-head">Ter</div><div class="cal-head">Qua</div>
+            <div class="cal-head">Qui</div><div class="cal-head">Sex</div><div class="cal-head">Sáb</div><div class="cal-head">Dom</div>
+            ${cells.join('')}
+          </div>
+        </div>
+
+        <!-- LISTA DOS FERIADOS OFICIAIS DO ANO -->
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <div>
+              <div style="font-size:14px; font-weight:800;">🎉 Feriados Oficiais (${y})</div>
+              <div class="subtext">Feriado não trabalhado (8h) = <b style="color:var(--success);">${dayPayUnworked} €</b></div>
+            </div>
+            <label style="display:flex; align-items:center; gap:6px; margin:0;">
+              <input type="checkbox" style="width:18px; height:18px;" ${state.autoPayUnworkedHolidays?'checked':''} onchange="state.autoPayUnworkedHolidays=this.checked; saveState();" />
+              <span>Auto-Pagar</span>
+            </label>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            ${summary.yearHolidays.map(h => {
+              const dow = new Date(h.date + 'T12:00:00').getDay();
+              const isWknd = (dow === 0 || dow === 6);
+              return `
+                <div class="row" style="background:var(--card-alt); padding:9px 12px; border-radius:10px;">
+                  <div>
+                    <div style="font-weight:800; font-size:12px;">${h.date} — ${h.name}</div>
+                    <div class="subtext">${isWknd ? 'Fim de semana: dá +1 dia de Congé Compensatório' : 'Dia útil: pago automaticamente na folha'}</div>
+                  </div>
+                  <span class="badge ${isWknd ? 'bg-amber' : 'bg-emerald'}">
+                    ${isWknd ? '+1 Dia Comp.' : `+${dayPayUnworked} €`}
+                  </span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== ABA 3: FICHE DE SALAIRE & AUDITORIA ====================
+    function renderFolhaTab(t, profile, summary) {
+      const diffConge = +(state.audit.companyCongeRate - summary.congeRate).toFixed(2);
+      const diffNet = +(state.audit.companyNet - summary.netSalary).toFixed(2);
+
+      return `
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <div>
+              <div style="font-size:16px; font-weight:900;">📄 Fiche de Salaire (${state.selectedMonth})</div>
+              <div class="subtext">${profile.name} • Classe ${profile.selectedClass} (${profile.taxRate}%)</div>
+            </div>
+            <select onchange="setTaxClass(this.value)" style="width:auto;">
+              ${profile.classes.map(c => `<option value="${c.id}" ${profile.selectedClass===c.id?'selected':''}>${c.label}</option>`).join('')}
+            </select>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+            <div class="row">
+              <span>Horas Normais (${summary.totalNormalHours}h × ${(Number(state.baseRate)+Number(state.hourlyBonus)).toFixed(2)} €)</span>
+              <b>${(summary.totalNormalHours * (Number(state.baseRate)+Number(state.hourlyBonus))).toFixed(2)} €</b>
+            </div>
+            <div class="row" style="color:#d8b4fe;">
+              <span>Feriados Não Trabalhados (${summary.unworkedHolidayHours}h)</span>
+              <b>+${summary.unworkedHolidayPay.toFixed(2)} €</b>
+            </div>
+            <div class="row" style="color:#fcd34d;">
+              <span>Férias / Congé (${summary.congeDaysCount}d × 8h @ ${summary.congeRate.toFixed(2)} €/h)</span>
+              <b>+${(summary.congeDaysCount * state.standardDailyHours * summary.congeRate).toFixed(2)} €</b>
+            </div>
+            <div class="row" style="color:#6ee7b7;">
+              <span>Horas Extras Pagas (${summary.totalPaidExtraHours}h) & Suplementos</span>
+              <b>+${summary.totalOtAndSupplements.toFixed(2)} €</b>
+            </div>
+
+            <div class="row" style="align-items:center; padding-top:4px;">
+              <span class="subtext">13.º Mês / Prémio Extra Bruto (€):</span>
+              <input type="number" step="10" value="${state.extraMonthlyBonusGross}" onchange="state.extraMonthlyBonusGross=Number(this.value); saveState();" style="width:110px; text-align:right; padding:6px;" />
+            </div>
+
+            <div class="row" style="background:var(--card-alt); padding:10px 12px; border-radius:12px; font-size:15px; font-weight:900;">
+              <span>TOTAL BRUTO</span>
+              <span style="color:var(--primary);">${summary.totalGross.toFixed(2)} €</span>
+            </div>
+
+            <div class="subtext" style="font-weight:800; text-transform:uppercase; margin-top:6px;">Descontos Oficiais (${profile.name})</div>
+            ${summary.deductionBreakdown.map(d => `
+              <div class="row" style="color:#fda4af;">
+                <span>- ${d.label} (${d.rate}%)</span>
+                <span>-${d.amount.toFixed(2)} €</span>
+              </div>
+            `).join('')}
+
+            <div class="row" style="color:#fda4af;">
+              <span>- Retenção Imposto (Classe ${profile.selectedClass}: ${profile.taxRate}%)</span>
+              <span>-${summary.estimatedTax.toFixed(2)} €</span>
+            </div>
+
+            ${summary.voucherDeduction > 0 ? `
+              <div class="row" style="color:#fcd34d;">
+                <span>- Chèques-Repas (${summary.vouchersCount} dias trab. × ${profile.mealVoucherCost.toFixed(2)} €)</span>
+                <span>-${summary.voucherDeduction.toFixed(2)} €</span>
+              </div>
+            ` : ''}
+
+            ${summary.cis > 0 ? `
+              <div class="row" style="color:#6ee7b7;">
+                <span>+ Crédito Fiscal CIS</span>
+                <span>+${summary.cis.toFixed(2)} €</span>
+              </div>
+            ` : ''}
+
+            ${summary.totalExpensesReimb > 0 ? `
+              <div class="row" style="color:#6ee7b7;">
+                <span>+ Reembolso Despesas / Km (Isento)</span>
+                <span>+${summary.totalExpensesReimb.toFixed(2)} €</span>
+              </div>
+            ` : ''}
+
+            <div class="row" style="background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.4); padding:14px; border-radius:14px; font-size:17px; font-weight:900; margin-top:6px;">
+              <span>SALÁRIO LÍQUIDO</span>
+              <span style="color:#6ee7b7;">${summary.netSalary.toFixed(2)} €</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPLICAÇÃO DA MÉDIA DOS 3 MESES DE CONGÉ -->
+        <div class="card">
+          <div style="font-size:13px; font-weight:800; color:#fcd34d; margin-bottom:6px;">
+            🔍 Cálculo da Média de Congé (${summary.congeInfo.prev3.join(', ')})
+          </div>
+          <div class="subtext">
+            ${summary.congeInfo.isAuto
+              ? `Calculado automaticamente sobre os últimos 3 meses: <b>${summary.congeInfo.totalGross.toFixed(2)} € brutos</b> a dividir por <b>${summary.congeInfo.totalHours}h</b> = <b>${summary.congeRate.toFixed(2)} €/h</b>.`
+              : `A usar valor manual de arranque (<b>${summary.congeRate.toFixed(2)} €/h</b>). Assim que tiver 3 meses registados, passa a automático.`}
+          </div>
+        </div>
+
+        <!-- AUDITORIA COM A FOLHA DA EMPRESA -->
+        <div class="card">
+          <div style="font-size:14px; font-weight:800; margin-bottom:10px;">⚖️ Conferência com a Folha da Empresa</div>
+          <div class="grid-3" style="margin-bottom:10px;">
+            <div>
+              <label>Taxa Congé Folha (€/h)</label>
+              <input type="number" step="0.01" value="${state.audit.companyCongeRate}" onchange="state.audit.companyCongeRate=Number(this.value); saveState();" />
+            </div>
+            <div>
+              <label>Horas Pagas Folha</label>
+              <input type="number" step="0.5" value="${state.audit.companyHours}" onchange="state.audit.companyHours=Number(this.value); saveState();" />
+            </div>
+            <div>
+              <label>Líquido no Banco (€)</label>
+              <input type="number" step="1" value="${state.audit.companyNet}" onchange="state.audit.companyNet=Number(this.value); saveState();" />
+            </div>
+          </div>
+          <div style="background:var(--card-alt); padding:10px 12px; border-radius:12px; font-size:12px;">
+            <div>• Diferença Taxa Congé: <b>${diffConge >= 0 ? '+' : ''}${diffConge} €/h</b></div>
+            <div style="margin-top:4px;">• Diferença Salário Líquido: <b style="color:${Math.abs(diffNet)<10?'#6ee7b7':'#fda4af'};">${diffNet >= 0 ? '+' : ''}${diffNet} €</b></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== ABA 4: CONTROLO DE DINHEIROS & ORÇAMENTO ====================
+    function renderFinancasTab(t, summary) {
+      const spentPct = Math.min(100, Math.round((summary.totalOutflows / Math.max(1, summary.netSalary)) * 100));
+      return `
+        <div class="card">
+          <div class="row" style="margin-bottom:8px;">
+            <div>
+              <div style="font-size:16px; font-weight:900;">💰 Controlo de Dinheiros (${state.selectedMonth})</div>
+              <div class="subtext">Cada hora líquida trabalhada rende <b>${summary.netPerWorkedHour.toFixed(2)} €/h</b></div>
+            </div>
+            <span class="badge bg-emerald">Líquido: ${summary.netSalary.toFixed(2)} €</span>
+          </div>
+
+          <div class="grid-3" style="margin:10px 0; text-align:center;">
+            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
+              <div class="subtext">Despesas Fixas</div>
+              <div style="font-size:15px; font-weight:900; color:#fda4af;">-${summary.fixedExp.toFixed(0)} €</div>
+            </div>
+            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
+              <div class="subtext">Variáveis</div>
+              <div style="font-size:15px; font-weight:900; color:#fcd34d;">-${summary.varExp.toFixed(0)} €</div>
+            </div>
+            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
+              <div class="subtext">Poupança / ETF</div>
+              <div style="font-size:15px; font-weight:900; color:#6ee7b7;">${summary.savExp.toFixed(0)} €</div>
+            </div>
+          </div>
+
+          <div class="row" style="background:var(--card-alt); padding:12px; border-radius:12px;">
+            <div>
+              <div class="subtext">Dinheiro Livre Após Despesas e Poupança</div>
+              <div style="font-size:20px; font-weight:900; color:${summary.freeCash >= 0 ? '#6ee7b7' : '#fda4af'};">
+                ${summary.freeCash.toFixed(2)} €
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge ${spentPct <= 85 ? 'bg-emerald' : 'bg-rose'}">${spentPct}% comprometido</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADICIONAR DESPESA OU POUPANÇA -->
+        <div class="card">
+          <div style="font-size:13px; font-weight:800; margin-bottom:8px;">+ Adicionar Despesa ou Poupança Mensal</div>
+          <div class="grid-3" style="margin-bottom:8px;">
+            <div>
+              <label>Descrição</label>
+              <input type="text" placeholder="Ex: Seguro, Luz..." value="${state.newExpense.name}" onchange="state.newExpense.name=this.value" />
+            </div>
+            <div>
+              <label>Categoria</label>
+              <select onchange="state.newExpense.category=this.value">
+                <option value="fixa" ${state.newExpense.category==='fixa'?'selected':''}>Despesa Fixa</option>
+                <option value="variavel" ${state.newExpense.category==='variavel'?'selected':''}>Variável</option>
+                <option value="poupanca" ${state.newExpense.category==='poupanca'?'selected':''}>Poupança / ETF</option>
+              </select>
+            </div>
+            <div>
+              <label>Valor (€)</label>
+              <input type="number" step="5" placeholder="0.00" value="${state.newExpense.amount}" onchange="state.newExpense.amount=this.value" />
+            </div>
+          </div>
+          <button onclick="addExpenseItem()" class="btn-primary">+ Guardar no Orçamento</button>
+        </div>
+
+        <!-- LISTA DE DESPESAS E CUSTO EM HORAS DE TRABALHO -->
+        <div class="card">
+          <div style="font-size:13px; font-weight:800; margin-bottom:8px;">Suas Despesas & Equivalência em Horas de Trabalho</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${(state.expensesList || []).map(item => {
+              const hoursCost = (Number(item.amount) / Math.max(1, summary.netPerWorkedHour)).toFixed(1);
+              const badgeColor = item.category === 'poupanca' ? 'bg-emerald' : item.category === 'fixa' ? 'bg-rose' : 'bg-amber';
+              return `
+                <div class="row" style="background:var(--card-alt); padding:10px 12px; border-radius:12px;">
+                  <div>
+                    <div style="font-weight:800; font-size:13px;">${item.name}</div>
+                    <div class="subtext">Equivale a <b>${hoursCost} horas</b> do seu trabalho líquido</div>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="badge ${badgeColor}">${Number(item.amount).toFixed(2)} €</span>
+                    <button onclick="deleteExpenseItem(${item.id})" class="btn-danger" style="padding:5px 8px; font-size:11px;">✕</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== ABA 5: CONFIGURAÇÕES & BACKUP ====================
+    function renderConfigTab(t, profile) {
+      return `
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <span style="font-size:14px; font-weight:800; color:#38bdf8;">⚙️ Salário, Prémio 2,60€ & Classe Fiscal</span>
+            <button onclick="applyIndex25()" class="badge bg-amber" style="border:none; cursor:pointer; padding:6px 10px;">
+              +2,5% Index
+            </button>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div>
+              <label>País de Trabalho</label>
+              <select onchange="setCountry(this.value)">
+                ${Object.keys(state.countryProfiles).map(c => `<option value="${c}" ${state.country===c?'selected':''}>${state.countryProfiles[c].name}</option>`).join('')}
+              </select>
+            </div>
+            <div>
+              <label>Classe de Imposto</label>
+              <select onchange="setTaxClass(this.value)">
+                ${profile.classes.map(c => `<option value="${c.id}" ${profile.selectedClass===c.id?'selected':''}>${c.label}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div>
+              <label>Valor Hora Base (€/h)</label>
+              <input type="number" step="0.01" value="${state.baseRate}" onchange="state.baseRate=Number(this.value); saveState();" />
+            </div>
+            <div>
+              <label>Prémio Fixo (€/h)</label>
+              <input type="number" step="0.01" value="${state.hourlyBonus}" onchange="state.hourlyBonus=Number(this.value); saveState();" />
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:8px;">
+            <div>
+              <label>Retenção Imposto (%)</label>
+              <input type="number" step="0.1" value="${profile.taxRate}" onchange="state.countryProfiles[state.country].taxRate=Number(this.value); saveState();" />
+            </div>
+            <div>
+              <label>Congé Manual (€/h)</label>
+              <input type="number" step="0.01" value="${state.manualCongeRate}" onchange="state.manualCongeRate=Number(this.value); saveState();" />
+            </div>
+            <div>
+              <label>Meta Líquida (€)</label>
+              <input type="number" step="50" value="${state.monthlyNetGoal}" onchange="state.monthlyNetGoal=Number(this.value); saveState();" />
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px; font-size:12px;">
+            <label style="display:flex; align-items:center; gap:8px; color:var(--text);">
+              <input type="checkbox" style="width:18px; height:18px;" ${state.includeBonusInOt?'checked':''} onchange="state.includeBonusInOt=this.checked; saveState();" />
+              Incluir prémio (${state.hourlyBonus.toFixed(2)} €/h) nas Horas Extras (+${state.otSupplementPct}%)
+            </label>
+            <label style="display:flex; align-items:center; gap:8px; color:var(--text);">
+              <input type="checkbox" style="width:18px; height:18px;" ${state.includeBonusInUnworkedHoliday?'checked':''} onchange="state.includeBonusInUnworkedHoliday=this.checked; saveState();" />
+              Incluir prémio (${state.hourlyBonus.toFixed(2)} €/h) nos Feriados Não Trabalhados
+            </label>
+          </div>
+        </div>
+
+        <!-- DESCONTOS INDIVIDUAIS DO PAÍS -->
+        <div class="card">
+          <div style="font-size:14px; font-weight:800; color:#6ee7b7; margin-bottom:10px;">
+            🏛️ Descontos Sociais (${profile.name})
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${profile.deductions.map((d, idx) => `
+              <div class="row" style="background:var(--card-alt); padding:8px 12px; border-radius:10px;">
+                <span style="font-size:12px; font-weight:600;">${d.label}</span>
+                <div style="display:flex; align-items:center; gap:4px; width:90px;">
+                  <input type="number" step="0.05" value="${d.rate}" onchange="state.countryProfiles[state.country].deductions[${idx}].rate=Number(this.value); saveState();" style="text-align:right; padding:6px;" />
+                  <span class="subtext">%</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="grid-2" style="margin-top:10px;">
+            <div>
+              <label>Chèque-Repas (€/dia trab.)</label>
+              <input type="number" step="0.1" value="${profile.mealVoucherCost}" onchange="state.countryProfiles[state.country].mealVoucherCost=Number(this.value); saveState();" />
+            </div>
+            <div>
+              <label>Crédito Fiscal CIS (€/mês)</label>
+              <input type="number" step="1" value="${profile.cisCredit}" onchange="state.countryProfiles[state.country].cisCredit=Number(this.value); saveState();" />
+            </div>
+          </div>
+        </div>
+
+        <!-- CÓPIA DE SEGURANÇA POR TEXTO (FUNCIONA DENTRO DO APK) -->
+        <div class="card">
+          <div style="font-size:14px; font-weight:800; margin-bottom:6px;">💾 Backup Seguro (Copiar / Restaurar Dados)</div>
+          <div class="subtext" style="margin-bottom:8px;">Gere o código abaixo para guardar todos os seus meses num bloco de notas antes de desinstalar ou atualizar o APK.</div>
+          <div class="grid-2" style="margin-bottom:8px;">
+            <button onclick="generateBackupCode()" class="btn-ghost">1. Gerar Código Backup</button>
+            <button onclick="restoreFromBackupCode()" class="btn-success">2. Restaurar Código</button>
+          </div>
+          <textarea rows="3" placeholder="Cole aqui o código de backup ou clique em Gerar Código..." onchange="state.backupText=this.value">${state.backupText || ''}</textarea>
+        </div>
+      `;
+    }
+
+    render();
+  </script>
+</body>
+</html>
