@@ -4,540 +4,253 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob: gap:; style-src * 'self' 'unsafe-inline'; script-src * 'self' 'unsafe-inline' 'unsafe-eval';" />
-  <title>LuxTime Pro v6.0</title>
+  <title>LuxTime Pro v6.1</title>
   <style>
     :root {
-      --bg: #0b0e14;
-      --surface: #121722;
-      --surface-blue: #102a45;
-      --surface-card: #161c28;
-      --drawer-header: #a8c7fa;
-      --drawer-bg: #14171f;
-      --gold-bg: #2b2212;
-      --gold-text: #f59e0b;
-      --accent: #2dd4bf;
-      --blue-pill: #38bdf8;
-      --text: #f1f5f9;
-      --muted: #64748b;
-      --border: rgba(255, 255, 255, 0.06);
+      --bg: #0b0f19;
+      --card: #141d2f;
+      --card-hover: #1b263d;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #f43f5e;
+      --purple: #a855f7;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      padding-bottom: 96px;
       overflow-x: hidden;
-      user-select: none;
     }
+    .container { max-width: 600px; margin: 0 auto; padding: 14px; }
+    
+    .top-pill-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .pill-badge {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 99px; font-size: 11px; font-weight: 800;
+      display: inline-flex; align-items: center; gap: 5px; color: var(--text);
+    }
+    .pill-badge.accent { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border-color: rgba(56, 189, 248, 0.3); }
+    .pill-badge.warning { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3); }
 
-    /* TOP BAR ESTILO RASTREADOR DE HORAS */
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 8px;
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .metric-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
-    .icon-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: var(--surface-card); border: 1px solid var(--border);
-      color: var(--text); display: flex; align-items: center; justify-content: center;
-      font-size: 18px; cursor: pointer;
-    }
-    .pill-btn {
-      background: var(--surface-card); border: 1px solid var(--border);
-      color: var(--muted); padding: 8px 16px; border-radius: 99px;
-      font-size: 13px; font-weight: 600; cursor: pointer;
-    }
-    .pill-btn.active {
-      background: rgba(45, 212, 191, 0.16); color: var(--accent);
-      border-color: rgba(45, 212, 191, 0.4);
-    }
+    .metric-title { font-size: 11px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+    .metric-value { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
+    .metric-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
 
-    /* NAVEGADOR DE MÊS */
-    .month-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 6px 16px 12px;
+    .card-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 16px; margin-bottom: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
-    .month-title {
-      font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
-      text-transform: capitalize;
-    }
-
-    /* BANNER AZUL ESCURO ARREDONDADO (COMO NA FOTO) */
-    .hero-blue-card {
-      margin: 0 14px 14px;
-      background: var(--surface-blue);
-      border-radius: 22px;
-      padding: 16px 18px;
-      display: flex; align-items: center; justify-content: space-between;
-      border: 1px solid rgba(56, 189, 248, 0.15);
-    }
-
-    /* CALENDÁRIO ESCURO ELEGANTE */
-    .cal-wrapper {
-      margin: 0 14px 14px;
-      background: var(--surface);
-      border-radius: 24px;
-      padding: 14px 10px;
-      border: 1px solid var(--border);
-    }
-    .cal-weekdays {
-      display: grid; grid-template-columns: repeat(7, 1fr);
-      text-align: center; font-size: 11px; font-weight: 700;
-      color: var(--muted); margin-bottom: 10px; letter-spacing: 0.5px;
-    }
-    .cal-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-    }
-    .day-cell {
-      aspect-ratio: 1 / 1.12;
-      background: var(--surface-card);
-      border-radius: 14px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: space-between;
-      padding: 6px 2px;
-      cursor: pointer; position: relative;
-      border: 1.5px solid transparent;
-      transition: transform 0.1s;
-    }
-    .day-cell:active { transform: scale(0.93); }
-    .day-cell.empty { background: transparent; cursor: default; }
-    .day-cell.today { border-color: var(--accent); }
-    .day-cell.has-work { background: rgba(16, 42, 69, 0.75); border-color: rgba(56, 189, 248, 0.25); }
-    .day-cell.has-conge { background: rgba(43, 34, 18, 0.85); border-color: rgba(245, 158, 11, 0.35); }
-    .day-cell.has-holiday { background: rgba(59, 29, 94, 0.65); border-color: rgba(168, 85, 247, 0.4); }
-    .day-num { font-size: 14px; font-weight: 700; color: #cbd5e1; }
-    .day-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      position: absolute; top: 5px; right: 5px;
-    }
-    .day-sub {
-      font-size: 9px; font-weight: 800; padding: 1px 4px;
-      border-radius: 6px; max-width: 92%; overflow: hidden; white-space: nowrap;
-    }
-
-    /* CARTÕES INFERIORES DE RESUMO (€) */
-    .bottom-summary-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-      margin: 0 14px 90px;
-    }
-    .summary-box {
-      background: var(--surface-blue);
-      border-radius: 22px;
-      padding: 15px 16px;
-      border: 1px solid rgba(56, 189, 248, 0.14);
-    }
-    .summary-label {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      color: #60a5fa; letter-spacing: 0.6px;
-    }
-    .summary-val {
-      font-size: 22px; font-weight: 900; color: #fff; margin-top: 4px;
-    }
-    .summary-meta { font-size: 11px; color: #93c5fd; margin-top: 3px; }
-
-    /* MENU LATERAL DESLIZANTE (IDÊNTICO À FOTO RASTREADOR DE HORAS) */
-    .drawer-backdrop {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
-      z-index: 1000; opacity: 0; pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
-    .drawer {
-      position: fixed; top: 0; left: 0; bottom: 0;
-      width: 82%; max-width: 320px;
-      background: var(--drawer-bg);
-      z-index: 1001;
-      transform: translateX(-102%);
-      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-      display: flex; flex-direction: column;
-      box-shadow: 12px 0 36px rgba(0,0,0,0.6);
-    }
-    .drawer.open { transform: translateX(0); }
-    .drawer-top {
-      background: var(--drawer-header);
-      color: #0f172a;
-      padding: 36px 22px 22px;
-    }
-    .brand-circle {
-      width: 66px; height: 66px; border-radius: 50%;
-      background: #0d1b2a;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-      margin-bottom: 14px;
-      border: 2px solid rgba(45, 212, 191, 0.4);
-    }
-    .drawer-title {
-      font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 14px;
-    }
-    .drawer-pill-btn {
-      background: #111827; color: #f8fafc;
-      border: none; border-radius: 99px;
-      padding: 11px 18px; font-size: 13px; font-weight: 700;
-      display: inline-flex; align-items: center; gap: 8px;
-      cursor: pointer; width: 100%; justify-content: center;
-    }
-    .drawer-body {
-      padding: 14px 12px; flex: 1; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 4px;
-    }
-    .premio-banner {
-      background: var(--gold-bg);
-      color: var(--gold-text);
-      padding: 14px 16px;
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      font-weight: 800; font-size: 15px;
-      margin-bottom: 8px; cursor: pointer;
-    }
-    .drawer-item {
-      display: flex; align-items: center; gap: 16px;
-      padding: 14px 16px; border-radius: 14px;
-      color: #e2e8f0; font-size: 15px; font-weight: 600;
-      background: transparent; border: none; width: 100%; text-align: left;
-      cursor: pointer;
-    }
-    .drawer-item.active {
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--accent); font-weight: 800;
-    }
-    .drawer-item-icon { width: 24px; text-align: center; font-size: 18px; }
-    .drawer-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 4px; }
-    .drawer-footer {
-      padding: 12px; text-align: center; font-size: 12px; color: var(--muted);
-    }
-
-    /* GAVETA INFERIOR (MODAL PARA REGISTAR DIA) */
-    .sheet-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      z-index: 950; display: none; align-items: flex-end; justify-content: center;
-    }
-    .sheet-backdrop.open { display: flex; }
-    .sheet {
-      background: #151b26; width: 100%; max-width: 600px;
-      border-radius: 26px 26px 0 0; padding: 20px 16px 28px;
-      border-top: 1px solid rgba(255,255,255,0.12);
-      max-height: 90vh; overflow-y: auto;
-    }
-
-    /* COMPONENTES INTERNOS DAS SECÇÕES */
-    .section-wrap { padding: 4px 14px 90px; }
-    .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 16px; margin-bottom: 12px;
-    }
+    
     .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+
+    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; font-weight: 700; }
     input, select, textarea {
-      width: 100%; background: var(--surface-card); color: var(--text);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-      padding: 10px 12px; font-size: 13px; font-weight: 600; outline: none;
+      width: 100%; background: #0f172a; color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 14px;
+      padding: 11px 13px; font-size: 13px; font-weight: 700; outline: none;
     }
-    .btn-main {
-      background: var(--accent); color: #042f2e;
-      border: none; border-radius: 14px; padding: 13px;
-      font-size: 14px; font-weight: 800; width: 100%; cursor: pointer;
+    input:focus, select:focus { border-color: var(--primary); }
+
+    button {
+      border: none; border-radius: 14px; padding: 12px 14px;
+      font-size: 13px; font-weight: 800; cursor: pointer;
     }
-    .btn-sec {
-      background: var(--surface-card); color: var(--text);
-      border: 1px solid var(--border); border-radius: 12px;
-      padding: 10px 14px; font-size: 12px; font-weight: 700; cursor: pointer;
+    .btn-primary { background: linear-gradient(135deg, #38bdf8, #0284c7); color: #082f49; width: 100%; }
+    .btn-success { background: linear-gradient(135deg, #34d399, #059669); color: #022c22; width: 100%; }
+    .btn-ghost { background: var(--card-hover); color: var(--text); border: 1px solid var(--border); width: 100%; }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(11, 15, 25, 0.98); backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      padding: 8px 6px calc(10px + env(safe-area-inset-bottom));
+      z-index: 999;
     }
-    .fab {
-      position: fixed; right: 18px; bottom: 22px;
-      width: 56px; height: 56px; border-radius: 50%;
-      background: var(--accent); color: #042f2e;
-      font-size: 28px; font-weight: 900; border: none;
-      box-shadow: 0 8px 24px rgba(45, 212, 191, 0.35);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; z-index: 800;
+    .nav-item {
+      background: transparent; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; padding: 6px 2px; border-radius: 12px; font-size: 10px; font-weight: 700;
     }
+    .nav-item.active { color: var(--primary); background: rgba(56, 189, 248, 0.12); }
+    .nav-icon { font-size: 19px; line-height: 1; }
+    .progress-bar { width: 100%; height: 7px; background: #070b14; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .progress-fill { height: 100%; background: var(--success); border-radius: 99px; }
   </style>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app" class="container"></div>
+  <nav id="bottomNav" class="bottom-nav"></nav>
 
   <script>
-    // ==================== PERFIS FISCAIS POR PAÍS ====================
-    var DEFAULT_COUNTRY_PROFILES = {
-      LU: {
-        name: "Luxemburgo 🇱🇺",
-        classes: [
-          { id: "1", label: "Classe 1 (Solteiro)", defaultTax: 14.5 },
-          { id: "1a", label: "Classe 1a (Monoparental)", defaultTax: 9.0 },
-          { id: "2", label: "Classe 2 (Casado)", defaultTax: 7.5 }
-        ],
-        selectedClass: "2", taxRate: 7.5, cisCredit: 50, otTaxExempt: true,
-        deductions: [
-          { key: "pension", label: "Caixa de Pensões (CNAP)", rate: 8.0, onOt: false },
-          { key: "health", label: "Caixa de Doença (CNS Espécie)", rate: 2.8, onOt: true },
-          { key: "healthCash", label: "Caixa de Doença (CNS Monetária)", rate: 0.25, onOt: false },
-          { key: "depend", label: "Seguro Dependência (Abat. 642,73€)", rate: 1.4, onOt: true, allowance: 642.73 }
-        ],
-        mealVoucherCost: 2.80, mealVoucherMax: 18
-      },
-      DE: {
-        name: "Alemanha 🇩🇪",
-        classes: [
-          { id: "I", label: "Steuerklasse I", defaultTax: 16.0 },
-          { id: "III", label: "Steuerklasse III", defaultTax: 8.5 },
-          { id: "IV", label: "Steuerklasse IV", defaultTax: 14.0 }
-        ],
-        selectedClass: "III", taxRate: 8.5, cisCredit: 0, otTaxExempt: false,
-        deductions: [
-          { key: "rv", label: "Rentenversicherung", rate: 9.3, onOt: true },
-          { key: "kv", label: "Krankenversicherung", rate: 8.86, onOt: true },
-          { key: "pv", label: "Pflegeversicherung", rate: 1.8, onOt: true },
-          { key: "av", label: "Arbeitslosenversicherung", rate: 1.3, onOt: true }
-        ],
-        mealVoucherCost: 0, mealVoucherMax: 0
-      },
-      FR: {
-        name: "França 🇫🇷",
-        classes: [
-          { id: "1p", label: "1 Part (Célibataire)", defaultTax: 7.5 },
-          { id: "2p", label: "2 Parts (Couple)", defaultTax: 4.5 }
-        ],
-        selectedClass: "2p", taxRate: 4.5, cisCredit: 0, otTaxExempt: true,
-        deductions: [
-          { key: "vieillesse", label: "Assurance Vieillesse", rate: 7.3, onOt: true },
-          { key: "csg", label: "CSG / CRDS", rate: 9.53, onOt: true },
-          { key: "agirc", label: "Retraite AGIRC-ARRCO", rate: 3.15, onOt: true }
-        ],
-        mealVoucherCost: 4.50, mealVoucherMax: 20
-      },
-      PT: {
-        name: "Portugal 🇵🇹",
-        classes: [
-          { id: "nc", label: "Não Casado", defaultTax: 13.5 },
-          { id: "c2", label: "Casado 2 Titulares", defaultTax: 12.0 }
-        ],
-        selectedClass: "c2", taxRate: 12.0, cisCredit: 0, otTaxExempt: false,
-        deductions: [ { key: "ss", label: "Segurança Social (TSU)", rate: 11.0, onOt: true } ],
-        mealVoucherCost: 0, mealVoucherMax: 22
-      },
-      ES: {
-        name: "Espanha 🇪🇸",
-        classes: [
-          { id: "s1", label: "Situación 1", defaultTax: 14.0 },
-          { id: "s3", label: "Situación 3", defaultTax: 11.5 }
-        ],
-        selectedClass: "s3", taxRate: 11.5, cisCredit: 0, otTaxExempt: false,
-        deductions: [
-          { key: "cc", label: "Contingencias Comunes", rate: 4.7, onOt: true },
-          { key: "des", label: "Desempleo + FP", rate: 1.8, onOt: true }
-        ],
-        mealVoucherCost: 0, mealVoucherMax: 0
-      }
-    };
-
-    // ==================== FERIADOS AUTOMÁTICOS ====================
-    function getEasterDate(year) {
-      var a = year % 19, b = Math.floor(year / 100), c = year % 100;
-      var d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
-      var g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
-      var i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
-      var m = Math.floor((a + 11 * h + 22 * l) / 451);
-      var month = Math.floor((h + l - 7 * m + 114) / 31);
-      var day = ((h + l - 7 * m + 114) % 31) + 1;
-      return new Date(year, month - 1, day);
-    }
-    function addDays(date, days) { var d = new Date(date); d.setDate(d.getDate() + days); return d; }
-    function fmtISO(d) {
-      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-    }
-
-    function getPublicHolidays(year, country) {
-      var easter = getEasterDate(year);
-      var easterMon = fmtISO(addDays(easter, 1));
-      var ascension = fmtISO(addDays(easter, 39));
-      var whitMon = fmtISO(addDays(easter, 50));
-      if (country === 'LU') {
-        return [
-          { date: year + "-01-01", name: "Ano Novo (Nouvel An)" },
-          { date: easterMon, name: "Segunda de Páscoa" },
-          { date: year + "-05-01", name: "1.º de Maio" },
-          { date: year + "-05-09", name: "Dia da Europa" },
-          { date: ascension, name: "Ascensão" },
-          { date: whitMon, name: "Segunda de Pentecostes" },
-          { date: year + "-06-23", name: "Festa Nacional (23 Juin)" },
-          { date: year + "-08-15", name: "Assunção (15 Agosto)" },
-          { date: year + "-11-01", name: "Todos os Santos" },
-          { date: year + "-12-25", name: "Natal" },
-          { date: year + "-12-26", name: "Saint-Étienne (26 Dez)" }
-        ];
-      }
-      return [
-        { date: year + "-01-01", name: "Ano Novo" },
-        { date: easterMon, name: "Páscoa" },
-        { date: year + "-05-01", name: "1.º de Maio" },
-        { date: year + "-08-15", name: "15 de Agosto" },
-        { date: year + "-11-01", name: "Todos os Santos" },
-        { date: year + "-12-25", name: "Natal" }
-      ];
-    }
-
-    // ==================== ESTADO DA APLICAÇÃO ====================
     var defaultState = {
-      lang: 'pt',
-      view: 'calendario', // calendario, premio, despesas, estatisticas, banco, relatorios, definicoes
-      drawerOpen: false,
-      sheetOpen: false,
-      multiStampMode: false,
-      activeStamp: 'work8', // work8, work9, conge, feriado_trab, clear
-      selectedMonth: '2026-11',
-      country: 'LU',
-      baseRate: 17.50,
-      hourlyBonus: 2.60,
-      includeBonusInOt: true,
-      includeBonusInUnworkedHoliday: true,
-      autoPayUnworkedHolidays: true,
-      standardDailyHours: 8,
-      defaultBreakMin: 30,
-      otSupplementPct: 40,
-      nightSupplementPct: 15,
-      holidaySupplementPct: 100,
-      manualCongeRate: 21.80,
-      annualCongeQuota: 26,
-      monthlyNetGoal: 3400,
-      countryProfiles: DEFAULT_COUNTRY_PROFILES,
-      liveClock: { running: false, startTimeMs: null },
+      activeTab: 'registo', selectedMonth: '2026-11', country: 'LU',
+      baseRate: 17.50, hourlyBonus: 2.60, manualCongeRate: 21.80, monthlyNetGoal: 3400,
       entries: {
-        "2026-08": [{ date: "2026-08-03", type: "work", start: "06:30", end: "16:00", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, otMode: "pay", expense: 0, note: "Distribuição" }],
-        "2026-09": [{ date: "2026-09-02", type: "work", start: "07:00", end: "16:30", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, otMode: "pay", expense: 0, note: "Rota" }],
-        "2026-10": [{ date: "2026-10-05", type: "work", start: "06:30", end: "16:30", breakMin: 30, normalH: 8, extraH: 1.5, nightH: 0, otMode: "pay", expense: 0, note: "Logística" }],
-        "2026-11": [
-          { date: "2026-11-02", type: "work", start: "06:30", end: "16:00", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, otMode: "pay", expense: 0, note: "Distribuição" },
-          { date: "2026-11-03", type: "work", start: "07:00", end: "15:30", breakMin: 30, normalH: 8, extraH: 0, nightH: 0, otMode: "pay", expense: 0, note: "Armazém" }
-        ]
+        "2026-11": [{ date: "2026-11-04", type: "work", start: "07:00", end: "16:30", breakMin: 30, normalH: 8, extraH: 1, expense: 0, note: "Distribuição" }]
       },
-      form: { date: "2026-11-04", type: "work", start: "07:00", end: "16:30", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, otMode: "pay", expense: 0, note: "Distribuição" },
-      expensesList: [
-        { id: 1, name: "Habitação / Casa", category: "fixa", amount: 1150 },
-        { id: 2, name: "Supermercado & Alimentação", category: "variavel", amount: 520 },
-        { id: 3, name: "Combustível & Auto", category: "variavel", amount: 210 },
-        { id: 4, name: "Poupança / ETF", category: "poupanca", amount: 400 }
-      ],
-      newExpense: { name: "", category: "fixa", amount: "" },
-      backupText: ""
+      form: { date: "2026-11-04", type: "work", start: "07:00", end: "16:30", breakMin: 30, normalH: 8, extraH: 1, note: "" },
+      expensesList: [{ id: 1, name: "Casa / Habitação", category: "fixa", amount: 1150 }]
     };
 
     var loaded = null;
-    try { loaded = JSON.parse(localStorage.getItem('luxtime_v6_sleek') || 'null'); } catch (e) {}
+    try { loaded = JSON.parse(localStorage.getItem('luxtime_v6_1') || 'null'); } catch(e){}
     var state = Object.assign({}, defaultState, loaded || {});
-    if (!state.countryProfiles || !state.countryProfiles[state.country]) state.countryProfiles = DEFAULT_COUNTRY_PROFILES;
 
     function saveState() {
-      try { localStorage.setItem('luxtime_v6_sleek', JSON.stringify(state)); } catch (e) {}
+      try { localStorage.setItem('luxtime_v6_1', JSON.stringify(state)); } catch(e){}
       render();
     }
 
-    // ==================== MOTOR DE CÁLCULO ====================
-    function calcShiftFromTimes(startStr, endStr, breakMin, stdHours) {
-      if (!startStr || !endStr) return { normalH: stdHours, extraH: 0, nightH: 0 };
-      var s = startStr.split(':').map(Number), e = endStr.split(':').map(Number);
-      var sMin = s[0] * 60 + s[1], eMin = e[0] * 60 + e[1];
-      if (eMin <= sMin) eMin += 24 * 60;
-      var totalH = +(Math.max(0, (eMin - sMin) - Number(breakMin || 0)) / 60).toFixed(2);
-      var normalH = Math.min(stdHours, totalH);
-      var extraH = +(Math.max(0, totalH - stdHours)).toFixed(2);
-      var nightMin = 0;
-      for (var m = sMin; m < eMin; m++) {
-        var c = m % 1440;
-        if (c >= 1320 || c < 360) nightMin++;
-      }
-      return { normalH: normalH, extraH: extraH, nightH: +(nightMin / 60).toFixed(2) };
-    }
-
-    function getPrevious3Months(ym) {
-      var p = ym.split('-').map(Number), res = [];
-      for (var i = 1; i <= 3; i++) {
-        var d = new Date(p[0], p[1] - 1 - i, 1);
-        res.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
-      }
-      return res;
-    }
-
-    function computeRowGross(entry, congeRate) {
-      var base = Number(state.baseRate), bonus = Number(state.hourlyBonus);
-      var rateWithBonus = base + bonus;
-      var otRate = base * (1 + Number(state.otSupplementPct) / 100) + (state.includeBonusInOt ? bonus : 0);
-
-      if (entry.type === 'baixa' || entry.type === 'recupera') return { gross: 0, otGross: 0, bonusTotal: 0, hoursCounted: 0 };
-      if (entry.type === 'conge') {
-        var hc = Number(entry.normalH || state.standardDailyHours);
-        return { gross: hc * congeRate, otGross: 0, bonusTotal: 0, hoursCounted: hc };
-      }
-      if (entry.type === 'feriado_chome') {
-        var hf = Number(entry.normalH || state.standardDailyHours);
-        var rf = base + (state.includeBonusInUnworkedHoliday ? bonus : 0);
-        return { gross: hf * rf, otGross: 0, bonusTotal: state.includeBonusInUnworkedHoliday ? hf * bonus : 0, hoursCounted: hf };
-      }
-      if (entry.type === 'feriado_trab') {
-        var ht = Number(entry.normalH || state.standardDailyHours);
-        var chome = ht * (base + (state.includeBonusInUnworkedHoliday ? bonus : 0));
-        var worked = ht * rateWithBonus;
-        var maj = ht * base * (Number(state.holidaySupplementPct) / 100);
-        return { gross: chome + worked + maj, otGross: maj, bonusTotal: ht * bonus * 2, hoursCounted: ht };
-      }
-
-      var nh = Number(entry.normalH || 0);
-      var eh = entry.otMode === 'pay' ? Number(entry.extraH || 0) : 0;
-      var nightPay = Number(entry.nightH || 0) * base * (Number(state.nightSupplementPct) / 100);
-      var normalPay = nh * rateWithBonus;
-      var otPay = eh * otRate;
-      var bonusTotal = (nh * bonus) + (state.includeBonusInOt ? eh * bonus : 0);
-      return { gross: normalPay + otPay + nightPay, otGross: otPay + nightPay, bonusTotal: bonusTotal, hoursCounted: nh + eh };
-    }
-
-    function getCongeRate(ym) {
-      var prev3 = getPrevious3Months(ym), totG = 0, totH = 0;
-      prev3.forEach(function(m) {
-        (state.entries[m] || []).forEach(function(e) {
-          var r = computeRowGross(e, Number(state.manualCongeRate));
-          totG += r.gross; totH += r.hoursCounted;
-        });
-      });
-      return totH >= 24 ? +(totG / totH).toFixed(2) : Number(state.manualCongeRate);
-    }
-
-    function getEffectiveMonthEntries(ym) {
-      var manual = (state.entries[ym] || []).slice();
-      var year = Number(ym.split('-')[0]);
-      var holidays = getPublicHolidays(year, state.country).filter(function(h) { return h.date.indexOf(ym) === 0; });
-      if (state.autoPayUnworkedHolidays) {
-        holidays.forEach(function(h) {
-          var dow = new Date(h.date + 'T12:00:00').getDay();
-          var exists = manual.some(function(e) { return e.date === h.date; });
-          if (!exists && dow >= 1 && dow <= 5) {
-            manual.push({
-              date: h.date, type: 'feriado_chome', start: '-', end: '-',
-              breakMin: 0, normalH: state.standardDailyHours, extraH: 0, nightH: 0,
-              otMode: 'pay', expense: 0, note: h.name, isAutoHoliday: true
-            });
-          }
-        });
-      }
-      return manual.sort(function(a, b) { return a.date.localeCompare(b.date); });
-    }
-
-    function calculateMonthSummary(ym) {
-      var profile = state.countryProfiles[state.country];
-      var congeRate = getCongeRate(ym);
-      var list = getEffectiveMonthEntries(ym);
-
-      var totalGross = 0, totalOtAndSupplements = 0, totalBonusEarned = 0;
-      var totalNormalHours = 0, totalPaidExtraHours = 0;
-      var workedDaysForVouchers = 0, congeDaysCount = 0;
-      var unworkedHolidayHours = 0, unworkedHolidayPay = 0, totalExpensesReimb = 0;
+    function calculateMonthSummary() {
+      var list = state.entries[state.selectedMonth] || [];
+      var totalGross = 0, totalNorm = 0, totalExtra = 0, workDays = 0;
+      var bonusRate = Number(state.hourlyBonus);
+      var base = Number(state.baseRate);
 
       list.forEach(function(e) {
-        var r = computeRowGross(e, congeRate);
-        totalGross += r.gross;
-        totalOtAndSupplements += r.otGross;
-        totalBonusEarned += r.bonusTotal;
-        totalExpensesReimb += Number(e.expense || 0);
-        if (e.type === 'work' || e.type === 'feriado_trab') {
-          totalNormalHours +=
+        var hNorm = Number(e.normalH || 0);
+        var hExt = Number(e.extraH || 0);
+        if (e.type === 'work') {
+          totalNorm += hNorm; totalExtra += hExt; workDays++;
+          totalGross += (hNorm * (base + bonusRate)) + (hExt * (base * 1.4 + bonusRate));
+        } else if (e.type === 'conge') {
+          totalGross += Number(state.manualCongeRate) * 8;
+        }
+      });
+
+      var totalDeductions = totalGross * 0.1225; // Pensões + Doença + Dependência aprox.
+      var tax = Math.max(0, totalGross - totalDeductions) * 0.075;
+      var net = totalGross - totalDeductions - tax + 50;
+
+      var fixed = 0;
+      (state.expensesList || []).forEach(function(x) { fixed += Number(x.amount); });
+      var freeCash = net - fixed;
+
+      return {
+        list: list, totalGross: +totalGross.toFixed(2), netSalary: +net.toFixed(2),
+        freeCash: +freeCash.toFixed(2), congeRate: Number(state.manualCongeRate),
+        totalBonus: +((totalNorm + totalExtra) * bonusRate).toFixed(2)
+      };
+    }
+
+    window.setTab = function(tab) { state.activeTab = tab; saveState(); };
+    window.setMonth = function(m) { state.selectedMonth = m; state.form.date = m + '-04'; saveState(); };
+    window.saveEntry = function() {
+      var ym = state.selectedMonth;
+      if (!state.entries[ym]) state.entries[ym] = [];
+      state.entries[ym] = state.entries[ym].filter(function(e) { return e.date !== state.form.date; });
+      state.entries[ym].push(Object.assign({}, state.form));
+      saveState();
+      alert("Registo guardado com sucesso!");
+    };
+
+    function render() {
+      var summary = calculateMonthSummary();
+      var goalPct = Math.min(100, Math.round((summary.netSalary / state.monthlyNetGoal) * 100));
+
+      document.getElementById('app').innerHTML = `
+        <div class="top-pill-bar">
+          <div class="pill-badge accent">Luxemburgo 🇱🇺</div>
+          <div class="pill-badge warning">Classe 2</div>
+          <div class="pill-badge">+2.60 €/h</div>
+          <div style="margin-left:auto;">
+            <input type="month" value="${state.selectedMonth}" onchange="setMonth(this.value)" style="width:auto; padding:5px 8px; font-size:11px;" />
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card" style="border-left: 4px solid var(--success);">
+            <div class="metric-title">Líquido Estimado</div>
+            <div class="metric-value" style="color:var(--success);">${summary.netSalary.toFixed(2)} €</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${goalPct}%;"></div></div>
+            <div class="metric-sub">${goalPct}% da meta (${state.monthlyNetGoal} €)</div>
+          </div>
+
+          <div class="metric-card" style="border-left: 4px solid var(--primary);">
+            <div class="metric-title">Total Bruto</div>
+            <div class="metric-value">${summary.totalGross.toFixed(2)} €</div>
+            <div class="metric-sub" style="color:#7dd3fc;">Prémio: +${summary.totalBonus.toFixed(2)} €</div>
+          </div>
+
+          <div class="metric-card" style="border-left: 4px solid var(--warning);">
+            <div class="metric-title">Média Congé 3M</div>
+            <div class="metric-value" style="color:#fcd34d;">${summary.congeRate.toFixed(2)} €/h</div>
+            <div class="metric-sub">1 dia (8h) = ${(summary.congeRate * 8).toFixed(2)} €</div>
+          </div>
+
+          <div class="metric-card" style="border-left: 4px solid var(--purple);">
+            <div class="metric-title">Saldo Livre Mês</div>
+            <div class="metric-value" style="color:${summary.freeCash >= 0 ? '#d8b4fe' : '#fda4af'};">${summary.freeCash.toFixed(2)} €</div>
+            <div class="metric-sub">Congé: 26d | Repos: 0h</div>
+          </div>
+        </div>
+
+        ${state.activeTab === 'registo' ? renderRegisto(summary) : ''}
+        ${state.activeTab === 'calendario' ? `<div class="card-box"><h3>📅 Calendário</h3><p class="subtext">Turnos registados: ${summary.list.length}</p></div>` : ''}
+        ${state.activeTab === 'folha' ? `<div class="card-box"><h3>📄 Salário</h3><p class="subtext">Líquido: ${summary.netSalary} €</p></div>` : ''}
+        ${state.activeTab === 'financas' ? `<div class="card-box"><h3>💰 Dinheiros</h3><p class="subtext">Saldo livre: ${summary.freeCash} €</p></div>` : ''}
+        ${state.activeTab === 'config' ? `<div class="card-box"><h3>⚙️ Ajustes</h3><p class="subtext">Base: ${state.baseRate} €/h | Prémio: ${state.hourlyBonus} €/h</p></div>` : ''}
+      `;
+
+      document.getElementById('bottomNav').innerHTML = `
+        <button onclick="setTab('registo')" class="nav-item ${state.activeTab==='registo'?'active':''}">
+          <span class="nav-icon">⏱️</span><span>Ponto</span>
+        </button>
+        <button onclick="setTab('calendario')" class="nav-item ${state.activeTab==='calendario'?'active':''}">
+          <span class="nav-icon">📅</span><span>Calendário</span>
+        </button>
+        <button onclick="setTab('folha')" class="nav-item ${state.activeTab==='folha'?'active':''}">
+          <span class="nav-icon">📄</span><span>Salário</span>
+        </button>
+        <button onclick="setTab('financas')" class="nav-item ${state.activeTab==='financas'?'active':''}">
+          <span class="nav-icon">💰</span><span>Dinheiros</span>
+        </button>
+        <button onclick="setTab('config')" class="nav-item ${state.activeTab==='config'?'active':''}">
+          <span class="nav-icon">⚙️</span><span>Ajustes</span>
+        </button>
+      `;
+    }
+
+    function renderRegisto(summary) {
+      return `
+        <div class="card-box">
+          <div style="font-size:13px; font-weight:800; color:var(--primary); margin-bottom:10px;">⚡ Registo de Ponto</div>
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div><label>Data</label><input type="date" value="${state.form.date}" onchange="state.form.date=this.value" /></div>
+            <div>
+              <label>Tipo</label>
+              <select onchange="state.form.type=this.value">
+                <option value="work" ${state.form.type==='work'?'selected':''}>Trabalho Normal</option>
+                <option value="conge" ${state.form.type==='conge'?'selected':''}>Férias (Congé)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-3" style="margin-bottom:12px;">
+            <div><label>Entrada</label><input type="time" value="${state.form.start}" onchange="state.form.start=this.value" /></div>
+            <div><label>Saída</label><input type="time" value="${state.form.end}" onchange="state.form.end=this.value" /></div>
+            <div><label>Extras (h)</label><input type="number" step="0.5" value="${state.form.extraH}" onchange="state.form.extraH=this.value" /></div>
+          </div>
+          <button onclick="saveEntry()" class="btn-success">✓ Guardar Registo</button>
+        </div>
+      `;
+    }
+
+    render();
+  </script>
+</body>
+</html>
