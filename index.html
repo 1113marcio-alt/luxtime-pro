@@ -4,1703 +4,473 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob: gap:; style-src * 'self' 'unsafe-inline'; script-src * 'self' 'unsafe-inline' 'unsafe-eval';" />
-  <title>LuxTime Pro v5.0 Ultimate</title>
+  <title>Rastreador de Horas - LuxTime Pro</title>
   <style>
     :root {
-      --bg: #070b14;
-      --card: #111927;
-      --card-alt: #192438;
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --primary: #38bdf8;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #f43f5e;
-      --purple: #a855f7;
+      --bg-main: #131722;
+      --bg-cal: #0e1118;
+      --blue-pill: #1e4d78;
+      --blue-pill-light: #255d91;
+      --drawer-header: #a8c7fa;
+      --drawer-bg: #12151e;
+      --gold-bg: #2d2518;
+      --gold-text: #f5a623;
+      --coral: #cf7973;
+      --text: #f1f5f9;
+      --muted: #8e9bb0;
+      --accent: #38bdf8;
+      --purple-dot: #c026d3;
+      --emerald: #10b981;
+      --rose: #f43f5e;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
+      background-color: var(--bg-main);
       color: var(--text);
-      padding-bottom: 92px;
+      min-height: 100vh;
       overflow-x: hidden;
       user-select: none;
     }
-    .container { max-width: 680px; margin: 0 auto; padding: 12px; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 14px 16px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* TOP BAR IGUAL À FOTO 1 */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      margin-bottom: 18px;
+    }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      padding: 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .multi-select-pill {
+      background: #1a2436;
+      color: #a8c5e2;
+      border: 1px solid rgba(168, 199, 250, 0.14);
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .multi-select-pill.active {
+      background: var(--blue-pill);
+      color: #fff;
+      border-color: #60a5fa;
+      box-shadow: 0 0 14px rgba(30, 77, 120, 0.7);
+    }
+
+    /* SELETOR DE MÊS IGUAL À FOTO 1 */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding: 0 4px;
+    }
+    .circle-nav-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #232938;
+      border: none;
+      color: #cbd5e1;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .circle-nav-btn:active { transform: scale(0.93); }
+    .month-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: #ffffff;
+    }
+
+    /* BOTÃO COMEÇAR A TRABALHAR IGUAL À FOTO 1 */
+    .start-work-btn {
+      width: 100%;
+      background: var(--blue-pill);
+      color: #ffffff;
+      border: none;
+      border-radius: 26px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .start-work-btn:active { transform: scale(0.98); }
+    .play-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: var(--blue-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      padding-left: 2px;
+    }
+
+    /* CARTÃO DO CALENDÁRIO IGUAL À FOTO 1 */
+    .calendar-box {
+      background: var(--bg-cal);
+      border-radius: 26px;
+      padding: 18px 12px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      margin-bottom: 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .weekdays-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
       margin-bottom: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.32);
+    }
+    .wk-label {
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      color: #94a3b8;
+    }
+    .wk-label.weekend { color: var(--coral); }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 10px;
+      column-gap: 6px;
+    }
+    .day-cell {
+      height: 62px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 8px;
+      position: relative;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.12s;
+    }
+    .day-cell.empty { cursor: default; pointer-events: none; }
+    .day-cell.weekend-cell {
+      background: repeating-linear-gradient(
+        -45deg,
+        #161922,
+        #161922 5px,
+        #1a1e29 5px,
+        #1a1e29 10px
+      );
+    }
+    .day-cell.selected-day {
+      background: #1a2a3e;
+      border-color: #6b8fb3;
+    }
+    .day-cell.multi-picked {
+      background: rgba(56, 189, 248, 0.24);
+      border-color: #38bdf8;
+    }
+    .day-num {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+      z-index: 2;
+    }
+    .weekend-cell .day-num { color: #788296; }
+    .selected-day .day-num { color: #ffffff; font-weight: 800; }
+
+    .holiday-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #d946ef;
+      box-shadow: 0 0 6px #d946ef;
+    }
+    .couch-icon {
+      margin-top: 6px;
+      opacity: 0.22;
+      color: #94a3b8;
+    }
+    .day-pill-tag {
+      margin-top: 5px;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 6px;
+      z-index: 2;
+      white-space: nowrap;
+    }
+    .tag-work { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+    .tag-ot { background: rgba(56, 189, 248, 0.22); color: #7dd3fc; }
+    .tag-conge { background: rgba(245, 158, 11, 0.22); color: #fcd34d; }
+    .tag-hol { background: rgba(192, 38, 211, 0.22); color: #f0abfc; }
+
+    /* CARTÃO INFERIOR AZUL IGUAL À FOTO 1 */
+    .bottom-summary-pill {
+      background: var(--blue-pill);
+      border-radius: 26px;
+      padding: 18px 16px;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      align-items: center;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+    }
+    .summary-col {
+      text-align: center;
+      padding: 0 6px;
+    }
+    .summary-divider {
+      height: 38px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .summary-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      color: rgba(255, 255, 255, 0.75);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .summary-value {
+      font-size: 25px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .summary-sub {
+      font-size: 10px;
+      color: #bae6fd;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    /* MENU LATERAL DESLIZANTE IGUAL À FOTO 2 */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 82%;
+      max-width: 330px;
+      background: var(--drawer-bg);
+      z-index: 1001;
+      transform: translateX(-102%);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+    }
+    .drawer-panel.open { transform: translateX(0); }
+
+    .drawer-top {
+      background: var(--drawer-header);
+      padding: 34px 22px 22px;
+      color: #0f172a;
+    }
+    .app-logo-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #0d1624;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    }
+    .drawer-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0d1b2a;
+      margin-bottom: 14px;
+    }
+    .google-sync-btn {
+      background: #12161f;
+      color: #f8fafc;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .drawer-menu {
+      padding: 12px 12px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+    .drawer-item:active { background: rgba(255,255,255,0.06); }
+    .drawer-item.active-view { background: rgba(56, 189, 248, 0.14); color: #38bdf8; }
+    .drawer-item.premio-item {
+      background: var(--gold-bg);
+      color: var(--gold-text);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .drawer-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 8px 4px;
+    }
+    .drawer-footer {
+      padding: 14px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* CARTÕES E MODAIS INTERNOS */
+    .section-card {
+      background: #181e2c;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
     }
     .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700;
-    }
-    .bg-sky { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; }
-    .bg-emerald { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
-    .bg-amber { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
-    .bg-purple { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; }
-    .bg-rose { background: rgba(244, 63, 94, 0.15); color: #fda4af; }
-
     label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
     input, select, textarea {
-      width: 100%; background: var(--card-alt); color: var(--text);
-      border: 1px solid rgba(255,255,255,0.12); border-radius: 11px;
-      padding: 9px 11px; font-size: 13px; font-weight: 600; outline: none;
+      width: 100%;
+      background: #0f141f;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
     }
-    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-    button {
-      border: none; border-radius: 12px; padding: 10px 13px;
-      font-size: 12px; font-weight: 700; cursor: pointer;
-      transition: transform 0.1s, opacity 0.15s;
+    input:focus, select:focus { border-color: var(--accent); }
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
     }
-    button:active { transform: scale(0.96); }
-    .btn-primary { background: linear-gradient(135deg, #38bdf8, #0284c7); color: #082f49; width: 100%; font-weight: 800; font-size: 13px; }
-    .btn-success { background: linear-gradient(135deg, #34d399, #059669); color: #022c22; font-weight: 800; }
-    .btn-warning { background: linear-gradient(135deg, #fbbf24, #d97706); color: #451a03; font-weight: 800; }
-    .btn-danger { background: rgba(244, 63, 94, 0.2); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.35); }
-    .btn-ghost { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
+    .btn-blue { background: var(--blue-pill); color: #fff; width: 100%; }
+    .btn-emerald { background: var(--emerald); color: #042f2e; width: 100%; font-weight: 800; }
+    .btn-rose { background: rgba(244,63,94,0.18); color: #fda4af; border: 1px solid rgba(244,63,94,0.3); }
+    .btn-dark { background: #232a3b; color: #e2e8f0; }
 
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(11, 17, 30, 0.96);
-      backdrop-filter: blur(14px);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      display: grid; grid-template-columns: repeat(5, 1fr);
-      padding: 6px 6px calc(8px + env(safe-area-inset-bottom));
-      z-index: 999;
+    /* MODAL BOTTOM SHEET PARA EDITAR O DIA */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 950;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
     }
-    .nav-item {
-      background: transparent; color: var(--muted);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 3px; padding: 6px 2px; border-radius: 12px; font-size: 10px; font-weight: 700;
+    .modal-sheet {
+      width: 100%;
+      max-width: 480px;
+      background: #171c28;
+      border-radius: 26px 26px 0 0;
+      padding: 20px 18px 30px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .nav-item.active { color: var(--primary); background: rgba(56, 189, 248, 0.13); }
-    .nav-icon { font-size: 18px; line-height: 1; }
-
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 8px; }
-    .cal-head { text-align: center; font-size: 10px; font-weight: 700; color: var(--muted); padding: 4px 0; }
-    .cal-day {
-      background: var(--card-alt); border: 1px solid var(--border);
-      border-radius: 10px; min-height: 56px; padding: 4px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      cursor: pointer; position: relative;
-    }
-    .cal-day.today { box-shadow: inset 0 0 0 1.5px var(--primary); }
-    .cal-day.empty { background: transparent; border: none; cursor: default; }
-    .cal-num { font-size: 11px; font-weight: 800; }
-    .cal-tag { font-size: 9px; font-weight: 700; padding: 2px 3px; border-radius: 5px; text-align: center; white-space: nowrap; overflow: hidden; }
-
-    .stamp-bar { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 6px; }
-    .stamp-btn {
-      padding: 7px 10px; border-radius: 10px; font-size: 11px; font-weight: 800;
-      white-space: nowrap; background: var(--card-alt); color: var(--muted); border: 1px solid var(--border);
-    }
-    .stamp-btn.active { border-color: var(--primary); color: #fff; background: rgba(56, 189, 248, 0.22); }
-
     .tag-chip {
-      padding: 5px 9px; border-radius: 99px; font-size: 11px; font-weight: 700;
-      background: var(--card-alt); color: var(--muted); border: 1px solid var(--border); white-space: nowrap;
+      padding: 6px 11px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #0f141f;
+      color: #94a3b8;
+      border: 1px solid rgba(255,255,255,0.08);
+      white-space: nowrap;
+      cursor: pointer;
     }
-    .tag-chip.active { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border-color: var(--primary); }
-
-    .progress-bar { width: 100%; height: 8px; background: #090d16; border-radius: 99px; overflow: hidden; margin-top: 6px; display: flex; }
-    .progress-fill { height: 100%; transition: width 0.3s; }
-    .divider { height: 1px; background: var(--border); margin: 10px 0; }
-    .kpi-val { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; margin-top: 2px; }
-    .subtext { font-size: 11px; color: var(--muted); }
+    .tag-chip.active { background: var(--blue-pill); color: #fff; border-color: #60a5fa; }
   </style>
 </head>
 <body>
-  <div id="app" class="container"></div>
-  <nav id="bottomNav" class="bottom-nav"></nav>
+  <div id="app" class="app-shell"></div>
+  <div id="drawerContainer"></div>
+  <div id="modalContainer"></div>
 
   <script>
-    // ==================== DICIONÁRIO MULTI-IDIOMA (6 LÍNGUAS) ====================
-    const I18N = {
-      pt: {
-        tabs: { registo: "Ponto", calendario: "Calendário", folha: "Salário", financas: "Dinheiros", config: "Ajustes" },
-        netEst: "Líquido Estimado", grossTot: "Total Bruto", conge3m: "Média Congé 3M", freeCash: "Saldo Livre Mês",
-        liveClock: "Relógio de Ponto Inteligente", startShift: "▶ Iniciar Turno", pauseShift: "☕ Pausa", resumeShift: "▶ Retomar", stopShift: "⏹ Finalizar",
-        quickTpl: "Modelos 1-Toque", fillWeek: "⚡ Preencher Seg-Sex",
-        saveDay: "Guardar Registo", updateDay: "Atualizar Dia", cancelEdit: "Cancelar",
-        stampTitle: "Modo Carimbo Rápido (Toque num carimbo e depois nos dias do calendário):",
-        types: {
-          work: "Trabalho Normal", conge: "Férias (Congé)", feriado_chome: "Feriado Não Trab.",
-          feriado_trab: "Feriado Trab. (+100%)", recupera: "Uso Banco Horas", baixa: "Baixa Médica (CNS)"
-        }
-      },
-      lb: {
-        tabs: { registo: "Stonnen", calendario: "Kalender", folha: "Fiche", financas: "Budget", config: "Optiounen" },
-        netEst: "Netto Pai", grossTot: "Total Brutto", conge3m: "Congé Moyenne", freeCash: "Fräie Saldo",
-        liveClock: "Smart Stempelauer", startShift: "▶ Starten", pauseShift: "☕ Paus", resumeShift: "▶ Weider", stopShift: "⏹ Stoppen",
-        quickTpl: "Schnell Schichten", fillWeek: "⚡ Woch fëllen (Mo-Fr)",
-        saveDay: "Späicheren", updateDay: "Aktualiséieren", cancelEdit: "Ofbriechen",
-        stampTitle: "Schnell-Stempel Modus (Wielt e Stempel a tippt op d'Deeg):",
-        types: {
-          work: "Normal Aarbecht", conge: "Congé (Vakanz)", feriado_chome: "Feierdag (Fräi)",
-          feriado_trab: "Feierdag geschafft", recupera: "Repos benotzt", baixa: "Krankenschein (CNS)"
-        }
-      },
-      fr: {
-        tabs: { registo: "Pointage", calendario: "Calendrier", folha: "Salaire", financas: "Finances", config: "Réglages" },
-        netEst: "Salaire Net", grossTot: "Total Brut", conge3m: "Moyenne Congé 3M", freeCash: "Reste à Vivre",
-        liveClock: "Pointeuse Intelligente", startShift: "▶ Démarrer", pauseShift: "☕ Pause", resumeShift: "▶ Reprendre", stopShift: "⏹ Terminer",
-        quickTpl: "Modèles 1-Clic", fillWeek: "⚡ Remplir Lun-Ven",
-        saveDay: "Enregistrer", updateDay: "Mettre à jour", cancelEdit: "Annuler",
-        stampTitle: "Mode Tampon Rapide (Choisissez un tampon et touchez les jours) :",
-        types: {
-          work: "Travail Normal", conge: "Congé Payé", feriado_chome: "Férié Chômé",
-          feriado_trab: "Férié Travaillé (+100%)", recupera: "Repos Pris", baixa: "Maladie (CNS)"
-        }
-      },
-      de: {
-        tabs: { registo: "Stempeln", calendario: "Kalender", folha: "Lohn", financas: "Finanzen", config: "Setup" },
-        netEst: "Nettogehalt", grossTot: "Gesamtbrutto", conge3m: "Urlaubsschnitt 3M", freeCash: "Freies Budget",
-        liveClock: "Smart-Stechuhr", startShift: "▶ Starten", pauseShift: "☕ Pause", resumeShift: "▶ Weiter", stopShift: "⏹ Stoppen",
-        quickTpl: "Schnellvorlagen", fillWeek: "⚡ Mo-Fr füllen",
-        saveDay: "Speichern", updateDay: "Aktualisieren", cancelEdit: "Abbrechen",
-        stampTitle: "Stempel-Modus (Stempel wählen & Tage im Kalender antippen):",
-        types: {
-          work: "Arbeitstag", conge: "Urlaub (Congé)", feriado_chome: "Feiertag (Frei)",
-          feriado_trab: "Feiertag gearbeitet", recupera: "Freizeitausgleich", baixa: "Krankheit (CNS)"
-        }
-      },
-      en: {
-        tabs: { registo: "Punch", calendario: "Calendar", folha: "Payslip", financas: "Money", config: "Settings" },
-        netEst: "Estimated Net", grossTot: "Total Gross", conge3m: "3M Holiday Avg", freeCash: "Free Cashflow",
-        liveClock: "Smart Shift Timer", startShift: "▶ Clock In", pauseShift: "☕ Break", resumeShift: "▶ Resume", stopShift: "⏹ Clock Out",
-        quickTpl: "1-Tap Shifts", fillWeek: "⚡ Auto-Fill Mon-Fri",
-        saveDay: "Save Entry", updateDay: "Update Entry", cancelEdit: "Cancel",
-        stampTitle: "Quick Stamp Mode (Pick a stamp and tap calendar days):",
-        types: {
-          work: "Regular Work", conge: "Paid Leave (Congé)", feriado_chome: "Public Holiday",
-          feriado_trab: "Holiday Worked (+100%)", recupera: "Time Bank Used", baixa: "Sick Leave (CNS)"
-        }
-      },
-      es: {
-        tabs: { registo: "Fichaje", calendario: "Calendario", folha: "Nómina", financas: "Finanzas", config: "Ajustes" },
-        netEst: "Salario Neto", grossTot: "Total Bruto", conge3m: "Media Vacaciones", freeCash: "Saldo Libre",
-        liveClock: "Reloj Inteligente", startShift: "▶ Iniciar", pauseShift: "☕ Pausa", resumeShift: "▶ Reanudar", stopShift: "⏹ Terminar",
-        quickTpl: "Turnos 1-Toque", fillWeek: "⚡ Rellenar Lun-Vie",
-        saveDay: "Guardar Día", updateDay: "Actualizar Día", cancelEdit: "Cancelar",
-        stampTitle: "Modo Sello Rápido (Elige un sello y toca los días del calendario):",
-        types: {
-          work: "Trabajo Normal", conge: "Vacaciones (Congé)", feriado_chome: "Festivo Libre",
-          feriado_trab: "Festivo Trabajado", recupera: "Uso Banco Horas", baixa: "Baja Médica"
-        }
-      }
-    };
-
-    // ==================== PERFIS FISCAIS POR PAÍS ====================
-    const DEFAULT_COUNTRY_PROFILES = {
-      LU: {
-        name: "Luxemburgo 🇱🇺",
-        classes: [
-          { id: "1", label: "Classe 1 (Solteiro / Geral)", defaultTax: 14.5 },
-          { id: "1a", label: "Classe 1a (Monoparental)", defaultTax: 9.0 },
-          { id: "2", label: "Classe 2 (Casado / Conjunto)", defaultTax: 7.5 }
-        ],
-        selectedClass: "2",
-        taxRate: 7.5,
-        cisCredit: 50,
-        otTaxExempt: true,
-        deductions: [
-          { key: "pension", label: "Caixa de Pensões (CNAP)", rate: 8.0, onOt: false },
-          { key: "health", label: "Caixa de Doença (CNS Espécie)", rate: 2.8, onOt: true },
-          { key: "healthCash", label: "Caixa de Doença (CNS Monetária)", rate: 0.25, onOt: false },
-          { key: "depend", label: "Seguro Dependência (Abat. 642,73€)", rate: 1.4, onOt: true, allowance: 642.73 }
-        ],
-        mealVoucherCost: 2.80,
-        mealVoucherMax: 18
-      },
-      DE: {
-        name: "Alemanha 🇩🇪",
-        classes: [
-          { id: "I", label: "Steuerklasse I", defaultTax: 16.0 },
-          { id: "III", label: "Steuerklasse III", defaultTax: 8.5 },
-          { id: "IV", label: "Steuerklasse IV", defaultTax: 14.0 },
-          { id: "V", label: "Steuerklasse V", defaultTax: 24.0 }
-        ],
-        selectedClass: "III",
-        taxRate: 8.5,
-        cisCredit: 0,
-        otTaxExempt: false,
-        deductions: [
-          { key: "rv", label: "Rentenversicherung", rate: 9.3, onOt: true },
-          { key: "kv", label: "Krankenversicherung", rate: 8.86, onOt: true },
-          { key: "pv", label: "Pflegeversicherung", rate: 1.8, onOt: true },
-          { key: "av", label: "Arbeitslosenversicherung", rate: 1.3, onOt: true }
-        ],
-        mealVoucherCost: 0,
-        mealVoucherMax: 0
-      },
-      FR: {
-        name: "França 🇫🇷",
-        classes: [
-          { id: "1p", label: "Célibataire (1 Part)", defaultTax: 7.5 },
-          { id: "2p", label: "Marié / Pacsé (2 Parts)", defaultTax: 4.5 },
-          { id: "3p", label: "Famille (2.5+ Parts)", defaultTax: 2.5 }
-        ],
-        selectedClass: "2p",
-        taxRate: 4.5,
-        cisCredit: 0,
-        otTaxExempt: true,
-        deductions: [
-          { key: "vieillesse", label: "Assurance Vieillesse", rate: 7.3, onOt: true },
-          { key: "csg", label: "CSG / CRDS", rate: 9.53, onOt: true },
-          { key: "agirc", label: "Retraite AGIRC-ARRCO", rate: 3.15, onOt: true }
-        ],
-        mealVoucherCost: 4.50,
-        mealVoucherMax: 20
-      },
-      PT: {
-        name: "Portugal 🇵🇹",
-        classes: [
-          { id: "nc", label: "Não Casado", defaultTax: 13.5 },
-          { id: "c2", label: "Casado 2 Titulares", defaultTax: 12.0 },
-          { id: "c1", label: "Casado 1 Titular", defaultTax: 8.5 }
-        ],
-        selectedClass: "c2",
-        taxRate: 12.0,
-        cisCredit: 0,
-        otTaxExempt: false,
-        deductions: [
-          { key: "ss", label: "Segurança Social (TSU)", rate: 11.0, onOt: true }
-        ],
-        mealVoucherCost: 0,
-        mealVoucherMax: 22
-      },
-      ES: {
-        name: "Espanha 🇪🇸",
-        classes: [
-          { id: "s1", label: "Situación 1 (Soltero)", defaultTax: 14.0 },
-          { id: "s2", label: "Situación 2 (Casado)", defaultTax: 10.5 },
-          { id: "s3", label: "Situación 3 (General)", defaultTax: 11.5 }
-        ],
-        selectedClass: "s3",
-        taxRate: 11.5,
-        cisCredit: 0,
-        otTaxExempt: false,
-        deductions: [
-          { key: "cc", label: "Contingencias Comunes", rate: 4.7, onOt: true },
-          { key: "des", label: "Desempleo + FP + MEI", rate: 1.8, onOt: true }
-        ],
-        mealVoucherCost: 0,
-        mealVoucherMax: 0
-      }
-    };
-
-    // ==================== FERIADOS AUTOMÁTICOS ====================
-    function getEasterDate(year) {
-      const a = year % 19, b = Math.floor(year / 100), c = year % 100;
-      const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
-      const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
-      const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
-      const m = Math.floor((a + 11 * h + 22 * l) / 451);
-      const month = Math.floor((h + l - 7 * m + 114) / 31);
-      const day = ((h + l - 7 * m + 114) % 31) + 1;
-      return new Date(year, month - 1, day);
-    }
-    function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return d; }
-    function fmtISO(d) {
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
-
-    function getPublicHolidays(year, country) {
-      const easter = getEasterDate(year);
-      const easterMon = fmtISO(addDays(easter, 1));
-      const ascension = fmtISO(addDays(easter, 39));
-      const whitMon = fmtISO(addDays(easter, 50));
-      const goodFri = fmtISO(addDays(easter, -2));
-      const corpus = fmtISO(addDays(easter, 60));
-
-      if (country === 'LU') {
-        return [
-          { date: `${year}-01-01`, name: "Ano Novo (Nouvel An)" },
-          { date: easterMon, name: "Segunda de Páscoa" },
-          { date: `${year}-05-01`, name: "1.º de Maio (Dia do Trabalhador)" },
-          { date: `${year}-05-09`, name: "Dia da Europa (Journée de l'Europe)" },
-          { date: ascension, name: "Quinta da Ascensão" },
-          { date: whitMon, name: "Segunda de Pentecostes" },
-          { date: `${year}-06-23`, name: "Festa Nacional Luxemburgo (23 Juin)" },
-          { date: `${year}-08-15`, name: "Assunção (15 de Agosto)" },
-          { date: `${year}-11-01`, name: "Todos os Santos (Toussaint)" },
-          { date: `${year}-12-25`, name: "Dia de Natal (Noël)" },
-          { date: `${year}-12-26`, name: "2.º Dia de Natal (Saint-Étienne)" }
-        ];
-      }
-      if (country === 'PT') {
-        return [
-          { date: `${year}-01-01`, name: "Ano Novo" },
-          { date: goodFri, name: "Sexta-Feira Santa" },
-          { date: `${year}-04-25`, name: "25 de Abril" },
-          { date: `${year}-05-01`, name: "Dia do Trabalhador" },
-          { date: corpus, name: "Corpo de Deus" },
-          { date: `${year}-06-10`, name: "Dia de Portugal" },
-          { date: `${year}-08-15`, name: "Assunção" },
-          { date: `${year}-10-05`, name: "Implantação da República" },
-          { date: `${year}-11-01`, name: "Todos os Santos" },
-          { date: `${year}-12-01`, name: "Restauração da Independência" },
-          { date: `${year}-12-08`, name: "Imaculada Conceição" },
-          { date: `${year}-12-25`, name: "Natal" }
-        ];
-      }
-      return [
-        { date: `${year}-01-01`, name: "Ano Novo" },
-        { date: easterMon, name: "Segunda de Páscoa" },
-        { date: `${year}-05-01`, name: "1.º de Maio" },
-        { date: ascension, name: "Ascensão" },
-        { date: whitMon, name: "Pentecostes" },
-        { date: `${year}-08-15`, name: "15 de Agosto" },
-        { date: `${year}-11-01`, name: "1 de Novembro" },
-        { date: `${year}-12-25`, name: "Natal" },
-        { date: `${year}-12-26`, name: "26 de Dezembro" }
-      ];
-    }
-
-    // ==================== ESTADO GLOBAL ====================
-    const QUICK_TAGS = ["🚛 Distribuição", "📦 Armazém", "🛣️ Rota Longa", "🔧 Manutenção"];
-
-    const defaultState = {
-      lang: 'pt',
-      activeTab: 'registo',
-      selectedMonth: '2026-11',
-      country: 'LU',
-      baseRate: 17.50,
-      hourlyBonus: 2.60,
-      includeBonusInOt: true,
-      includeBonusInUnworkedHoliday: true,
-      autoPayUnworkedHolidays: true,
-      standardDailyHours: 8,
-      defaultBreakMin: 30,
-      roundingMinutes: 0, // 0=Exato, 5, 15, 30 (Inspirado no Timesheet Tracker)
-      otSupplementPct: 40,
-      nightSupplementPct: 15,
-      sundaySupplementPct: 70,
-      holidaySupplementPct: 100,
-      manualCongeRate: 21.80,
-      annualCongeQuota: 26,
-      monthlyNetGoal: 3400,
-      extraMonthlyBonusGross: 0,
-      calendarStampMode: 'edit', // 'edit', 'work8', 'work9', 'conge', 'feriado_trab', 'clear'
-      countryProfiles: DEFAULT_COUNTRY_PROFILES,
-      liveClock: {
-        running: false,
-        paused: false,
-        startTimeMs: null,
-        pauseStartMs: null,
-        accumulatedPauseMs: 0
-      },
-      editingDate: null,
-      entries: {
-        "2026-08": [
-          { date: "2026-08-03", type: "work", start: "06:30", end: "16:00", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "🚛 Distribuição" }
-        ],
-        "2026-09": [
-          { date: "2026-09-02", type: "work", start: "07:00", end: "16:30", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "🛣️ Rota Longa" }
-        ],
-        "2026-10": [
-          { date: "2026-10-05", type: "work", start: "06:30", end: "16:30", breakMin: 30, normalH: 8, extraH: 1.5, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "📦 Armazém" }
-        ],
-        "2026-11": [
-          { date: "2026-11-02", type: "work", start: "06:30", end: "16:00", breakMin: 30, normalH: 8, extraH: 1, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "🚛 Distribuição" },
-          { date: "2026-11-03", type: "work", start: "07:00", end: "15:30", breakMin: 30, normalH: 8, extraH: 0, nightH: 0, sundayH: 0, otMode: "pay", expense: 0, note: "📦 Armazém" }
-        ]
-      },
-      form: {
-        date: "2026-11-04",
-        type: "work",
-        start: "07:00",
-        end: "16:30",
-        breakMin: 30,
-        normalH: 8,
-        extraH: 1,
-        nightH: 0,
-        sundayH: 0,
-        otMode: "pay",
-        expense: 0,
-        note: "🚛 Distribuição"
-      },
-      expensesList: [
-        { id: 1, name: "Habitação / Casa", category: "fixa", amount: 1150 },
-        { id: 2, name: "Supermercado & Alimentação", category: "variavel", amount: 520 },
-        { id: 3, name: "Combustível & Manutenção Auto", category: "variavel", amount: 210 },
-        { id: 4, name: "Telemóvel, Internet & Luz", category: "fixa", amount: 145 },
-        { id: 5, name: "Poupança / Investimento ETF", category: "poupanca", amount: 400 }
-      ],
-      newExpense: { name: "", category: "fixa", amount: "" },
-      audit: { companyHours: 168, companyCongeRate: 21.80, companyNet: 3250 },
-      backupText: ""
-    };
-
-    const loaded = JSON.parse(localStorage.getItem('luxtime_v4_pro') || 'null');
-    const state = Object.assign({}, defaultState, loaded || {});
-    if (!state.expensesList) state.expensesList = defaultState.expensesList;
-    if (!state.liveClock || typeof state.liveClock.accumulatedPauseMs === 'undefined') {
-      state.liveClock = { running: false, paused: false, startTimeMs: null, pauseStartMs: null, accumulatedPauseMs: 0 };
-    }
-    if (!state.calendarStampMode) state.calendarStampMode = 'edit';
-
-    function saveState() {
-      localStorage.setItem('luxtime_v4_pro', JSON.stringify(state));
-      render();
-    }
-
-    // ==================== ARREDONDAMENTO & CÁLCULO DE HORAS ====================
-    function applyRoundingMinutes(totalMin, roundStep) {
-      const step = Number(roundStep || 0);
-      if (step <= 0) return totalMin;
-      return Math.round(totalMin / step) * step;
-    }
-
-    function calcShiftFromTimes(startStr, endStr, breakMin, stdHours, dateStr) {
-      if (!startStr || !endStr) return { normalH: stdHours, extraH: 0, nightH: 0, sundayH: 0 };
-      const [sh, sm] = startStr.split(':').map(Number);
-      const [eh, em] = endStr.split(':').map(Number);
-      let startMin = sh * 60 + sm;
-      let endMin = eh * 60 + em;
-      if (endMin <= startMin) endMin += 24 * 60;
-
-      let rawWorkedMin = Math.max(0, (endMin - startMin) - Number(breakMin || 0));
-      let totalWorkedMin = applyRoundingMinutes(rawWorkedMin, state.roundingMinutes);
-      const totalH = +(totalWorkedMin / 60).toFixed(2);
-      const normalH = Math.min(stdHours, totalH);
-      const extraH = +(Math.max(0, totalH - stdHours)).toFixed(2);
-
-      let nightMin = 0;
-      for (let m = startMin; m < endMin; m++) {
-        const clockMin = m % (24 * 60);
-        if (clockMin >= 22 * 60 || clockMin < 6 * 60) nightMin++;
-      }
-      const nightH = +(nightMin / 60).toFixed(2);
-      const isSun = dateStr ? (new Date(dateStr + 'T12:00:00').getDay() === 0) : false;
-      const sundayH = isSun ? totalH : 0;
-
-      return { normalH, extraH, nightH, sundayH };
-    }
-
-    // ==================== MOTOR SALARIAL ====================
-    function getPrevious3Months(ym) {
-      const [y, m] = ym.split('-').map(Number);
-      const res = [];
-      for (let i = 1; i <= 3; i++) {
-        const d = new Date(y, m - 1 - i, 1);
-        res.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
-      }
-      return res;
-    }
-
-    function computeRowGross(entry, congeRateForMonth) {
-      const base = Number(state.baseRate);
-      const bonus = Number(state.hourlyBonus);
-      const rateWithBonus = base + bonus;
-      const otBaseRate = base * (1 + Number(state.otSupplementPct) / 100) + (state.includeBonusInOt ? bonus : 0);
-
-      if (entry.type === 'baixa' || entry.type === 'recupera') {
-        return { gross: 0, otGross: 0, bonusTotal: 0, baseOnly: 0, hoursCounted: 0 };
-      }
-      if (entry.type === 'conge') {
-        const h = Number(entry.normalH || state.standardDailyHours);
-        return { gross: h * congeRateForMonth, otGross: 0, bonusTotal: 0, baseOnly: 0, hoursCounted: h };
-      }
-      if (entry.type === 'feriado_chome') {
-        const h = Number(entry.normalH || state.standardDailyHours);
-        const r = base + (state.includeBonusInUnworkedHoliday ? bonus : 0);
-        return { gross: h * r, otGross: 0, bonusTotal: state.includeBonusInUnworkedHoliday ? h * bonus : 0, baseOnly: h * base, hoursCounted: h };
-      }
-      if (entry.type === 'feriado_trab') {
-        const h = Number(entry.normalH || state.standardDailyHours);
-        const holChome = h * (base + (state.includeBonusInUnworkedHoliday ? bonus : 0));
-        const worked = h * rateWithBonus;
-        const maj100 = h * base * (Number(state.holidaySupplementPct) / 100);
-        return {
-          gross: holChome + worked + maj100,
-          otGross: maj100,
-          bonusTotal: h * bonus * (state.includeBonusInUnworkedHoliday ? 2 : 1),
-          baseOnly: h * base * 2,
-          hoursCounted: h
-        };
-      }
-
-      const nh = Number(entry.normalH || 0);
-      const eh = entry.otMode === 'pay' ? Number(entry.extraH || 0) : 0;
-      const nightH = Number(entry.nightH || 0);
-      const sunH = Number(entry.sundayH || 0);
-
-      const normalPay = nh * rateWithBonus;
-      const otPay = eh * otBaseRate;
-      const nightPay = nightH * base * (Number(state.nightSupplementPct) / 100);
-      const sunPay = sunH * base * (Number(state.sundaySupplementPct) / 100);
-      const bonusTotal = (nh * bonus) + (state.includeBonusInOt ? eh * bonus : 0);
-
-      return {
-        gross: normalPay + otPay + nightPay + sunPay,
-        otGross: otPay + nightPay + sunPay,
-        bonusTotal,
-        baseOnly: nh * base,
-        hoursCounted: nh + eh
-      };
-    }
-
-    function getCongeRateDetails(ym) {
-      const prev3 = getPrevious3Months(ym);
-      let totalGross = 0, totalHours = 0;
-      prev3.forEach(m => {
-        const list = state.entries[m] || [];
-        list.forEach(e => {
-          const r = computeRowGross(e, Number(state.manualCongeRate));
-          totalGross += r.gross;
-          totalHours += r.hoursCounted;
-        });
-      });
-      const isAuto = totalHours >= 24;
-      const rate = isAuto ? +(totalGross / totalHours).toFixed(2) : Number(state.manualCongeRate);
-      return { rate, isAuto, totalGross: +totalGross.toFixed(2), totalHours: +totalHours.toFixed(2), prev3 };
-    }
-
-    function getEffectiveMonthEntries(ym) {
-      const manual = [...(state.entries[ym] || [])];
-      const [year] = ym.split('-').map(Number);
-      const holidays = getPublicHolidays(year, state.country).filter(h => h.date.startsWith(ym));
-
-      if (state.autoPayUnworkedHolidays) {
-        holidays.forEach(h => {
-          const d = new Date(h.date + 'T12:00:00');
-          const dow = d.getDay();
-          const alreadyLogged = manual.some(e => e.date === h.date);
-          if (!alreadyLogged && dow >= 1 && dow <= 5) {
-            manual.push({
-              date: h.date, type: 'feriado_chome', start: '-', end: '-',
-              breakMin: 0, normalH: state.standardDailyHours, extraH: 0, nightH: 0, sundayH: 0,
-              otMode: 'pay', expense: 0, note: h.name, isAutoHoliday: true
-            });
-          }
-        });
-      }
-      return manual.sort((a, b) => a.date.localeCompare(b.date));
-    }
-
-    function calculateMonthSummary(ym) {
-      const profile = state.countryProfiles[state.country];
-      const congeInfo = getCongeRateDetails(ym);
-      const congeRate = congeInfo.rate;
-      const list = getEffectiveMonthEntries(ym);
-
-      let totalGross = Number(state.extraMonthlyBonusGross || 0);
-      let totalOtAndSupplements = 0, totalBonusEarned = 0, totalBaseOnly = 0;
-      let totalNormalHours = 0, totalPaidExtraHours = 0;
-      let workedDaysForVouchers = 0, congeDaysCount = 0;
-      let unworkedHolidayHours = 0, unworkedHolidayPay = 0, totalExpensesReimb = 0;
-
-      list.forEach(e => {
-        const r = computeRowGross(e, congeRate);
-        totalGross += r.gross;
-        totalOtAndSupplements += r.otGross;
-        totalBonusEarned += r.bonusTotal;
-        totalBaseOnly += r.baseOnly;
-        totalExpensesReimb += Number(e.expense || 0);
-
-        if (e.type === 'work' || e.type === 'feriado_trab') {
-          totalNormalHours += Number(e.normalH || 0);
-          workedDaysForVouchers++;
-          if (e.otMode === 'pay') totalPaidExtraHours += Number(e.extraH || 0);
-        } else if (e.type === 'conge') {
-          congeDaysCount++;
-        } else if (e.type === 'feriado_chome') {
-          unworkedHolidayHours += Number(e.normalH || state.standardDailyHours);
-          unworkedHolidayPay += r.gross;
-        }
-      });
-
-      const [year] = ym.split('-').map(Number);
-      let annualCongeUsed = 0, totalReposBankHours = 0;
-      Object.keys(state.entries).forEach(monthKey => {
-        const mList = state.entries[monthKey] || [];
-        mList.forEach(item => {
-          if (monthKey.startsWith(String(year)) && item.type === 'conge') annualCongeUsed++;
-          if (item.otMode === 'bank') totalReposBankHours += Number(item.extraH || 0);
-          if (item.type === 'recupera') totalReposBankHours -= Number(item.normalH || state.standardDailyHours);
-        });
-      });
-
-      const regularGross = Math.max(0, totalGross - totalOtAndSupplements);
-      const deductionBreakdown = [];
-      let totalSocialDeductions = 0;
-
-      profile.deductions.forEach(d => {
-        let base = d.onOt ? totalGross : regularGross;
-        if (d.allowance) base = Math.max(0, totalGross - Number(d.allowance));
-        const val = +(base * (Number(d.rate) / 100)).toFixed(2);
-        totalSocialDeductions += val;
-        deductionBreakdown.push({ label: d.label, rate: d.rate, amount: val });
-      });
-
-      const taxableGross = profile.otTaxExempt
-        ? Math.max(0, regularGross - totalSocialDeductions)
-        : Math.max(0, totalGross - totalSocialDeductions);
-
-      const estimatedTax = +(taxableGross * (Number(profile.taxRate) / 100)).toFixed(2);
-      const vouchersCount = Math.min(Number(profile.mealVoucherMax || 0), workedDaysForVouchers);
-      const voucherDeduction = +(vouchersCount * Number(profile.mealVoucherCost || 0)).toFixed(2);
-      const cis = Number(profile.cisCredit || 0);
-
-      const netSalary = +(totalGross - totalSocialDeductions - estimatedTax - voucherDeduction + cis + totalExpensesReimb).toFixed(2);
-
-      const yearHolidays = getPublicHolidays(year, state.country);
-      const weekendHolidays = yearHolidays.filter(h => {
-        const dow = new Date(h.date + 'T12:00:00').getDay();
-        return dow === 0 || dow === 6;
-      });
-
-      let fixedExp = 0, varExp = 0, savExp = 0;
-      (state.expensesList || []).forEach(x => {
-        const v = Number(x.amount || 0);
-        if (x.category === 'fixa') fixedExp += v;
-        else if (x.category === 'poupanca') savExp += v;
-        else varExp += v;
-      });
-      const totalOutflows = +(fixedExp + varExp + savExp).toFixed(2);
-      const freeCash = +(netSalary - totalOutflows).toFixed(2);
-      const totalWorkedH = Math.max(1, totalNormalHours + totalPaidExtraHours);
-      const netPerWorkedHour = +(netSalary / totalWorkedH).toFixed(2);
-
-      return {
-        list, congeRate, congeInfo,
-        totalGross: +totalGross.toFixed(2),
-        totalBaseOnly: +totalBaseOnly.toFixed(2),
-        totalOtAndSupplements: +totalOtAndSupplements.toFixed(2),
-        totalBonusEarned: +totalBonusEarned.toFixed(2),
-        totalNormalHours: +totalNormalHours.toFixed(2),
-        totalPaidExtraHours: +totalPaidExtraHours.toFixed(2),
-        annualCongeUsed,
-        annualCongeRemaining: Math.max(0, Number(state.annualCongeQuota) - annualCongeUsed),
-        totalReposBankHours: +totalReposBankHours.toFixed(2),
-        congeDaysCount, unworkedHolidayHours,
-        unworkedHolidayPay: +unworkedHolidayPay.toFixed(2),
-        deductionBreakdown,
-        totalSocialDeductions: +totalSocialDeductions.toFixed(2),
-        estimatedTax, vouchersCount, voucherDeduction, cis,
-        totalExpensesReimb: +totalExpensesReimb.toFixed(2),
-        netSalary, weekendHolidays, yearHolidays,
-        fixedExp, varExp, savExp, totalOutflows, freeCash, netPerWorkedHour
-      };
-    }
-
-    // ==================== RELÓGIO DE PONTO COM PAUSA AO VIVO ====================
-    let liveInterval = null;
-    function updateLiveClockDisplay() {
-      const el = document.getElementById('liveClockBox');
-      if (!el || !state.liveClock.running) return;
-      const now = Date.now();
-      const currentPauseMs = state.liveClock.paused ? (now - state.liveClock.pauseStartMs) : 0;
-      const totalPauseMs = (state.liveClock.accumulatedPauseMs || 0) + currentPauseMs;
-      const netWorkMs = Math.max(0, (now - state.liveClock.startTimeMs) - totalPauseMs);
-
-      const elapsedSec = Math.floor(netWorkMs / 1000);
-      const hrs = Math.floor(elapsedSec / 3600);
-      const mins = Math.floor((elapsedSec % 3600) / 60);
-      const secs = elapsedSec % 60;
-      const pauseMins = Math.floor(totalPauseMs / 60000);
-
-      const elapsedHoursDec = elapsedSec / 3600;
-      const normalRate = Number(state.baseRate) + Number(state.hourlyBonus);
-      const otRate = Number(state.baseRate) * (1 + Number(state.otSupplementPct) / 100) + (state.includeBonusInOt ? Number(state.hourlyBonus) : 0);
-
-      let earned = 0;
-      if (elapsedHoursDec <= state.standardDailyHours) {
-        earned = elapsedHoursDec * normalRate;
-      } else {
-        earned = (state.standardDailyHours * normalRate) + ((elapsedHoursDec - state.standardDailyHours) * otRate);
-      }
-
-      const dayProgressPct = Math.min(100, Math.round((elapsedHoursDec / state.standardDailyHours) * 100));
-
-      el.innerHTML = `
-        <div class="row">
-          <div>
-            <div style="font-size:23px; font-weight:900; font-family:monospace; color:${state.liveClock.paused ? '#fcd34d' : '#38bdf8'};">
-              ${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}
-            </div>
-            <div class="subtext">
-              ${state.liveClock.paused ? '☕ EM PAUSA' : '🟢 A Trabalhar'} • Pausa acumulada: <b>${pauseMins} min</b>
-            </div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:22px; font-weight:900; color:#10b981;">+${earned.toFixed(3)} €</div>
-            <div class="subtext">${dayProgressPct}% da meta diária (${state.standardDailyHours}h)</div>
-          </div>
-        </div>
-        <div class="progress-bar" style="margin-top:8px;">
-          <div class="progress-fill" style="width:${dayProgressPct}%; background:${elapsedHoursDec > state.standardDailyHours ? '#f59e0b' : '#10b981'};"></div>
-        </div>
-      `;
-    }
-
-    window.startLiveClock = () => {
-      state.liveClock = {
-        running: true,
-        paused: false,
-        startTimeMs: Date.now(),
-        pauseStartMs: null,
-        accumulatedPauseMs: 0
-      };
-      saveState();
-    };
-
-    window.togglePauseLiveClock = () => {
-      if (!state.liveClock.running) return;
-      if (!state.liveClock.paused) {
-        state.liveClock.paused = true;
-        state.liveClock.pauseStartMs = Date.now();
-      } else {
-        state.liveClock.accumulatedPauseMs += (Date.now() - state.liveClock.pauseStartMs);
-        state.liveClock.paused = false;
-        state.liveClock.pauseStartMs = null;
-      }
-      saveState();
-    };
-
-    window.stopLiveClock = () => {
-      if (!state.liveClock.running) return;
-      const now = Date.now();
-      if (state.liveClock.paused && state.liveClock.pauseStartMs) {
-        state.liveClock.accumulatedPauseMs += (now - state.liveClock.pauseStartMs);
-      }
-      const startDt = new Date(state.liveClock.startTimeMs);
-      const endDt = new Date(now);
-      const todayISO = fmtISO(startDt);
-      const startStr = startDt.toTimeString().slice(0, 5);
-      const endStr = endDt.toTimeString().slice(0, 5);
-      const recordedBreakMin = Math.round((state.liveClock.accumulatedPauseMs || 0) / 60000);
-      const effectiveBreak = recordedBreakMin > 0 ? recordedBreakMin : state.defaultBreakMin;
-
-      const calc = calcShiftFromTimes(startStr, endStr, effectiveBreak, state.standardDailyHours, todayISO);
-      state.form.date = todayISO;
-      state.form.type = 'work';
-      state.form.start = startStr;
-      state.form.end = endStr;
-      state.form.breakMin = effectiveBreak;
-      state.form.normalH = calc.normalH;
-      state.form.extraH = calc.extraH;
-      state.form.nightH = calc.nightH;
-      state.form.sundayH = calc.sundayH;
-
-      state.liveClock = { running: false, paused: false, startTimeMs: null, pauseStartMs: null, accumulatedPauseMs: 0 };
-      window.saveEntry();
-    };
-
-    if (liveInterval) clearInterval(liveInterval);
-    liveInterval = setInterval(updateLiveClockDisplay, 1000);
-
-    // ==================== FUNÇÕES DE INTERAÇÃO & CARIMBO ====================
-    window.setTab = (tab) => { state.activeTab = tab; saveState(); };
-    window.setLang = (l) => { state.lang = l; saveState(); };
-    window.setMonth = (m) => { state.selectedMonth = m; state.form.date = `${m}-01`; saveState(); };
-    window.setCountry = (c) => { state.country = c; saveState(); };
-    window.setTaxClass = (clsId) => {
-      const p = state.countryProfiles[state.country];
-      p.selectedClass = clsId;
-      const found = p.classes.find(x => x.id === clsId);
-      if (found) p.taxRate = found.defaultTax;
-      saveState();
-    };
-
-    window.setStampMode = (mode) => {
-      state.calendarStampMode = mode;
-      saveState();
-    };
-
-    window.handleCalendarDayClick = (dateStr) => {
-      const mode = state.calendarStampMode || 'edit';
-      if (mode === 'edit') {
-        window.editEntryFromList(dateStr);
-        return;
-      }
-      const ym = dateStr.slice(0, 7);
-      if (!state.entries[ym]) state.entries[ym] = [];
-      state.entries[ym] = state.entries[ym].filter(e => e.date !== dateStr);
-
-      if (mode === 'clear') {
-        saveState();
-        return;
-      }
-      if (mode === 'work8') {
-        state.entries[ym].push({
-          date: dateStr, type: 'work', start: '07:00', end: '15:30',
-          breakMin: state.defaultBreakMin, normalH: 8, extraH: 0, nightH: 0, sundayH: 0,
-          otMode: 'pay', expense: 0, note: '🚛 Distribuição'
-        });
-      } else if (mode === 'work9') {
-        state.entries[ym].push({
-          date: dateStr, type: 'work', start: '07:00', end: '16:30',
-          breakMin: state.defaultBreakMin, normalH: 8, extraH: 1, nightH: 0, sundayH: 0,
-          otMode: 'pay', expense: 0, note: '🚛 Distribuição (+1h)'
-        });
-      } else if (mode === 'conge') {
-        state.entries[ym].push({
-          date: dateStr, type: 'conge', start: '-', end: '-',
-          breakMin: 0, normalH: 8, extraH: 0, nightH: 0, sundayH: 0,
-          otMode: 'pay', expense: 0, note: '🏖️ Férias (Congé)'
-        });
-      } else if (mode === 'feriado_trab') {
-        state.entries[ym].push({
-          date: dateStr, type: 'feriado_trab', start: '07:00', end: '15:30',
-          breakMin: state.defaultBreakMin, normalH: 8, extraH: 0, nightH: 0, sundayH: 0,
-          otMode: 'pay', expense: 0, note: '🎉 Feriado Trabalhado'
-        });
-      }
-      saveState();
-    };
-
-    window.applyQuickTemplate = (tpl) => {
-      if (tpl === 'morning') {
-        state.form.type = 'work'; state.form.start = '06:00'; state.form.end = '14:30'; state.form.breakMin = 30;
-      } else if (tpl === 'day9h') {
-        state.form.type = 'work'; state.form.start = '07:00'; state.form.end = '16:30'; state.form.breakMin = 30;
-      } else if (tpl === 'conge') {
-        state.form.type = 'conge'; state.form.normalH = state.standardDailyHours; state.form.extraH = 0; state.form.nightH = 0; state.form.sundayH = 0;
-      } else if (tpl === 'feriado_trab') {
-        state.form.type = 'feriado_trab'; state.form.normalH = state.standardDailyHours; state.form.extraH = 0;
-      }
-      if (state.form.type === 'work') {
-        const calc = calcShiftFromTimes(state.form.start, state.form.end, state.form.breakMin, state.standardDailyHours, state.form.date);
-        state.form.normalH = calc.normalH; state.form.extraH = calc.extraH; state.form.nightH = calc.nightH; state.form.sundayH = calc.sundayH;
-      }
-      saveState();
-    };
-
-    window.selectQuickTag = (tag) => {
-      state.form.note = tag;
-      saveState();
-    };
-
-    window.updateFormField = (field, val) => {
-      state.form[field] = val;
-      if (['start', 'end', 'breakMin', 'date'].includes(field) && state.form.type === 'work') {
-        const calc = calcShiftFromTimes(state.form.start, state.form.end, state.form.breakMin, state.standardDailyHours, state.form.date);
-        state.form.normalH = calc.normalH; state.form.extraH = calc.extraH; state.form.nightH = calc.nightH; state.form.sundayH = calc.sundayH;
-      }
-      saveState();
-    };
-
-    window.saveEntry = () => {
-      const ym = state.form.date.slice(0, 7);
-      state.selectedMonth = ym;
-      if (!state.entries[ym]) state.entries[ym] = [];
-      state.entries[ym] = state.entries[ym].filter(e => e.date !== state.form.date);
-      state.entries[ym].push({ ...state.form });
-      state.editingDate = null;
-      saveState();
-    };
-
-    window.editEntryFromList = (dateStr) => {
-      const ym = dateStr.slice(0, 7);
-      const list = getEffectiveMonthEntries(ym);
-      const found = list.find(e => e.date === dateStr);
-      if (found) {
-        state.form = { ...found };
-        delete state.form.isAutoHoliday;
-      } else {
-        state.form.date = dateStr;
-      }
-      state.editingDate = dateStr;
-      state.activeTab = 'registo';
-      saveState();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.deleteEntry = (date) => {
-      const ym = state.selectedMonth;
-      if (!state.entries[ym]) return;
-      state.entries[ym] = state.entries[ym].filter(e => e.date !== date);
-      if (state.editingDate === date) state.editingDate = null;
-      saveState();
-    };
-
-    window.autoFillWorkweek = () => {
-      const ym = state.selectedMonth;
-      const [y, m] = ym.split('-').map(Number);
-      const holidays = getPublicHolidays(y, state.country).map(h => h.date);
-      if (!state.entries[ym]) state.entries[ym] = [];
-      const daysInMonth = new Date(y, m, 0).getDate();
-      for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${ym}-${String(d).padStart(2, '0')}`;
-        const dow = new Date(dateStr + 'T12:00:00').getDay();
-        const exists = state.entries[ym].some(e => e.date === dateStr);
-        if (dow >= 1 && dow <= 5 && !holidays.includes(dateStr) && !exists) {
-          state.entries[ym].push({
-            date: dateStr, type: 'work', start: '07:00', end: '15:30',
-            breakMin: state.defaultBreakMin, normalH: state.standardDailyHours,
-            extraH: 0, nightH: 0, sundayH: 0, otMode: 'pay', expense: 0, note: '🚛 Distribuição'
-          });
-        }
-      }
-      saveState();
-    };
-
-    window.copyPayslipReport = () => {
-      const summary = calculateMonthSummary(state.selectedMonth);
-      const lines = [
-        `📊 RELATÓRIO DE HORAS & SALÁRIO — ${state.selectedMonth}`,
-        `----------------------------------------`,
-        `• Horas Normais Trabalhadas: ${summary.totalNormalHours}h`,
-        `• Horas Extras Pagas: ${summary.totalPaidExtraHours}h`,
-        `• Dias de Férias (Congé): ${summary.congeDaysCount}d (@ ${summary.congeRate.toFixed(2)} €/h)`,
-        `• Horas Feriados Não Trab.: ${summary.unworkedHolidayHours}h (+${summary.unworkedHolidayPay.toFixed(2)} €)`,
-        `• Prémio 2,60€/h Acumulado: +${summary.totalBonusEarned.toFixed(2)} €`,
-        `----------------------------------------`,
-        `💰 TOTAL BRUTO: ${summary.totalGross.toFixed(2)} €`,
-        `🏛️ Descontos Sociais: -${summary.totalSocialDeductions.toFixed(2)} €`,
-        `📄 Imposto Retido: -${summary.estimatedTax.toFixed(2)} €`,
-        `🍽️ Chèques-Repas (${summary.vouchersCount}d): -${summary.voucherDeduction.toFixed(2)} €`,
-        `✅ SALÁRIO LÍQUIDO ESTIMADO: ${summary.netSalary.toFixed(2)} €`,
-        `----------------------------------------`,
-        `DETALHE DIÁRIO:`
-      ];
-      summary.list.forEach(e => {
-        lines.push(`${e.date}: ${e.type.toUpperCase()} | ${e.normalH}h norm + ${e.extraH}h ext | ${e.note || ''}`);
-      });
-      const text = lines.join('\n');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => alert("Relatório copiado! Já pode colar no WhatsApp ou Bloco de Notas."));
-      } else {
-        state.backupText = text;
-        state.activeTab = 'config';
-        saveState();
-        alert("Relatório gerado na caixa de texto em Ajustes!");
-      }
-    };
-
-    window.addExpenseItem = () => {
-      if (!state.newExpense.name || !state.newExpense.amount) return;
-      state.expensesList.push({
-        id: Date.now(),
-        name: state.newExpense.name,
-        category: state.newExpense.category || 'fixa',
-        amount: Number(state.newExpense.amount)
-      });
-      state.newExpense = { name: "", category: "fixa", amount: "" };
-      saveState();
-    };
-
-    window.deleteExpenseItem = (id) => {
-      state.expensesList = state.expensesList.filter(x => x.id !== id);
-      saveState();
-    };
-
-    window.applyIndex25 = () => {
-      state.baseRate = +(Number(state.baseRate) * 1.025).toFixed(2);
-      saveState();
-    };
-
-    window.generateBackupCode = () => {
-      state.backupText = JSON.stringify(state);
-      saveState();
-    };
-
-    window.restoreFromBackupCode = () => {
-      try {
-        const parsed = JSON.parse(state.backupText);
-        Object.assign(state, parsed);
-        state.backupText = "";
-        saveState();
-        alert("Backup restaurado com sucesso!");
-      } catch (e) {
-        alert("Código de backup inválido.");
-      }
-    };
-
-    // ==================== RENDERIZAÇÃO PRINCIPAL ====================
-    function render() {
-      const t = I18N[state.lang] || I18N.pt;
-      const profile = state.countryProfiles[state.country];
-      const summary = calculateMonthSummary(state.selectedMonth);
-      const goalPct = Math.min(100, Math.round((summary.netSalary / Math.max(1, state.monthlyNetGoal)) * 100));
-
-      document.getElementById('app').innerHTML = `
-        <div class="card" style="padding: 12px 14px;">
-          <div class="row" style="margin-bottom: 8px; flex-wrap: wrap;">
-            <div style="display:flex; gap:5px; flex-wrap:wrap;">
-              <span class="badge bg-sky">${profile.name}</span>
-              <span class="badge bg-amber">Classe ${profile.selectedClass}</span>
-              <span class="badge bg-emerald">+${Number(state.hourlyBonus).toFixed(2)} €/h</span>
-            </div>
-            <div style="display:flex; gap:5px;">
-              <select onchange="setLang(this.value)" style="width:auto; padding:5px 7px; font-size:11px;">
-                <option value="pt" ${state.lang==='pt'?'selected':''}>🇵🇹 PT</option>
-                <option value="lb" ${state.lang==='lb'?'selected':''}>🇱🇺 LB</option>
-                <option value="fr" ${state.lang==='fr'?'selected':''}>🇫🇷 FR</option>
-                <option value="de" ${state.lang==='de'?'selected':''}>🇩🇪 DE</option>
-                <option value="en" ${state.lang==='en'?'selected':''}>🇬🇧 EN</option>
-                <option value="es" ${state.lang==='es'?'selected':''}>🇪🇸 ES</option>
-              </select>
-              <input type="month" value="${state.selectedMonth}" onchange="setMonth(this.value)" style="width:auto; padding:5px 7px; font-size:11px;" />
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--success);">
-              <div class="subtext">${t.netEst}</div>
-              <div class="kpi-val" style="color:var(--success);">${summary.netSalary.toFixed(2)} €</div>
-              <div class="progress-bar"><div class="progress-fill" style="width:${goalPct}%; background:var(--success);"></div></div>
-              <div class="subtext" style="font-size:10px; margin-top:4px;">${goalPct}% da meta (${state.monthlyNetGoal} €)</div>
-            </div>
-
-            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--primary);">
-              <div class="subtext">${t.grossTot}</div>
-              <div class="kpi-val">${summary.totalGross.toFixed(2)} €</div>
-              <div class="subtext" style="font-size:10px; color:#7dd3fc; margin-top:4px;">
-                Prémio 2,60€: +${summary.totalBonusEarned.toFixed(2)} €
-              </div>
-            </div>
-
-            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--warning);">
-              <div class="subtext">${t.conge3m}</div>
-              <div class="kpi-val" style="color:#fcd34d;">${summary.congeRate.toFixed(2)} €/h</div>
-              <div class="subtext" style="font-size:10px; margin-top:4px;">
-                1 dia (8h) = ${(summary.congeRate * 8).toFixed(2)} €
-              </div>
-            </div>
-
-            <div style="background:var(--card-alt); padding:10px 12px; border-radius:14px; border-left:4px solid var(--purple);">
-              <div class="subtext">${t.freeCash}</div>
-              <div class="kpi-val" style="color:${summary.freeCash >= 0 ? '#d8b4fe' : '#fda4af'};">
-                ${summary.freeCash.toFixed(2)} €
-              </div>
-              <div class="subtext" style="font-size:10px; margin-top:4px;">
-                Congé disp.: ${summary.annualCongeRemaining}d | Repos: ${summary.totalReposBankHours}h
-              </div>
-            </div>
-          </div>
-        </div>
-
-        ${state.activeTab === 'registo' ? renderRegistoTab(t, summary) : ''}
-        ${state.activeTab === 'calendario' ? renderCalendarioTab(t, summary) : ''}
-        ${state.activeTab === 'folha' ? renderFolhaTab(t, profile, summary) : ''}
-        ${state.activeTab === 'financas' ? renderFinancasTab(t, summary) : ''}
-        ${state.activeTab === 'config' ? renderConfigTab(t, profile) : ''}
-      `;
-
-      document.getElementById('bottomNav').innerHTML = `
-        <button onclick="setTab('registo')" class="nav-item ${state.activeTab==='registo'?'active':''}">
-          <span class="nav-icon">⏱️</span><span>${t.tabs.registo}</span>
-        </button>
-        <button onclick="setTab('calendario')" class="nav-item ${state.activeTab==='calendario'?'active':''}">
-          <span class="nav-icon">📅</span><span>${t.tabs.calendario}</span>
-        </button>
-        <button onclick="setTab('folha')" class="nav-item ${state.activeTab==='folha'?'active':''}">
-          <span class="nav-icon">📄</span><span>${t.tabs.folha}</span>
-        </button>
-        <button onclick="setTab('financas')" class="nav-item ${state.activeTab==='financas'?'active':''}">
-          <span class="nav-icon">💰</span><span>${t.tabs.financas}</span>
-        </button>
-        <button onclick="setTab('config')" class="nav-item ${state.activeTab==='config'?'active':''}">
-          <span class="nav-icon">⚙️</span><span>${t.tabs.config}</span>
-        </button>
-      `;
-
-      if (state.liveClock.running) updateLiveClockDisplay();
-    }
-
-    // ==================== ABA 1: PONTO INTELIGENTE & REGISTO ====================
-    function renderRegistoTab(t, summary) {
-      return `
-        <!-- RELÓGIO DE PONTO COM PAUSA AO VIVO -->
-        <div class="card" style="border: 1px solid rgba(56, 189, 248, 0.28);">
-          <div class="row" style="margin-bottom:8px;">
-            <span style="font-size:12px; font-weight:800; color:#7dd3fc;">⏱️ ${t.liveClock}</span>
-            <span class="badge bg-emerald">${(Number(state.baseRate)+Number(state.hourlyBonus)).toFixed(2)} €/h</span>
-          </div>
-          <div id="liveClockBox" style="margin-bottom:10px;">
-            ${!state.liveClock.running ? `<div class="subtext">Bata o ponto na entrada, pause no almoço e finalize na saída com cálculo automático.</div>` : ''}
-          </div>
-          ${!state.liveClock.running ? `
-            <button onclick="startLiveClock()" class="btn-success" style="width:100%;">${t.startShift}</button>
-          ` : `
-            <div class="grid-2">
-              <button onclick="togglePauseLiveClock()" class="btn-warning">
-                ${state.liveClock.paused ? t.resumeShift : t.pauseShift}
-              </button>
-              <button onclick="stopLiveClock()" class="btn-danger">
-                ${t.stopShift}
-              </button>
-            </div>
-          `}
-        </div>
-
-        <!-- FORMULÁRIO COM MODELOS E ETIQUETAS 1-TOQUE -->
-        <div class="card">
-          <div class="row" style="margin-bottom:10px;">
-            <span style="font-size:12px; font-weight:800; color:#38bdf8;">
-              ${state.editingDate ? `✏️ A Editar: ${state.editingDate}` : `⚡ ${t.quickTpl}`}
-            </span>
-            <button onclick="autoFillWorkweek()" class="badge bg-emerald" style="border:none; cursor:pointer; padding:6px 10px;">
-              ${t.fillWeek}
-            </button>
-          </div>
-
-          <div class="grid-4" style="margin-bottom:10px;">
-            <button onclick="applyQuickTemplate('morning')" class="btn-ghost" style="padding:8px 4px; font-size:11px;">🌅 06-14:30</button>
-            <button onclick="applyQuickTemplate('day9h')" class="btn-ghost" style="padding:8px 4px; font-size:11px;">🚛 07-16:30</button>
-            <button onclick="applyQuickTemplate('conge')" class="btn-ghost" style="padding:8px 4px; font-size:11px; color:#fcd34d;">🏖️ Congé</button>
-            <button onclick="applyQuickTemplate('feriado_trab')" class="btn-ghost" style="padding:8px 4px; font-size:11px; color:#d8b4fe;">🎉 Feriado</button>
-          </div>
-
-          <div class="grid-2" style="margin-bottom:8px;">
-            <div>
-              <label>Data</label>
-              <input type="date" value="${state.form.date}" onchange="updateFormField('date', this.value)" />
-            </div>
-            <div>
-              <label>Tipo de Dia</label>
-              <select onchange="updateFormField('type', this.value)">
-                ${Object.entries(t.types).map(([k,v]) => `<option value="${k}" ${state.form.type===k?'selected':''}>${v}</option>`).join('')}
-              </select>
-            </div>
-          </div>
-
-          <div class="grid-3" style="margin-bottom:8px;">
-            <div>
-              <label>Entrada</label>
-              <input type="time" value="${state.form.start}" onchange="updateFormField('start', this.value)" />
-            </div>
-            <div>
-              <label>Saída</label>
-              <input type="time" value="${state.form.end}" onchange="updateFormField('end', this.value)" />
-            </div>
-            <div>
-              <label>Pausa (min)</label>
-              <input type="number" value="${state.form.breakMin}" onchange="updateFormField('breakMin', this.value)" />
-            </div>
-          </div>
-
-          <div class="grid-3" style="margin-bottom:8px;">
-            <div>
-              <label>Horas Normais</label>
-              <input type="number" step="0.25" value="${state.form.normalH}" onchange="updateFormField('normalH', this.value)" />
-            </div>
-            <div>
-              <label>Horas Extras</label>
-              <input type="number" step="0.25" value="${state.form.extraH}" onchange="updateFormField('extraH', this.value)" />
-            </div>
-            <div>
-              <label>Noturnas (22-06h)</label>
-              <input type="number" step="0.25" value="${state.form.nightH}" onchange="updateFormField('nightH', this.value)" />
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-bottom:8px;">
-            <div>
-              <label>Destino Horas Extras</label>
-              <select onchange="updateFormField('otMode', this.value)">
-                <option value="pay" ${state.form.otMode==='pay'?'selected':''}>Pagar na Folha (+40%)</option>
-                <option value="bank" ${state.form.otMode==='bank'?'selected':''}>Banco Horas (Repos)</option>
-              </select>
-            </div>
-            <div>
-              <label>Reembolso Km / Despesas (€)</label>
-              <input type="number" step="0.5" value="${state.form.expense}" onchange="updateFormField('expense', this.value)" />
-            </div>
-          </div>
-
-          <!-- ETIQUETAS RÁPIDAS (INSPIRADO NO TIMESHEET TRACKER) -->
-          <label>Etiqueta Rápida / Nota da Rota</label>
-          <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:6px;">
-            ${QUICK_TAGS.map(tag => `
-              <button type="button" onclick="selectQuickTag('${tag}')" class="tag-chip ${state.form.note === tag ? 'active' : ''}">${tag}</button>
-            `).join('')}
-          </div>
-          <input type="text" value="${state.form.note}" placeholder="Nota personalizada..." onchange="updateFormField('note', this.value)" style="margin-bottom:10px;" />
-
-          <div class="row">
-            <button onclick="saveEntry()" class="btn-primary">
-              ✓ ${state.editingDate ? t.updateDay : t.saveDay}
-            </button>
-            ${state.editingDate ? `<button onclick="state.editingDate=null; saveState();" class="btn-ghost">${t.cancelEdit}</button>` : ''}
-          </div>
-        </div>
-
-        <!-- LISTA DE REGISTOS -->
-        <div class="card">
-          <div class="row" style="margin-bottom:10px;">
-            <span style="font-size:13px; font-weight:800;">Registos de ${state.selectedMonth} (${summary.list.length}d)</span>
-            <span class="subtext">Normais: <b>${summary.totalNormalHours}h</b> | Extras: <b>${summary.totalPaidExtraHours}h</b></span>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            ${summary.list.map(e => {
-              const row = computeRowGross(e, summary.congeRate);
-              const badgeCls = e.type.includes('feriado') ? 'bg-purple' : e.type === 'conge' ? 'bg-amber' : 'bg-sky';
-              return `
-                <div class="row" style="background:var(--card-alt); padding:10px 12px; border-radius:12px;">
-                  <div onclick="editEntryFromList('${e.date}')" style="flex:1; cursor:pointer;">
-                    <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                      <span style="font-weight:800; font-size:13px;">${e.date.slice(8,10)}/${e.date.slice(5,7)}</span>
-                      <span class="badge ${badgeCls}">${t.types[e.type] || e.type}</span>
-                      ${Number(e.extraH) > 0 ? `<span class="badge bg-emerald">+${e.extraH}h ext</span>` : ''}
-                    </div>
-                    <div class="subtext" style="margin-top:3px;">
-                      ${e.start} - ${e.end} • ${e.normalH}h ${e.note ? `• ${e.note}` : ''}
-                    </div>
-                  </div>
-                  <div style="text-align:right; display:flex; align-items:center; gap:8px;">
-                    <div>
-                      <div style="font-weight:900; color:var(--success); font-size:14px;">+${row.gross.toFixed(2)} €</div>
-                      <div class="subtext" style="font-size:10px;">Editar</div>
-                    </div>
-                    ${!e.isAutoHoliday ? `<button onclick="deleteEntry('${e.date}')" class="btn-danger" style="padding:6px 9px; font-size:11px;">✕</button>` : ''}
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // ==================== ABA 2: CALENDÁRIO COM MODO CARIMBO (SUPERSHIFT) ====================
-    function renderCalendarioTab(t, summary) {
-      const [y, m] = state.selectedMonth.split('-').map(Number);
-      const firstDay = new Date(y, m - 1, 1);
-      let startOffset = firstDay.getDay() - 1;
-      if (startOffset < 0) startOffset = 6;
-      const daysInMonth = new Date(y, m, 0).getDate();
-      const mapEntries = {};
-      summary.list.forEach(e => { mapEntries[e.date] = e; });
-      const todayISO = fmtISO(new Date());
-
-      const cells = [];
-      for (let i = 0; i < startOffset; i++) cells.push(`<div class="cal-day empty"></div>`);
-      for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${state.selectedMonth}-${String(d).padStart(2, '0')}`;
-        const entry = mapEntries[dateStr];
-        let tagHtml = '';
-        let borderStyle = '';
-        if (entry) {
-          if (entry.type === 'conge') {
-            tagHtml = `<div class="cal-tag bg-amber">Congé</div>`;
-            borderStyle = 'border-color: rgba(245,158,11,0.5);';
-          } else if (entry.type.includes('feriado')) {
-            tagHtml = `<div class="cal-tag bg-purple">Feriado</div>`;
-            borderStyle = 'border-color: rgba(168,85,247,0.5);';
-          } else if (entry.type === 'work') {
-            tagHtml = `<div class="cal-tag bg-emerald">${entry.normalH}h${Number(entry.extraH)>0 ? '+'+entry.extraH : ''}</div>`;
-            borderStyle = 'border-color: rgba(16,185,129,0.4);';
-          } else {
-            tagHtml = `<div class="cal-tag bg-sky">${entry.type}</div>`;
-          }
-        }
-        cells.push(`
-          <div onclick="handleCalendarDayClick('${dateStr}')" class="cal-day ${dateStr===todayISO?'today':''}" style="${borderStyle}">
-            <div class="cal-num">${d}</div>
-            ${tagHtml}
-          </div>
-        `);
-      }
-
-      const rateUnworkedHol = Number(state.baseRate) + (state.includeBonusInUnworkedHoliday ? Number(state.hourlyBonus) : 0);
-      const dayPayUnworked = (state.standardDailyHours * rateUnworkedHol).toFixed(2);
-      const sm = state.calendarStampMode || 'edit';
-
-      return `
-        <div class="card">
-          <div class="grid-3" style="text-align:center;">
-            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
-              <div class="subtext">Férias Restantes</div>
-              <div style="font-size:17px; font-weight:900; color:#fcd34d;">${summary.annualCongeRemaining} / ${state.annualCongeQuota}d</div>
-            </div>
-            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
-              <div class="subtext">Banco Horas (Repos)</div>
-              <div style="font-size:17px; font-weight:900; color:#38bdf8;">${summary.totalReposBankHours}h</div>
-            </div>
-            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
-              <div class="subtext">Feriados Fim Semana</div>
-              <div style="font-size:17px; font-weight:900; color:#d8b4fe;">+${summary.weekendHolidays.length} dias</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- GRELHA MENSAL COM BARRA DE CARIMBO RÁPIDO -->
-        <div class="card">
-          <div style="font-size:11px; font-weight:700; color:#7dd3fc; margin-bottom:6px;">🎨 ${t.stampTitle}</div>
-          <div class="stamp-bar">
-            <button onclick="setStampMode('edit')" class="stamp-btn ${sm==='edit'?'active':''}">✏️ Ver/Editar</button>
-            <button onclick="setStampMode('work8')" class="stamp-btn ${sm==='work8'?'active':''}">🚛 Turno 8h</button>
-            <button onclick="setStampMode('work9')" class="stamp-btn ${sm==='work9'?'active':''}">🔥 8h + 1h Ext</button>
-            <button onclick="setStampMode('conge')" class="stamp-btn ${sm==='conge'?'active':''}">🏖️ Congé</button>
-            <button onclick="setStampMode('feriado_trab')" class="stamp-btn ${sm==='feriado_trab'?'active':''}">🎉 Feriado Trab.</button>
-            <button onclick="setStampMode('clear')" class="stamp-btn ${sm==='clear'?'active':''}">🗑️ Apagar Dia</button>
-          </div>
-
-          <div class="cal-grid">
-            <div class="cal-head">Seg</div><div class="cal-head">Ter</div><div class="cal-head">Qua</div>
-            <div class="cal-head">Qui</div><div class="cal-head">Sex</div><div class="cal-head">Sáb</div><div class="cal-head">Dom</div>
-            ${cells.join('')}
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="row" style="margin-bottom:10px;">
-            <div>
-              <div style="font-size:14px; font-weight:800;">🎉 Feriados Oficiais (${y})</div>
-              <div class="subtext">Feriado útil não trabalhado (8h) = <b style="color:var(--success);">${dayPayUnworked} €</b></div>
-            </div>
-            <label style="display:flex; align-items:center; gap:6px; margin:0;">
-              <input type="checkbox" style="width:18px; height:18px;" ${state.autoPayUnworkedHolidays?'checked':''} onchange="state.autoPayUnworkedHolidays=this.checked; saveState();" />
-              <span>Auto-Pagar</span>
-            </label>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            ${summary.yearHolidays.map(h => {
-              const dow = new Date(h.date + 'T12:00:00').getDay();
-              const isWknd = (dow === 0 || dow === 6);
-              return `
-                <div class="row" style="background:var(--card-alt); padding:9px 12px; border-radius:10px;">
-                  <div>
-                    <div style="font-weight:800; font-size:12px;">${h.date} — ${h.name}</div>
-                    <div class="subtext">${isWknd ? 'Fim de semana: +1 dia de Congé Compensatório' : 'Dia útil: creditado automaticamente na folha'}</div>
-                  </div>
-                  <span class="badge ${isWknd ? 'bg-amber' : 'bg-emerald'}">
-                    ${isWknd ? '+1 Dia Comp.' : `+${dayPayUnworked} €`}
-                  </span>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // ==================== ABA 3: SALÁRIO, GRÁFICO & AUDITORIA ====================
-    function renderFolhaTab(t, profile, summary) {
-      const diffConge = +(state.audit.companyCongeRate - summary.congeRate).toFixed(2);
-      const diffNet = +(state.audit.companyNet - summary.netSalary).toFixed(2);
-      const grossSafe = Math.max(1, summary.totalGross);
-      const basePct = Math.round((summary.totalBaseOnly / grossSafe) * 100);
-      const bonusPct = Math.round((summary.totalBonusEarned / grossSafe) * 100);
-      const otPct = Math.round((summary.totalOtAndSupplements / grossSafe) * 100);
-      const holCongePct = Math.max(0, 100 - basePct - bonusPct - otPct);
-
-      return `
-        <div class="card">
-          <div class="row" style="margin-bottom:10px;">
-            <div>
-              <div style="font-size:16px; font-weight:900;">📄 Fiche de Salaire (${state.selectedMonth})</div>
-              <div class="subtext">${profile.name} • Classe ${profile.selectedClass} (${profile.taxRate}%)</div>
-            </div>
-            <select onchange="setTaxClass(this.value)" style="width:auto;">
-              ${profile.classes.map(c => `<option value="${c.id}" ${profile.selectedClass===c.id?'selected':''}>${c.label}</option>`).join('')}
-            </select>
-          </div>
-
-          <!-- GRÁFICO DE COMPOSIÇÃO DO SALÁRIO BRUTO -->
-          <div style="background:var(--card-alt); padding:10px 12px; border-radius:12px; margin-bottom:12px;">
-            <div class="subtext" style="font-weight:700;">Composição do seu Salário Bruto</div>
-            <div class="progress-bar" style="height:10px; margin:6px 0;">
-              <div class="progress-fill" style="width:${basePct}%; background:#38bdf8;"></div>
-              <div class="progress-fill" style="width:${bonusPct}%; background:#10b981;"></div>
-              <div class="progress-fill" style="width:${otPct}%; background:#f59e0b;"></div>
-              <div class="progress-fill" style="width:${holCongePct}%; background:#a855f7;"></div>
-            </div>
-            <div class="row" style="font-size:10px; flex-wrap:wrap;">
-              <span style="color:#7dd3fc;">● Base: ${summary.totalBaseOnly.toFixed(0)}€</span>
-              <span style="color:#6ee7b7;">● Prémio 2,60€: +${summary.totalBonusEarned.toFixed(0)}€</span>
-              <span style="color:#fcd34d;">● Extras: +${summary.totalOtAndSupplements.toFixed(0)}€</span>
-              <span style="color:#d8b4fe;">● Feriados/Congé</span>
-            </div>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
-            <div class="row">
-              <span>Horas Normais (${summary.totalNormalHours}h × ${(Number(state.baseRate)+Number(state.hourlyBonus)).toFixed(2)} €)</span>
-              <b>${(summary.totalNormalHours * (Number(state.baseRate)+Number(state.hourlyBonus))).toFixed(2)} €</b>
-            </div>
-            <div class="row" style="color:#d8b4fe;">
-              <span>Feriados Não Trabalhados (${summary.unworkedHolidayHours}h)</span>
-              <b>+${summary.unworkedHolidayPay.toFixed(2)} €</b>
-            </div>
-            <div class="row" style="color:#fcd34d;">
-              <span>Férias / Congé (${summary.congeDaysCount}d × 8h @ ${summary.congeRate.toFixed(2)} €/h)</span>
-              <b>+${(summary.congeDaysCount * state.standardDailyHours * summary.congeRate).toFixed(2)} €</b>
-            </div>
-            <div class="row" style="color:#6ee7b7;">
-              <span>Horas Extras Pagas (${summary.totalPaidExtraHours}h) & Suplementos</span>
-              <b>+${summary.totalOtAndSupplements.toFixed(2)} €</b>
-            </div>
-
-            <div class="row" style="align-items:center; padding-top:4px;">
-              <span class="subtext">13.º Mês / Prémio Extra Bruto (€):</span>
-              <input type="number" step="10" value="${state.extraMonthlyBonusGross}" onchange="state.extraMonthlyBonusGross=Number(this.value); saveState();" style="width:110px; text-align:right; padding:6px;" />
-            </div>
-
-            <div class="row" style="background:var(--card-alt); padding:10px 12px; border-radius:12px; font-size:15px; font-weight:900;">
-              <span>TOTAL BRUTO</span>
-              <span style="color:var(--primary);">${summary.totalGross.toFixed(2)} €</span>
-            </div>
-
-            <div class="subtext" style="font-weight:800; text-transform:uppercase; margin-top:4px;">Descontos Oficiais (${profile.name})</div>
-            ${summary.deductionBreakdown.map(d => `
-              <div class="row" style="color:#fda4af;">
-                <span>- ${d.label} (${d.rate}%)</span>
-                <span>-${d.amount.toFixed(2)} €</span>
-              </div>
-            `).join('')}
-
-            <div class="row" style="color:#fda4af;">
-              <span>- Retenção Imposto (Classe ${profile.selectedClass}: ${profile.taxRate}%)</span>
-              <span>-${summary.estimatedTax.toFixed(2)} €</span>
-            </div>
-
-            ${summary.voucherDeduction > 0 ? `
-              <div class="row" style="color:#fcd34d;">
-                <span>- Chèques-Repas (${summary.vouchersCount} dias trab. × ${profile.mealVoucherCost.toFixed(2)} €)</span>
-                <span>-${summary.voucherDeduction.toFixed(2)} €</span>
-              </div>
-            ` : ''}
-
-            ${summary.cis > 0 ? `
-              <div class="row" style="color:#6ee7b7;">
-                <span>+ Crédito Fiscal CIS</span>
-                <span>+${summary.cis.toFixed(2)} €</span>
-              </div>
-            ` : ''}
-
-            ${summary.totalExpensesReimb > 0 ? `
-              <div class="row" style="color:#6ee7b7;">
-                <span>+ Reembolso Despesas / Km (Isento)</span>
-                <span>+${summary.totalExpensesReimb.toFixed(2)} €</span>
-              </div>
-            ` : ''}
-
-            <div class="row" style="background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.4); padding:14px; border-radius:14px; font-size:17px; font-weight:900; margin-top:6px;">
-              <span>SALÁRIO LÍQUIDO</span>
-              <span style="color:#6ee7b7;">${summary.netSalary.toFixed(2)} €</span>
-            </div>
-
-            <button onclick="copyPayslipReport()" class="btn-ghost" style="margin-top:6px; width:100%;">
-              📋 Copiar Relatório Completo para RH / WhatsApp
-            </button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:10px;">⚖️ Auditoria com a Folha da Empresa</div>
-          <div class="grid-3" style="margin-bottom:10px;">
-            <div>
-              <label>Taxa Congé Folha (€/h)</label>
-              <input type="number" step="0.01" value="${state.audit.companyCongeRate}" onchange="state.audit.companyCongeRate=Number(this.value); saveState();" />
-            </div>
-            <div>
-              <label>Horas Pagas Folha</label>
-              <input type="number" step="0.5" value="${state.audit.companyHours}" onchange="state.audit.companyHours=Number(this.value); saveState();" />
-            </div>
-            <div>
-              <label>Líquido no Banco (€)</label>
-              <input type="number" step="1" value="${state.audit.companyNet}" onchange="state.audit.companyNet=Number(this.value); saveState();" />
-            </div>
-          </div>
-          <div style="background:var(--card-alt); padding:10px 12px; border-radius:12px; font-size:12px;">
-            <div>• Diferença Taxa Congé (3M): <b>${diffConge >= 0 ? '+' : ''}${diffConge} €/h</b></div>
-            <div style="margin-top:4px;">• Diferença Salário Líquido: <b style="color:${Math.abs(diffNet)<10?'#6ee7b7':'#fda4af'};">${diffNet >= 0 ? '+' : ''}${diffNet} €</b></div>
-          </div>
-        </div>
-      `;
-    }
-
-    // ==================== ABA 4: DINHEIROS & ORÇAMENTO ====================
-    function renderFinancasTab(t, summary) {
-      const spentPct = Math.min(100, Math.round((summary.totalOutflows / Math.max(1, summary.netSalary)) * 100));
-      return `
-        <div class="card">
-          <div class="row" style="margin-bottom:8px;">
-            <div>
-              <div style="font-size:16px; font-weight:900;">💰 Controlo de Dinheiros (${state.selectedMonth})</div>
-              <div class="subtext">Cada hora líquida trabalhada vale <b>${summary.netPerWorkedHour.toFixed(2)} €/h</b></div>
-            </div>
-            <span class="badge bg-emerald">Líquido: ${summary.netSalary.toFixed(2)} €</span>
-          </div>
-
-          <div class="grid-3" style="margin:10px 0; text-align:center;">
-            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
-              <div class="subtext">Despesas Fixas</div>
-              <div style="font-size:15px; font-weight:900; color:#fda4af;">-${summary.fixedExp.toFixed(0)} €</div>
-            </div>
-            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
-              <div class="subtext">Variáveis</div>
-              <div style="font-size:15px; font-weight:900; color:#fcd34d;">-${summary.varExp.toFixed(0)} €</div>
-            </div>
-            <div style="background:var(--card-alt); padding:10px; border-radius:12px;">
-              <div class="subtext">Poupança / ETF</div>
-              <div style="font-size:15px; font-weight:900; color:#6ee7b7;">${summary.savExp.toFixed(0)} €</div>
-            </div>
-          </div>
-
-          <div class="row" style="background:var(--card-alt); padding:12px; border-radius:12px;">
-            <div>
-              <div class="subtext">Dinheiro Livre Após Despesas e Poupança</div>
-              <div style="font-size:20px; font-weight:900; color:${summary.freeCash >= 0 ? '#6ee7b7' : '#fda4af'};">
-                ${summary.freeCash.toFixed(2)} €
-              </div>
-            </div>
-            <span class="badge ${spentPct <= 85 ? 'bg-emerald' : 'bg-rose'}">${spentPct}% usado</span>
-          </div>
-        </div>
-
-        <div class="card">
-          <div style="font-size:13px; font-weight:800; margin-bottom:8px;">+ Adicionar Despesa ou Poupança</div>
-          <div class="grid-3" style="margin-bottom:8px;">
-            <div>
-              <label>Descrição</label>
-              <input type="text" placeholder="Ex: Seguro..." value="${state.newExpense.name}" onchange="state.newExpense.name=this.value" />
-            </div>
-            <div>
-              <label>Categoria</label>
-              <select onchange="state.newExpense.category=this.value">
-                <option value="fixa" ${state.newExpense.category==='fixa'?'selected':''}>Despesa Fixa</option>
-                <option value="variavel" ${state.newExpense.category==='variavel'?'selected':''}>Variável</option>
-                <option value="poupanca" ${state.newExpense.category==='poupanca'?'selected':''}>Poupança / ETF</option>
-              </select>
-            </div>
-            <div>
-              <label>Valor (€)</label>
-              <input type="number" step="5" placeholder="0.00" value="${state.newExpense.amount}" onchange="state.newExpense.amount=this.value" />
-            </div>
-          </div>
-          <button onclick="addExpenseItem()" class="btn-primary">+ Guardar no Orçamento</button>
-        </div>
-
-        <div class="card">
-          <div style="font-size:13px; font-weight:800; margin-bottom:8px;">Suas Despesas & Custo em Horas de Trabalho</div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            ${(state.expensesList || []).map(item => {
-              const hoursCost = (Number(item.amount) / Math.max(1, summary.netPerWorkedHour)).toFixed(1);
-              const badgeColor = item.category === 'poupanca' ? 'bg-emerald' : item.category === 'fixa' ? 'bg-rose' : 'bg-amber';
-              return `
-                <div class="row" style="background:var(--card-alt); padding:10px 12px; border-radius:12px;">
-                  <div>
-                    <div style="font-weight:800; font-size:13px;">${item.name}</div>
-                    <div class="subtext">Custa <b>${hoursCost} horas</b> do seu trabalho líquido</div>
-                  </div>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <span class="badge ${badgeColor}">${Number(item.amount).toFixed(2)} €</span>
-                    <button onclick="deleteExpenseItem(${item.id})" class="btn-danger" style="padding:5px 8px; font-size:11px;">✕</button>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // ==================== ABA 5: CONFIGURAÇÕES & BACKUP ====================
-    function renderConfigTab(t, profile) {
-      return `
-        <div class="card">
-          <div class="row" style="margin-bottom:10px;">
-            <span style="font-size:14px; font-weight:800; color:#38bdf8;">⚙️ Salário, Prémio 2,60€ & Regras</span>
-            <button onclick="applyIndex25()" class="badge bg-amber" style="border:none; cursor:pointer; padding:6px 10px;">
-              +2,5% Index
-            </button>
-          </div>
-
-          <div class="grid-2" style="margin-bottom:8px;">
-            <div>
-              <label>País de Trabalho</label>
-              <select onchange="setCountry(this.value)">
-                ${Object.keys(state.countryProfiles).map(c => `<option value="${c}" ${state.country===c?'selected':''}>${state.countryProfiles[c].name}</option>`).join('')}
-              </select>
-            </div>
-            <div>
-              <label>Classe de Imposto</label>
-              <select onchange="setTaxClass(this.value)">
-                ${profile.classes.map(c => `<option value="${c.id}" ${profile.selectedClass===c.id?'selected':''}>${c.label}</option>`).join('')}
-              </select>
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-bottom:8px;">
-            <div>
-              <label>Valor Hora Base (€/h)</label>
-              <input type="number" step="0.01" value="${state.baseRate}" onchange="state.baseRate=Number(this.value); saveState();" />
-            </div>
-            <div>
-              <label>Prémio Fixo (€/h)</label>
-              <input type="number" step="0.01" value="${state.hourlyBonus}" onchange="state.hourlyBonus=Number(this.value); saveState();" />
-            </div>
-          </div>
-
-          <div class="grid-3" style="margin-bottom:8px;">
-            <div>
-              <label>Imposto (%)</label>
-              <input type="number" step="0.1" value="${profile.taxRate}" onchange="state.countryProfiles[state.country].taxRate=Number(this.value); saveState();" />
-            </div>
-            <div>
-              <label>Congé Manual (€/h)</label>
-              <input type="number" step="0.01" value="${state.manualCongeRate}" onchange="state.manualCongeRate=Number(this.value); saveState();" />
-            </div>
-            <div>
-              <label>Arredondar Ponto</label>
-              <select onchange="state.roundingMinutes=Number(this.value); saveState();">
-                <option value="0" ${state.roundingMinutes===0?'selected':''}>Exato (0m)</option>
-                <option value="5" ${state.roundingMinutes===5?'selected':''}>5 min</option>
-                <option value="15" ${state.roundingMinutes===15?'selected':''}>15 min</option>
-                <option value="30" ${state.roundingMinutes===30?'selected':''}>30 min</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px; font-size:12px;">
-            <label style="display:flex; align-items:center; gap:8px; color:var(--text);">
-              <input type="checkbox" style="width:18px; height:18px;" ${state.includeBonusInOt?'checked':''} onchange="state.includeBonusInOt=this.checked; saveState();" />
-              Incluir prémio (${state.hourlyBonus.toFixed(2)} €/h) nas Horas Extras (+${state.otSupplementPct}%)
-            </label>
-            <label style="display:flex; align-items:center; gap:8px; color:var(--text);">
-              <input type="checkbox" style="width:18px; height:18px;" ${state.includeBonusInUnworkedHoliday?'checked':''} onchange="state.includeBonusInUnworkedHoliday=this.checked; saveState();" />
-              Incluir prémio (${state.hourlyBonus.toFixed(2)} €/h) nos Feriados Não Trabalhados
-            </label>
-          </div>
-        </div>
-
-        <div class="card">
-          <div style="font-size:14px; font-weight:800; color:#6ee7b7; margin-bottom:10px;">
-            🏛️ Descontos Sociais (${profile.name})
-          </div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            ${profile.deductions.map((d, idx) => `
-              <div class="row" style="background:var(--card-alt); padding:8px 12px; border-radius:10px;">
-                <span style="font-size:12px; font-weight:600;">${d.label}</span>
-                <div style="display:flex; align-items:center; gap:4px; width:90px;">
-                  <input type="number" step="0.05" value="${d.rate}" onchange="state.countryProfiles[state.country].deductions[${idx}].rate=Number(this.value); saveState();" style="text-align:right; padding:6px;" />
-                  <span class="subtext">%</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:6px;">💾 Backup Seguro / Relatório Texto</div>
-          <div class="grid-2" style="margin-bottom:8px;">
-            <button onclick="generateBackupCode()" class="btn-ghost">1. Gerar Código Backup</button>
-            <button onclick="restoreFromBackupCode()" class="btn-success">2. Restaurar Código</button>
-          </div>
-          <textarea rows="3" placeholder="Cole aqui o código de backup ou clique em Gerar Código..." onchange="state.backupText=this.value">${state.backupText || ''}</textarea>
-        </div>
-      `;
-    }
-
-    render();
-  </script>
-</body>
-</html>
+    // ==================== NOMES DOS MESES E TRADUÇÕES (6 ID
