@@ -31,38 +31,67 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: 5. Criar e Compilar o APK Desbloqueado
+      - name: 5. Gerar Icone W e Compilar APK
         shell: bash
         run: |
           set +o pipefail
+          sudo apt-get update -y && sudo apt-get install -y librsvg2-bin
           export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
           yes | sdkmanager --licenses > /dev/null 2>&1 || true
           yes | sdkmanager "platforms;android-34" "build-tools;34.0.0" > /dev/null 2>&1 || true
           npm install -g cordova
           cordova telemetry off || true
-          cordova create app com.luxtime.pro "LuxTimePro"
-          
-          # Copiar o ficheiro HTML do repositorio e remover bloqueios CSP do Cordova
+          cordova create app com.luxtime.rastreador "Rastreador de Horas"
+
+          # Criar o icone oficial W com visto verde igual a foto
+          cat << 'EOF' > icon.svg
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+            <defs>
+              <radialGradient id="bg" cx="50%" cy="45%" r="55%">
+                <stop offset="0%" stop-color="#13333e"/>
+                <stop offset="100%" stop-color="#071018"/>
+              </radialGradient>
+              <linearGradient id="wgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#34d399"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+            <circle cx="256" cy="256" r="210" fill="none" stroke="#1e3a4c" stroke-width="6"/>
+            <path d="M118 185 L172 340 L238 222 L302 340 L398 168" fill="none" stroke="url(#wgrad)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="398" cy="168" r="19" fill="#34d399"/>
+          </svg>
+          EOF
+          rsvg-convert -w 512 -h 512 icon.svg -o app/icon.png
+
+          # Copiar o index.html
           HTML_FILE=$(find . -maxdepth 2 -iname "*.html" ! -path "./app/*" | head -n 1)
           if [ -n "$HTML_FILE" ]; then
             cp "$HTML_FILE" app/www/index.html
-            sed -i '/Content-Security-Policy/d' app/www/index.html
-            sed -i 's/<head>/<head><meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self '\''unsafe-inline'\'' blob: data: gap:; script-src * '\''self'\'' '\''unsafe-eval'\'' '\''unsafe-inline'\'' blob: data: gap:; object-src * '\''self'\'' blob: data: gap:; img-src * self '\''unsafe-inline'\'' blob: data: gap:; connect-src self * '\''unsafe-inline'\'' blob: data: gap:; frame-src * self blob: data: gap:;">/i' app/www/index.html
           fi
 
-          # Permitir acesso total no config.xml do Android
-          sed -i 's/<\/widget>/<allow-navigation href="*" \/><allow-intent href="*" \/><access origin="*" \/><preference name="AndroidInsecureFileModeEnabled" value="true" \/><\/widget>/g' app/config.xml
+          sed -i 's/<\/widget>/<icon src="icon.png" \/><allow-navigation href="*" \/><allow-intent href="*" \/><access origin="*" \/><preference name="AndroidInsecureFileModeEnabled" value="true" \/><preference name="StatusBarBackgroundColor" value="#0e121a" \/><\/widget>/g' app/config.xml
 
           cd app
           cordova platform add android@13.0.0
+
+          # Substituir todos os icones padrao do Android pelo novo icone W
+          rm -rf platforms/android/app/src/main/res/mipmap-anydpi-v26
+          for dir in platforms/android/app/src/main/res/mipmap-*; do
+            if [ -d "$dir" ]; then
+              cp icon.png "$dir/ic_launcher.png" || true
+              cp icon.png "$dir/ic_launcher_round.png" || true
+            fi
+          done
+
           cordova build android --debug
-          cp platforms/android/app/build/outputs/apk/debug/app-debug.apk ../LuxTime-Pro.apk
+          cp platforms/android/app/build/outputs/apk/debug/app-debug.apk ../Rastreador-Horas-Pro.apk
 
       - name: 6. Disponibilizar APK nos Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: LuxTime-Pro-APK
-          path: LuxTime-Pro.apk
+          name: Rastreador-Horas-APK
+          path: Rastreador-Horas-Pro.apk
 
       - name: 7. Publicar APK na pagina Releases
         continue-on-error: true
@@ -70,6 +99,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v3.1
-          name: "LuxTime Pro v3.1 (Corrigido Ecrã Azul)"
-          files: LuxTime-Pro.apk
+          tag_name: v6.0
+          name: "Rastreador de Horas v6.0 (Novo Design + Icone W)"
+          files: Rastreador-Horas-Pro.apk
